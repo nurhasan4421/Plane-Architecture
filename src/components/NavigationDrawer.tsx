@@ -25,9 +25,9 @@ export default function NavigationDrawer({
         aria-hidden="true"
       />
 
-      {/* Slide-out drawer matching BIG.DK exact positioning */}
+      {/* Slide-out drawer */}
       <nav
-        className={`fixed top-0 bottom-0 left-0 z-40 flex flex-col gap-1 bg-white pt-[65px] pr-8 pl-[5vw] md:pl-[60px] lg:pl-[30px] shadow-sm transition-all duration-300 ease-out select-none ${
+        className={`fixed top-0 bottom-0 left-0 z-40 flex flex-col gap-1.5 bg-white pt-[70px] pr-10 pl-[5vw] md:pl-[50px] lg:pl-[36px] shadow-sm transition-all duration-300 ease-out select-none font-body ${
           isOpen
             ? "translate-x-0 opacity-100 pointer-events-auto"
             : "-translate-x-full opacity-0 pointer-events-none"
@@ -86,8 +86,10 @@ export default function NavigationDrawer({
         </button>
 
         <div className="mt-auto pb-8 text-[11px] text-[#797979] tracking-wider uppercase">
-          <p>© {new Date().getFullYear()} Bjarke Ingels Group</p>
-          <p className="mt-1 text-[10px]">Copenhagen • New York • London • Barcelona • Shenzhen</p>
+          <p className="font-display font-medium text-black text-xs">Plane Architect</p>
+          <p className="mt-1 text-[10px] text-neutral-500">Dhaka, Bangladesh</p>
+          <p className="mt-0.5 text-[10px] text-neutral-400">+8801234567891</p>
+          <p className="text-[10px] text-neutral-400 lowercase">hello@planearchitect.com</p>
         </div>
       </nav>
     </>

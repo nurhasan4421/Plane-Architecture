@@ -2,7 +2,6 @@ import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PROJECTS } from "@/lib/projects-data";
-import HorizontalProjectViewer from "@/components/HorizontalProjectViewer";
 import ProjectDetailClientWrapper from "./ProjectDetailClientWrapper";
 
 export async function generateStaticParams() {
@@ -21,15 +20,15 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "Project Not Found | BIG",
+      title: "Project Not Found | Plane Architect",
     };
   }
 
   return {
-    title: `${project.title} | Bjarke Ingels Group`,
+    title: `${project.title} | Plane Architect • Dhaka, Bangladesh`,
     description: project.description,
     openGraph: {
-      title: `${project.title} | Bjarke Ingels Group`,
+      title: `${project.title} | Plane Architect`,
       description: project.description,
       images: [{ url: project.heroImage }],
     },

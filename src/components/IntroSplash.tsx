@@ -7,8 +7,7 @@ export default function IntroSplash() {
   const [animatingOut, setAnimatingOut] = useState(false);
 
   useEffect(() => {
-    // Check if splash was already shown this session
-    const seen = sessionStorage.getItem("big_splash_seen");
+    const seen = sessionStorage.getItem("plane_splash_seen");
     if (seen) {
       setVisible(false);
       return;
@@ -20,7 +19,7 @@ export default function IntroSplash() {
 
     const timer2 = setTimeout(() => {
       setVisible(false);
-      sessionStorage.setItem("big_splash_seen", "true");
+      sessionStorage.setItem("plane_splash_seen", "true");
     }, 1900);
 
     return () => {
@@ -38,37 +37,59 @@ export default function IntroSplash() {
       }`}
     >
       <div
-        className={`w-28 sm:w-36 md:w-44 transition-all duration-700 ease-out transform ${
-          animatingOut ? "scale-125 opacity-0" : "scale-100 opacity-100"
+        className={`flex flex-col items-center justify-center transition-all duration-700 ease-out transform ${
+          animatingOut ? "scale-110 opacity-0" : "scale-100 opacity-100"
         }`}
       >
-        <svg viewBox="0 0 475 216" className="w-full h-auto">
-          {/* Exact BIG blocky SVG paths from big.dk */}
-          <path
-            className="fill-white"
-            d="M43 87V130V174H0V0H130V87H87V43H43V87Z"
+        {/* Plane Architectural Geometry */}
+        <svg
+          viewBox="0 0 120 60"
+          className="w-28 sm:w-36 md:w-44 h-auto mb-4"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polyline
+            className="stroke-white"
+            strokeWidth="5"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            points="10,50 10,10 50,10 50,32 10,32"
           />
-          <path
-            className="fill-white"
-            d="M0 216V173H43H130H173V216H0Z"
+          <line
+            className="stroke-white"
+            strokeWidth="5"
+            strokeLinecap="square"
+            x1="62"
+            y1="10"
+            x2="62"
+            y2="50"
           />
-          <path
-            className="fill-white"
-            d="M173 86V174H130V129H42V86H86H130H173Z"
+          <line
+            className="stroke-white"
+            strokeWidth="5"
+            strokeLinecap="square"
+            x1="62"
+            y1="50"
+            x2="90"
+            y2="50"
           />
-          <path
-            className="fill-white"
-            d="M216 216V0H259V216H216Z"
-          />
-          <path
-            className="fill-white"
-            d="M345 43H302V0H475V43H345Z"
-          />
-          <path
-            className="fill-white"
-            d="M475 216H302V42H345V173H432V129H389V86H475V216Z"
+          <line
+            className="stroke-white"
+            strokeWidth="5"
+            strokeLinecap="square"
+            x1="100"
+            y1="10"
+            x2="118"
+            y2="50"
           />
         </svg>
+
+        <span className="font-display text-white text-sm md:text-base tracking-[0.3em] uppercase">
+          PLANE ARCHITECT
+        </span>
+        <span className="font-body text-neutral-400 text-[9px] md:text-[10px] tracking-[0.35em] uppercase mt-1">
+          DHAKA, BANGLADESH
+        </span>
       </div>
     </div>
   );

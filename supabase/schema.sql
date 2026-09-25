@@ -1,4 +1,4 @@
--- Supabase SQL Schema for Bjarke Ingels Group (BIG) Architecture Website
+-- Supabase SQL Schema for Plane Architect (Dhaka, Bangladesh)
 
 -- 1. Enable UUID Extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS public.projects (
     hero_image TEXT NOT NULL,
     icon_svg TEXT,
     quote TEXT,
-    quote_author TEXT DEFAULT 'Bjarke Ingels',
-    quote_author_role TEXT DEFAULT 'Founder & Creative Director, BIG',
+    quote_author TEXT DEFAULT 'Plane Architect',
+    quote_author_role TEXT DEFAULT 'Design Principal, Plane Architect Dhaka',
     description TEXT NOT NULL,
     awards JSONB DEFAULT '[]'::jsonb,
     collaborators JSONB DEFAULT '[]'::jsonb,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS public.inquiries (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 4. News & Press Table
+-- 4. News Table
 CREATE TABLE IF NOT EXISTS public.news (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     slug TEXT UNIQUE NOT NULL,
@@ -77,65 +77,71 @@ CREATE POLICY "Public read news"
     FOR SELECT
     USING (true);
 
--- Allow anyone (public/anon) to submit a contact inquiry
+-- Allow public insert into inquiries (contact form)
 CREATE POLICY "Allow public insert into inquiries"
     ON public.inquiries
     FOR INSERT
     WITH CHECK (true);
 
--- 6. Sample Initial Seed Data
+-- 6. Initial Seed Data for Plane Architect
 INSERT INTO public.projects (
-    slug, title, location, year, client, typology, category, subcategory, size_m2, size_ft2, status, aspect_ratio, hero_image, quote, description
+    slug, title, location, year, client, typology, category, subcategory, size_m2, size_ft2, status, aspect_ratio, hero_image, quote, quote_author, quote_author_role, description
 ) VALUES 
 (
-    'suzhou-museum-of-contemporary-art',
-    'Suzhou Museum of Contemporary Art',
-    'Suzhou, China',
+    'dhaka-contemporary-art-center',
+    'Dhaka Contemporary Art Center',
+    'Dhaka, Bangladesh',
     '2026',
-    'Suzhou Industrial Park Culture, Sports and Tourism Bureau & Suzhou Harmony Development Group',
+    'National Arts Trust & Ministry of Cultural Affairs',
     'Culture',
     'architecture',
     'culture',
-    '60,000',
-    '646,000',
+    '48,000',
+    '516,000',
     'Completed',
-    '4400 / 2288',
-    'https://media.big.dk/2-SUZHOU-MOCA-BY-SUZHOU-MOCA_web.jpg?width=1200',
-    'If the historic city center is the cradle of the Chinese garden, the lake district is the cradle of a new Suzhou. The site of the Suzhou Museum of Contemporary Art is sandwiched between the city and the lake. By dissolving the museum into a Chinese garden of interconnected galleries, the museum becomes a connection between the city and the lake.',
-    'Located on Jinji Lake, the 60,000-m2 Suzhou Museum of Contemporary Art offers a modern interpretation of the garden elements that have defined Suzhou urbanism for centuries.'
+    '16 / 9',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=85',
+    'Architecture in the Bengal delta must breathe with water, light, and monsoon rhythm. By elevating the galleries above high-water thresholds and carving perforated terracotta screen walls, the center transforms tropical climatic reality into luminous spatial poetry.',
+    'Plane Architect',
+    'Design Principal, Plane Architect Dhaka',
+    'A flagship cultural landmark positioned along the revitalized waterfront of Dhaka.'
 ),
 (
-    'dymak-hq',
-    'Dymak HQ',
-    'Odense, Denmark',
-    '2024',
-    'Dymak A/S',
+    'gulshan-botanical-pavilion',
+    'Gulshan Botanical Pavilion',
+    'Dhaka, Bangladesh',
+    '2025',
+    'Dhaka Urban Green Trust',
+    'Landscape',
+    'landscape',
+    'parks',
+    '14,500',
+    '156,000',
+    'Completed',
+    '16 / 10',
+    'https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1600&q=85',
+    'In a dense metropolis, nature cannot be merely a decorative fringe. It must be woven as an active botanical lung that filters urban dust, regulates microclimate, and provides sanctuary.',
+    'Plane Architect',
+    'Design Principal, Plane Architect',
+    'A biophilic sanctuary situated in Gulshan, Dhaka, comprising stepped botanical terraces.'
+),
+(
+    'apex-commercial-tower',
+    'Apex Aerodynamic Tower',
+    'Dhaka, Bangladesh',
+    '2026',
+    'Apex Financial Holdings',
     'Work',
     'architecture',
     'work',
-    '5,800',
-    '62,400',
-    'Completed',
-    '3303 / 2288',
-    'https://media.big.dk/19_21085_N282_webproject.jpg?width=1200',
-    'By elevating the traditional industrial warehouse into a campus of light, timber, and botanical greenery, Dymak HQ demonstrates how modern corporate headquarters can fuse workplace well-being with carbon-conscious design.',
-    'A combined headquarters, showroom, and logistics facility for global floral accessory specialist Dymak.'
-),
-(
-    'stem-university',
-    'STEM University',
-    'Bentonville, United States',
-    '2025',
-    'Walton Family Foundation',
-    'Education',
-    'architecture',
-    'education',
-    '45,000',
-    '484,000',
+    '85,000',
+    '914,000',
     'In Progress',
-    '4066 / 2288',
-    'https://media.big.dk/BIG_STEM_01_Aerial-Rendering_final.jpg?width=1200',
-    'STEM education thrives when disciplines collide. The university is arranged as a continuous topographical landscape where laboratories, machine shops, and seminar rooms weave together.',
-    'A state-of-the-art polytechnic campus integrated directly into the Ozark landscape.'
+    '16 / 10',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=85',
+    'A skyscraper in tropical Dhaka must be an aerodynamic kite. By sculpting the tower to dissipate cyclones and embedding vertical sky gardens, we re-invent workplace well-being in South Asia.',
+    'Plane Architect',
+    'Design Principal, Plane Architect Dhaka',
+    'A 42-story commercial tower in Motijheel, Dhaka, with an aerodynamic curved silhouette.'
 )
 ON CONFLICT (slug) DO NOTHING;

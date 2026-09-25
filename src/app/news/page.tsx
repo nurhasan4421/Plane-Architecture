@@ -12,7 +12,7 @@ export default function NewsPage() {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none">
+    <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none font-body">
       <Header
         onToggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
         isDrawerOpen={isDrawerOpen}
@@ -27,11 +27,11 @@ export default function NewsPage() {
 
       <div className="pt-28 pb-20 px-6 md:px-16 lg:px-28 max-w-6xl mx-auto w-full">
         <div className="mb-12">
-          <span className="text-xs uppercase tracking-widest text-[#797979] block mb-2">
-            Dispatches & Updates
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-2">
+            Plane Architect • Dhaka Dispatches
           </span>
-          <h1 className="text-3xl sm:text-4xl font-light text-black tracking-tight">
-            News & Architectural Milestones
+          <h1 className="font-display text-3xl sm:text-4xl font-normal text-black tracking-tight">
+            News, Monographs & Dispatches
           </h1>
         </div>
 
@@ -46,7 +46,7 @@ export default function NewsPage() {
                 />
               </div>
 
-              <div className="flex items-center gap-3 text-[10px] uppercase text-[#797979] tracking-wider mb-2">
+              <div className="flex items-center gap-3 text-[10px] uppercase text-[#797979] tracking-wider mb-2 font-body">
                 <span>{item.date}</span>
                 <span>•</span>
                 <span className="text-black font-semibold">{item.category}</span>
@@ -54,11 +54,13 @@ export default function NewsPage() {
                 <span>{item.readTime}</span>
               </div>
 
-              <h2 className="text-lg font-normal leading-snug text-black group-hover:opacity-75 transition-opacity mb-2">
+              <h2 className="font-display text-lg font-normal leading-snug text-black group-hover:opacity-75 transition-opacity mb-2">
                 {item.title}
               </h2>
 
-              <p className="text-xs text-neutral-600 leading-relaxed font-light">{item.excerpt}</p>
+              <p className="font-body text-xs text-neutral-600 leading-relaxed font-light">
+                {item.excerpt}
+              </p>
             </article>
           ))}
         </div>

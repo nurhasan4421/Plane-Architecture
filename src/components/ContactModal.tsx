@@ -11,39 +11,36 @@ interface ContactModalProps {
 
 const STUDIOS = [
   {
-    city: "Copenhagen",
-    country: "Denmark",
-    address: "Kløvermarksvej 70, 2300 København S",
-    phone: "+45 7221 7221",
-    email: "cph@big.dk",
+    city: "Dhaka",
+    country: "Bangladesh (Headquarters)",
+    address: "Dhala, Gulshan Architectural Quarter, Dhaka 1212",
+    phone: "+8801234567891",
+    email: "hello@planearchitect.com",
+    isHQ: true,
   },
   {
-    city: "New York",
-    country: "USA",
-    address: "45 Main Street, 9th Floor, Brooklyn, NY 11201",
-    phone: "+1 347 549 4141",
-    email: "nyc@big.dk",
+    city: "Chittagong",
+    country: "Bangladesh (Coastal Division)",
+    address: "Agrabad Commercial Area, Chittagong 4100",
+    phone: "+8801234567891",
+    email: "ctg@planearchitect.com",
+    isHQ: false,
   },
   {
-    city: "London",
-    country: "United Kingdom",
-    address: "1 Finsbury Avenue, London EC2M 2PF",
-    phone: "+44 20 3740 6860",
-    email: "lon@big.dk",
+    city: "Sylhet",
+    country: "Bangladesh (Highland Studio)",
+    address: "Zindabazar Tea Valley Corridor, Sylhet 3100",
+    phone: "+8801234567891",
+    email: "sylhet@planearchitect.com",
+    isHQ: false,
   },
   {
-    city: "Barcelona",
-    country: "Spain",
-    address: "Carrer de Pujades 77-79, 08005 Barcelona",
-    phone: "+34 93 639 3690",
-    email: "bcn@big.dk",
-  },
-  {
-    city: "Shenzhen",
-    country: "China",
-    address: "Tower 2, Kerry Plaza, Futian District, Shenzhen",
-    phone: "+86 755 8272 5810",
-    email: "szn@big.dk",
+    city: "Singapore",
+    country: "Southeast Asia Liaison",
+    address: "Marina Bay Financial Centre, Tower 1, Singapore",
+    phone: "+65 6789 0123",
+    email: "sg@planearchitect.com",
+    isHQ: false,
   },
 ];
 
@@ -51,7 +48,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    office: "Copenhagen",
+    office: "Dhaka (Headquarters)",
     type: "New Project",
     message: "",
   });
@@ -81,7 +78,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 select-none font-body">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
@@ -93,11 +90,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-black">
-              Contact & Studios
+            <h2 className="font-display text-base md:text-lg font-normal uppercase tracking-wider text-black">
+              Contact Plane Architect
             </h2>
-            <p className="text-[11px] text-[#797979] uppercase tracking-wider">
-              Bjarke Ingels Group Global Directory
+            <p className="font-body text-[11px] text-[#797979] uppercase tracking-wider">
+              Dhala, Bangladesh • +8801234567891 • hello@planearchitect.com
             </p>
           </div>
           <button
@@ -113,7 +110,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         <div className="overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column: Form */}
           <div>
-            <h3 className="text-xs uppercase font-medium tracking-wider text-black mb-4">
+            <h3 className="font-display text-sm uppercase font-normal tracking-wider text-black mb-4">
               Send an Inquiry
             </h3>
 
@@ -122,12 +119,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center mx-auto mb-3">
                   <Check className="w-5 h-5" />
                 </div>
-                <h4 className="text-sm uppercase font-semibold text-black mb-1">
-                  Thank You for Reaching Out
+                <h4 className="font-display text-base uppercase font-normal text-black mb-1">
+                  Inquiry Dispatched
                 </h4>
-                <p className="text-xs text-[#797979] leading-relaxed">
-                  Your message has been dispatched to our {formData.office} studio. A partner or
-                  communications director will reply promptly.
+                <p className="font-body text-xs text-[#797979] leading-relaxed">
+                  Thank you for reaching out to Plane Architect. Our Dhaka team will review your
+                  project parameters and contact you promptly at {formData.email}.
                 </p>
                 <button
                   onClick={() => {
@@ -135,7 +132,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     setFormData({
                       name: "",
                       email: "",
-                      office: "Copenhagen",
+                      office: "Dhaka (Headquarters)",
                       type: "New Project",
                       message: "",
                     });
@@ -157,7 +154,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-3 py-2 border border-neutral-300 text-xs text-black focus:outline-none focus:border-black rounded-none"
-                    placeholder="E.g. Jane Doe"
+                    placeholder="E.g. A. Rahman"
                   />
                 </div>
 
@@ -171,7 +168,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full px-3 py-2 border border-neutral-300 text-xs text-black focus:outline-none focus:border-black rounded-none"
-                    placeholder="jane@organization.com"
+                    placeholder="client@organization.com"
                   />
                 </div>
 
@@ -203,9 +200,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                       className="w-full px-3 py-2 border border-neutral-300 text-xs text-black focus:outline-none focus:border-black rounded-none bg-white"
                     >
                       <option value="New Project">New Project Commission</option>
-                      <option value="Press & Media">Press & Media</option>
-                      <option value="Lecture">Lecture & Speaking</option>
-                      <option value="Careers">Careers & Internship</option>
+                      <option value="Masterplanning">Masterplanning</option>
+                      <option value="Press & Media">Press & Publication</option>
+                      <option value="Careers">Careers & Apprenticeship</option>
                       <option value="General">General Inquiry</option>
                     </select>
                   </div>
@@ -221,7 +218,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-3 py-2 border border-neutral-300 text-xs text-black focus:outline-none focus:border-black rounded-none resize-none"
-                    placeholder="Briefly describe the site, program, or press request..."
+                    placeholder="Briefly describe the site location, typology, or inquiry..."
                   />
                 </div>
 
@@ -240,23 +237,25 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             )}
           </div>
 
-          {/* Right Column: Global Studios */}
+          {/* Right Column: Studio Directory */}
           <div className="border-t md:border-t-0 md:border-l border-neutral-100 md:pl-8">
-            <h3 className="text-xs uppercase font-medium tracking-wider text-black mb-4">
-              Worldwide Studios
+            <h3 className="font-display text-sm uppercase font-normal tracking-wider text-black mb-4">
+              Studios & Directory
             </h3>
             <div className="space-y-4">
               {STUDIOS.map((studio) => (
                 <div key={studio.city} className="border-b border-neutral-100 pb-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase text-black">
+                    <span className="font-display text-xs font-semibold uppercase text-black">
                       {studio.city}
                     </span>
                     <span className="text-[10px] uppercase text-[#797979]">{studio.country}</span>
                   </div>
                   <p className="text-[11px] text-neutral-600 mt-0.5">{studio.address}</p>
-                  <div className="flex items-center gap-4 mt-1 text-[10px] text-[#797979]">
-                    <span>{studio.phone}</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-1 text-[10px] text-[#797979]">
+                    <a href={`tel:${studio.phone}`} className="hover:text-black">
+                      {studio.phone}
+                    </a>
                     <a href={`mailto:${studio.email}`} className="text-black hover:underline">
                       {studio.email}
                     </a>

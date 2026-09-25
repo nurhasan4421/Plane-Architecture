@@ -6,18 +6,13 @@ import NavigationDrawer from "@/components/NavigationDrawer";
 import ContactModal from "@/components/ContactModal";
 import Footer from "@/components/Footer";
 
-const PARTNERS = [
-  { name: "Bjarke Ingels", role: "Founder & Creative Director", office: "Copenhagen / New York" },
-  { name: "Sheela Maini Søgaard", role: "Chief Executive Officer & Partner", office: "Copenhagen" },
-  { name: "Kai-Uwe Bergmann", role: "Partner, Global Business Development", office: "New York" },
-  { name: "David Zahle", role: "Partner & Architect", office: "Copenhagen" },
-  { name: "Jakob Lange", role: "Partner & Head of BIG Ideas", office: "Copenhagen" },
-  { name: "Finn Nørkjær", role: "Partner & Architect", office: "Copenhagen" },
-  { name: "Daniel Sundlin", role: "Partner & Architect", office: "New York" },
-  { name: "Leon Rost", role: "Partner & Architect", office: "New York" },
-  { name: "Catherine Huang", role: "Partner & Architect", office: "Shenzhen" },
-  { name: "João Albuquerque", role: "Partner & Architect", office: "Barcelona" },
-  { name: "Giulia Frittoli", role: "Partner & Head of Landscape", office: "Copenhagen" },
+const LEADERSHIP = [
+  { name: "K. M. Rahman", role: "Principal Architect & Founder", studio: "Dhaka" },
+  { name: "S. N. Chowdhury", role: "Director of Urban Design & Partner", studio: "Dhaka" },
+  { name: "Tariq Ahmed", role: "Head of Environmental Engineering", studio: "Dhaka" },
+  { name: "Nadia Hasan", role: "Partner, Landscape Ecology", studio: "Dhaka" },
+  { name: "Asif Karim", role: "Director of Research & Materiality", studio: "Dhaka" },
+  { name: "M. Siddique", role: "Head of Structural Computation", studio: "Chittagong" },
 ];
 
 export default function AboutPage() {
@@ -25,7 +20,7 @@ export default function AboutPage() {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none">
+    <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none font-body">
       <Header
         onToggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
         isDrawerOpen={isDrawerOpen}
@@ -41,83 +36,90 @@ export default function AboutPage() {
       <div className="pt-28 pb-20 px-6 md:px-16 lg:px-28 max-w-6xl mx-auto w-full">
         {/* Intro Manifesto */}
         <section className="mb-20">
-          <span className="text-xs uppercase tracking-widest text-[#797979] block mb-3">
-            About Bjarke Ingels Group
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-3">
+            About Plane Architect • Dhala, Bangladesh
           </span>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-light leading-tight tracking-tight text-black max-w-4xl mb-10">
-            BIG is an architectural laboratory dedicated to exploring how society evolutes and how
-            buildings can actively enrich human life.
+          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-normal leading-tight tracking-tight text-black max-w-4xl mb-10">
+            Plane Architect is an architectural and spatial laboratory based in Dhaka, Bangladesh,
+            investigating how geometric planes mediate climate, water, and human community.
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-neutral-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-neutral-700 font-body">
             <p>
-              Founded in 2005 by Bjarke Ingels in Copenhagen, BIG has evolved into a global studio of
-              more than 700 architects, landscape professionals, urbanists, researchers, and
-              inventors across Copenhagen, New York, London, Barcelona, and Shenzhen.
+              Founded in Dhaka, Bangladesh, Plane Architect operates at the nexus of deltaic
+              geography, tropical climate resilience, and rigorous architectural geometry. Our work
+              spans cultural institutions, master plans, public riverfronts, and sustainable
+              structures across South Asia and abroad.
             </p>
             <p>
-              Historically, the architectural field has been dominated by two opposing ideas: a
-              pragmatic, boring box that conforms to all standards, or an eccentric, avant-garde form
-              unsuited to real life. BIG operates in the fertile overlap between the pragmatic and the
-              utopian.
+              Rather than importing generic glass containers unsuited to tropical heat, Plane Architect
+              articulates tactile envelopes: perforated brick jalis, deep monsoon overhangs, breathing
+              timber frames, and shaded internal courtyards that temper heat and invite natural light.
             </p>
           </div>
         </section>
 
-        {/* Hedonistic Sustainability */}
+        {/* Delta Ecology & Sustainability */}
         <section id="sustainability" className="mb-20 border-t border-neutral-200 pt-16">
-          <span className="text-xs uppercase tracking-widest text-[#797979] block mb-2">
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-2">
             Design Philosophy
           </span>
-          <h2 className="text-xl sm:text-2xl font-normal text-black mb-6">
-            Hedonistic Sustainability
+          <h2 className="font-display text-xl sm:text-2xl font-normal text-black mb-6">
+            Contextual Materiality & Delta Ecology
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm leading-relaxed text-neutral-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm leading-relaxed text-neutral-700 font-body">
             <p>
-              Sustainability cannot be a moral sacrifice or an aesthetic compromise. Instead,
-              ecological design should improve quality of life and expand the possibilities of human
-              enjoyment. A clean harbor where people can swim, or a power plant on whose roof citizens
-              can ski, proves that sustainable architecture creates a richer everyday experience.
+              In Bangladesh, the landscape is in continuous motion with river cycles and seasonal
+              monsoons. We view architecture not as a static barrier against nature, but as an
+              inhabitable filter that responds gracefully to seasonal waters, rainfall, and prevailing
+              winds.
             </p>
             <p>
-              By treating ecological challenges as creative catalysts, our projects integrate passive
-              climatization, mass timber systems, renewable micro-grids, and circular materials into
-              sculptural public works.
+              Our research focuses on low-carbon local materials — locally manufactured gas-cured
+              terracotta, compressed earth, structural bamboo, and reclaimed timber — paired with
+              high-performance computational envelope modeling.
             </p>
           </div>
         </section>
 
-        {/* Global Partners */}
+        {/* Leadership */}
         <section id="people" className="mb-20 border-t border-neutral-200 pt-16">
-          <span className="text-xs uppercase tracking-widest text-[#797979] block mb-2">
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-2">
             Leadership
           </span>
-          <h2 className="text-xl sm:text-2xl font-normal text-black mb-8">Studio Partners</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {PARTNERS.map((partner, idx) => (
+          <h2 className="font-display text-xl sm:text-2xl font-normal text-black mb-8">
+            Studio Partners & Directors
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 font-body">
+            {LEADERSHIP.map((leader, idx) => (
               <div key={idx} className="border-b border-neutral-100 pb-4">
-                <h3 className="text-sm font-semibold uppercase text-black">{partner.name}</h3>
-                <p className="text-xs text-[#797979] mt-0.5">{partner.role}</p>
+                <h3 className="font-display text-sm font-semibold uppercase text-black">
+                  {leader.name}
+                </h3>
+                <p className="text-xs text-[#797979] mt-0.5">{leader.role}</p>
                 <p className="text-[10px] text-neutral-400 uppercase tracking-widest mt-1">
-                  {partner.office}
+                  {leader.studio} Studio
                 </p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Careers & Call to Action */}
-        <section id="careers" className="border-t border-neutral-200 pt-16 text-center">
-          <h2 className="text-xl font-normal text-black mb-2">Join the Laboratory</h2>
-          <p className="text-xs text-[#797979] uppercase tracking-wider max-w-lg mx-auto mb-6">
-            We are always seeking passionate architects, landscape designers, computational specialists,
-            and model makers.
+        {/* Studio Info & Inquiries */}
+        <section id="careers" className="border-t border-neutral-200 pt-16 text-center font-body">
+          <h2 className="font-display text-xl font-normal text-black mb-2">Connect With Plane Architect</h2>
+          <p className="text-xs text-[#797979] uppercase tracking-wider max-w-lg mx-auto mb-2">
+            Dhala, Bangladesh • +8801234567891 • hello@planearchitect.com
+          </p>
+          <p className="text-xs text-neutral-500 max-w-md mx-auto mb-6">
+            We welcome commissions, collaborative competitions, academic partnerships, and career
+            inquiries.
           </p>
           <button
             onClick={() => setIsContactOpen(true)}
             className="px-6 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors cursor-pointer"
           >
-            Apply or Contact Us
+            Contact Plane Architect
           </button>
         </section>
       </div>

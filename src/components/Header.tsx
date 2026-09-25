@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import BigLogo from "./BigLogo";
+import PlaneLogo from "./PlaneLogo";
 import { CATEGORIES_CONFIG } from "@/lib/projects-data";
 
 interface HeaderProps {
@@ -25,12 +25,13 @@ export default function Header({
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const currentCategory = hoveredCategory || activeCategory;
-  const activeConfig = CATEGORIES_CONFIG.find((c) => c.id === currentCategory) || CATEGORIES_CONFIG[0];
+  const activeConfig =
+    CATEGORIES_CONFIG.find((c) => c.id === currentCategory) || CATEGORIES_CONFIG[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-xs border-b border-transparent select-none">
+    <header className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-xs border-b border-transparent select-none font-body">
       {/* Top Main Bar */}
-      <div className="relative flex items-center justify-between h-[44px] md:h-[48px] px-4 md:px-8 lg:px-10">
+      <div className="relative flex items-center justify-between h-[46px] md:h-[50px] px-4 md:px-8 lg:px-10">
         {/* Left: Logo & Menu trigger */}
         <div className="flex items-center gap-3">
           <button
@@ -39,7 +40,7 @@ export default function Header({
             aria-label="Toggle Navigation Menu"
             title="Menu"
           >
-            <BigLogo />
+            <PlaneLogo />
           </button>
         </div>
 
@@ -69,7 +70,7 @@ export default function Header({
 
         {/* Right: Scale Slider & Mobile Filter trigger */}
         <div className="flex items-center gap-4">
-          {/* Desktop Scale Controls matching BIG view scaling */}
+          {/* Desktop Scale Controls */}
           {onScaleChange && (
             <div className="hidden md:flex items-center gap-2 text-[11px] text-[#797979] uppercase tracking-wider">
               <span className="text-[10px]">Scale</span>
@@ -129,7 +130,9 @@ export default function Header({
         {activeConfig.subcategories.map((sub) => (
           <button
             key={sub.id}
-            onClick={() => onSelectCategory?.(activeConfig.id, sub.id === "all" ? undefined : sub.id)}
+            onClick={() =>
+              onSelectCategory?.(activeConfig.id, sub.id === "all" ? undefined : sub.id)
+            }
             className="hover:text-black transition-colors duration-150 py-0.5 cursor-pointer"
           >
             {sub.label}

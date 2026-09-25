@@ -3,40 +3,30 @@ import "./globals.css";
 import IntroSplash from "@/components/IntroSplash";
 
 export const metadata: Metadata = {
-  title: "BIG | Bjarke Ingels Group",
+  title: "PLANE ARCHITECT | Dhaka, Bangladesh",
   description:
-    "BIG is a Copenhagen, New York, London, Barcelona and Shenzhen based group of architects, designers, urbanists, landscape professionals, interior and product designers, researchers and inventors.",
+    "Plane Architect is an architecture, urbanism, and landscape practice based in Dhaka, Bangladesh, exploring contextual, sustainable, and progressive architectural design.",
   keywords: [
-    "Architecture",
-    "Bjarke Ingels",
-    "BIG",
-    "Urbanism",
-    "Landscape",
-    "Hedonistic Sustainability",
-    "Danish Design",
+    "Plane Architect",
+    "Architecture Dhaka",
+    "Bangladesh Architecture",
+    "Urban Design",
+    "Sustainable Architecture",
+    "Landscape Architecture",
   ],
-  authors: [{ name: "Bjarke Ingels Group" }],
+  authors: [{ name: "Plane Architect" }],
   openGraph: {
-    title: "BIG | Bjarke Ingels Group",
-    description: "An architectural laboratory exploring how buildings shape human life and planetary ecology.",
-    url: "https://big.dk",
-    siteName: "BIG | Bjarke Ingels Group",
-    images: [
-      {
-        url: "https://media.big.dk/share.jpg",
-        width: 1200,
-        height: 630,
-        alt: "BIG | Bjarke Ingels Group",
-      },
-    ],
+    title: "PLANE ARCHITECT | Dhaka, Bangladesh",
+    description: "An architectural laboratory exploring how spatial geometry shapes human life and ecological futures.",
+    url: "https://planearchitect.com",
+    siteName: "PLANE ARCHITECT",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BIG | Bjarke Ingels Group",
+    title: "PLANE ARCHITECT | Dhaka, Bangladesh",
     description: "Architecture, Urbanism, Landscape, Research.",
-    images: ["https://media.big.dk/share.jpg"],
   },
   icons: {
     icon: "/favicon.ico",

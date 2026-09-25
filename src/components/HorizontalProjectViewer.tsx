@@ -24,7 +24,6 @@ export default function HorizontalProjectViewer({
     if (!el) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // In large screen horizontal mode, convert vertical wheel into horizontal scroll
       if (window.innerWidth >= 1024) {
         if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
           e.preventDefault();
@@ -49,7 +48,7 @@ export default function HorizontalProjectViewer({
   };
 
   return (
-    <div className="relative w-screen min-h-screen bg-white select-none pt-[50px] lg:pt-[60px] pb-16">
+    <div className="relative w-screen min-h-screen bg-white select-none pt-[50px] lg:pt-[60px] pb-16 font-body">
       {/* Horizontal Storytelling Track */}
       <div
         ref={containerRef}
@@ -68,20 +67,22 @@ export default function HorizontalProjectViewer({
                     dangerouslySetInnerHTML={{ __html: project.iconSvg }}
                   />
                 ) : (
-                  <span className="text-[11px] font-bold uppercase">{project.title.slice(0, 3)}</span>
+                  <span className="font-display text-[11px] font-bold uppercase">
+                    {project.title.slice(0, 3)}
+                  </span>
                 )}
               </div>
 
               {/* Title & Location */}
-              <h1 className="text-xl lg:text-2xl font-normal leading-tight text-black mb-1">
+              <h1 className="font-display text-xl lg:text-2xl font-normal leading-tight text-black mb-1">
                 {project.title}
               </h1>
-              <p className="text-xs lg:text-sm text-[#797979] uppercase tracking-wider mb-6 font-light">
+              <p className="font-body text-xs lg:text-sm text-[#797979] uppercase tracking-wider mb-6 font-light">
                 {project.location}
               </p>
 
               {/* Architectural Spec Sheet */}
-              <div className="space-y-4 border-t border-neutral-100 pt-4 text-left">
+              <div className="space-y-4 border-t border-neutral-100 pt-4 text-left font-body">
                 <div>
                   <h4 className="text-[10px] text-[#797979] uppercase tracking-widest">Year</h4>
                   <p className="text-xs uppercase text-black font-medium">{project.year}</p>
@@ -112,9 +113,9 @@ export default function HorizontalProjectViewer({
             </div>
 
             {/* Share Links */}
-            <div className="mt-6 pt-4 border-t border-neutral-100">
+            <div className="mt-6 pt-4 border-t border-neutral-100 font-body">
               <span className="text-[10px] text-[#797979] uppercase tracking-widest block mb-2">
-                Share
+                Share Project
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -125,9 +126,9 @@ export default function HorizontalProjectViewer({
                   <Share2 className="w-3.5 h-3.5" />
                 </button>
                 <a
-                  href={`mailto:?subject=${encodeURIComponent(project.title)}&body=${encodeURIComponent(
-                    `Check out ${project.title} by BIG: `
-                  )}`}
+                  href={`mailto:hello@planearchitect.com?subject=${encodeURIComponent(
+                    project.title
+                  )}&body=${encodeURIComponent(`Check out ${project.title} by Plane Architect: `)}`}
                   className="w-7 h-7 bg-black text-white flex items-center justify-center hover:bg-neutral-800 transition-colors"
                   title="Share via Email"
                 >
@@ -154,7 +155,7 @@ export default function HorizontalProjectViewer({
 
         {/* SECTION 2: INTERACTIVE CONCEPT DIAGRAMS */}
         {totalDiagrams > 0 && currentDiagram && (
-          <div className="relative shrink-0 flex flex-col justify-center items-center w-full lg:w-[480px] bg-neutral-50/50 p-6 lg:h-[76vh] border border-neutral-100">
+          <div className="relative shrink-0 flex flex-col justify-center items-center w-full lg:w-[480px] bg-neutral-50/50 p-6 lg:h-[76vh] border border-neutral-100 font-body">
             <div className="relative w-full h-[320px] lg:h-[420px] flex items-center justify-center overflow-hidden">
               <img
                 key={currentDiagram.step}
@@ -191,25 +192,25 @@ export default function HorizontalProjectViewer({
                   </button>
                 </div>
               </div>
-              <h3 className="text-xs uppercase font-semibold text-black tracking-wide">
+              <h3 className="font-display text-sm uppercase font-semibold text-black tracking-wide">
                 {currentDiagram.title}
               </h3>
-              <p className="text-xs text-neutral-600 mt-1 leading-normal">
+              <p className="font-body text-xs text-neutral-600 mt-1 leading-normal">
                 {currentDiagram.description}
               </p>
             </div>
           </div>
         )}
 
-        {/* SECTION 3: BJARKE INGELS QUOTE */}
+        {/* SECTION 3: PLANE ARCHITECT QUOTE */}
         {project.quote && (
           <div className="relative shrink-0 flex flex-col justify-center w-full lg:w-[580px] p-6 lg:p-10 lg:h-[76vh] bg-white border-l border-neutral-100">
-            <blockquote className="text-[15px] sm:text-[17px] lg:text-[19px] leading-relaxed font-light text-black tracking-tight mb-6">
+            <blockquote className="font-display text-[17px] sm:text-[19px] lg:text-[22px] leading-relaxed font-normal text-black tracking-tight mb-6">
               &ldquo;{project.quote}&rdquo;
             </blockquote>
-            <div className="text-[11px] uppercase tracking-wider text-[#797979]">
-              <span className="text-black font-medium">{project.quoteAuthor || "Bjarke Ingels"}</span>
-              <span className="block mt-0.5">{project.quoteAuthorRole || "BIG"}</span>
+            <div className="font-body text-[11px] uppercase tracking-wider text-[#797979]">
+              <span className="text-black font-medium">{project.quoteAuthor || "Plane Architect"}</span>
+              <span className="block mt-0.5">{project.quoteAuthorRole || "Dhaka, Bangladesh"}</span>
             </div>
           </div>
         )}
@@ -218,7 +219,7 @@ export default function HorizontalProjectViewer({
         {project.gallery?.map((img, idx) => (
           <div
             key={idx}
-            className="relative shrink-0 flex flex-col justify-between h-[50vh] lg:h-[76vh] bg-neutral-50 overflow-hidden"
+            className="relative shrink-0 flex flex-col justify-between h-[50vh] lg:h-[76vh] bg-neutral-50 overflow-hidden font-body"
           >
             <div className="relative h-full flex items-center justify-center">
               <img
@@ -236,8 +237,8 @@ export default function HorizontalProjectViewer({
         ))}
 
         {/* SECTION 5: CREDITS & COLLABORATORS */}
-        <div className="relative shrink-0 flex flex-col justify-center w-full lg:w-[320px] p-6 lg:h-[76vh] bg-neutral-50 border border-neutral-100 text-left">
-          <h3 className="text-xs uppercase font-semibold tracking-widest text-black mb-4">
+        <div className="relative shrink-0 flex flex-col justify-center w-full lg:w-[320px] p-6 lg:h-[76vh] bg-neutral-50 border border-neutral-100 text-left font-body">
+          <h3 className="font-display text-sm uppercase font-semibold tracking-widest text-black mb-4">
             Project Credits
           </h3>
           <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-2">
@@ -276,7 +277,7 @@ export default function HorizontalProjectViewer({
 
         {/* SECTION 6: NEXT PROJECT TEASER */}
         {nextProject && (
-          <div className="relative shrink-0 flex flex-col justify-center items-center w-full lg:w-[360px] p-8 lg:h-[76vh] bg-black text-white text-center">
+          <div className="relative shrink-0 flex flex-col justify-center items-center w-full lg:w-[360px] p-8 lg:h-[76vh] bg-black text-white text-center font-body">
             <span className="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">
               Next Project
             </span>
@@ -284,7 +285,7 @@ export default function HorizontalProjectViewer({
               href={`/projects/${nextProject.slug}`}
               className="group flex flex-col items-center"
             >
-              <h3 className="text-lg lg:text-xl font-normal leading-tight group-hover:underline mb-1">
+              <h3 className="font-display text-lg lg:text-xl font-normal leading-tight group-hover:underline mb-1">
                 {nextProject.title}
               </h3>
               <p className="text-xs text-neutral-400 uppercase tracking-wider mb-6">

@@ -9,12 +9,14 @@ interface FooterProps {
 
 export default function Footer({ onOpenContact }: FooterProps) {
   return (
-    <footer className="w-full bg-white border-t border-neutral-100 py-10 px-6 md:px-12 lg:px-20 text-[11px] text-[#797979] uppercase tracking-wider select-none">
+    <footer className="w-full bg-white border-t border-neutral-100 py-10 px-6 md:px-12 lg:px-20 text-[11px] text-[#797979] uppercase tracking-wider select-none font-body">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <p className="font-medium text-black">BIG — Bjarke Ingels Group</p>
-          <p className="text-[10px] mt-1 text-neutral-400">
-            Architecture • Landscape • Engineering • Planning • Product Design
+          <p className="font-display font-medium text-black text-xs md:text-sm">
+            Plane Architect • Dhala, Bangladesh
+          </p>
+          <p className="text-[10px] mt-1 text-neutral-400 font-body">
+            hello@planearchitect.com • +8801234567891
           </p>
         </div>
 
@@ -39,7 +41,7 @@ export default function Footer({ onOpenContact }: FooterProps) {
         </div>
 
         <div className="text-[10px] text-neutral-400">
-          © {new Date().getFullYear()} Bjarke Ingels Group. All rights reserved.
+          © {new Date().getFullYear()} Plane Architect. All rights reserved.
         </div>
       </div>
     </footer>
