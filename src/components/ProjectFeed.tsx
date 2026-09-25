@@ -38,7 +38,7 @@ export default function ProjectFeed({
 
   return (
     <div className="projects-container w-full overflow-x-hidden pt-[90px] md:pt-[110px] pb-24">
-      {/* Scaler matching big.dk projects-scaler */}
+      {/* Scaler matching architectural projects-scaler */}
       <div
         className="projects-scaler flex min-h-screen flex-col items-center select-none transition-transform duration-500 ease-out"
         style={{
