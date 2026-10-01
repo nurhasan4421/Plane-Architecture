@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import NavigationDrawer from "@/components/NavigationDrawer";
+import FeaturedProjectCarousel from "@/components/FeaturedProjectCarousel";
 import ProjectFeed from "@/components/ProjectFeed";
-import ContactModal from "@/components/ContactModal";
 import Footer from "@/components/Footer";
-import { PROJECTS } from "@/lib/projects-data";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function HomePage() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("architecture");
+  const { settings, projects, testimonials } = useSiteContent();
+  const [activeCategory, setActiveCategory] = useState("all");
   const [activeSubcategory, setActiveSubcategory] = useState<string | undefined>(undefined);
-  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const category = new URLSearchParams(window.location.search).get("category");
+    if (!category || !settings.categories.some((item) => item.id === category)) return;
+
+    const timeout = window.setTimeout(() => {
+      setActiveCategory(category);
+      setActiveSubcategory(undefined);
+    }, 0);
+    return () => window.clearTimeout(timeout);
+  }, [settings.categories]);
 
   const handleSelectCategory = (category: string, subcategory?: string) => {
     setActiveCategory(category);
@@ -24,37 +32,30 @@ export default function HomePage() {
     <main className="min-h-screen bg-white text-black flex flex-col justify-between">
       {/* Top Header */}
       <Header
-        onToggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
-        isDrawerOpen={isDrawerOpen}
         activeCategory={activeCategory}
+        activeSubcategory={activeSubcategory}
         onSelectCategory={handleSelectCategory}
-        scale={scale}
-        onScaleChange={setScale}
       />
 
-      {/* Slide-out Navigation Drawer */}
-      <NavigationDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        onOpenContact={() => setIsContactOpen(true)}
-      />
+      {settings.carouselEnabled && (
+        <FeaturedProjectCarousel
+          projects={settings.featuredProjectSlugs
+            .map((slug) => projects.find((project) => project.slug === slug))
+            .filter((project): project is (typeof projects)[number] => Boolean(project))}
+        />
+      )}
 
       {/* Main Project Feed */}
       <ProjectFeed
-        projects={PROJECTS}
+        key={`${activeCategory}:${activeSubcategory ?? "all"}`}
+        projects={projects}
         activeCategory={activeCategory}
         activeSubcategory={activeSubcategory}
-        scale={scale}
-      />
-
-      {/* Contact Modal */}
-      <ContactModal
-        isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
+        testimonials={testimonials}
       />
 
       {/* Footer */}
-      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <Footer onSelectCategory={handleSelectCategory} />
     </main>
   );
 }

@@ -13,7 +13,7 @@ const STUDIOS = [
   {
     city: "Dhaka",
     country: "Bangladesh (Headquarters)",
-    address: "Dhala, Gulshan Architectural Quarter, Dhaka 1212",
+    address: "Gulshan Architectural Quarter, Dhaka 1212, Bangladesh",
     phone: "+8801234567891",
     email: "hello@planearchitect.com",
     isHQ: true,
@@ -94,7 +94,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               Contact Plane Architect
             </h2>
             <p className="font-body text-[11px] text-[#797979] uppercase tracking-wider">
-              Dhala, Bangladesh • +8801234567891 • hello@planearchitect.com
+              Dhaka, Bangladesh • +8801234567891 • hello@planearchitect.com
             </p>
           </div>
           <button

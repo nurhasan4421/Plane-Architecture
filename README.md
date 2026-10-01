@@ -1,6 +1,6 @@
 # PLANE ARCHITECT
 
-An architectural studio website based in **Dhala, Bangladesh** (Dhaka, Bangladesh).
+An architectural studio website based in **Dhaka, Bangladesh** (Dhaka, Bangladesh).
 
 - **Studio Name**: Plane Architect
 - **Address**: Dhala, Bangladesh

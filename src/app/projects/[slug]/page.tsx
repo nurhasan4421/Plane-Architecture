@@ -1,11 +1,12 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PROJECTS } from "@/lib/projects-data";
+import { getProjectBySlug, getProjects } from "@/lib/site-content";
 import ProjectDetailClientWrapper from "./ProjectDetailClientWrapper";
 
 export async function generateStaticParams() {
-  return PROJECTS.map((project) => ({
+  const projects = await getProjects();
+  return projects.map((project) => ({
     slug: project.slug,
   }));
 }
@@ -16,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = PROJECTS.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return {
@@ -41,14 +42,19 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const currentIndex = PROJECTS.findIndex((p) => p.slug === slug);
+  const [project, allProjects] = await Promise.all([getProjectBySlug(slug), getProjects()]);
+  if (!project) notFound();
 
-  if (currentIndex === -1) {
-    notFound();
-  }
-
-  const project = PROJECTS[currentIndex];
-  const nextProject = PROJECTS[(currentIndex + 1) % PROJECTS.length];
+  const sameCategoryProjects = allProjects.filter(
+    (item) => item.category === project.category,
+  );
+  const categoryIndex = sameCategoryProjects.findIndex(
+    (item) => item.slug === project.slug,
+  );
+  const nextProject =
+    sameCategoryProjects.length > 1
+      ? sameCategoryProjects[(categoryIndex + 1) % sameCategoryProjects.length]
+      : undefined;
 
   return (
     <ProjectDetailClientWrapper project={project} nextProject={nextProject} />

@@ -1,31 +1,150 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import ProjectCard from "./ProjectCard";
-import { Project } from "@/types/project";
+import { Project, ProjectTestimonial } from "@/types/project";
 
 interface ProjectFeedProps {
   projects: Project[];
+  testimonials: ProjectTestimonial[];
   activeCategory: string;
   activeSubcategory?: string;
-  scale?: number;
 }
 
-export default function ProjectFeed({
-  projects,
-  activeCategory,
-  activeSubcategory,
-  scale = 1,
-}: ProjectFeedProps) {
+const PROJECTS_PER_BATCH = 20;
+
+function ClientTestimonials({ projects, managedTestimonials }: { projects: Project[]; managedTestimonials: ProjectTestimonial[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [randomProjects, setRandomProjects] = useState<Project[]>([]);
+
+  const projectsWithQuotes = useMemo(
+    () => projects.filter((project) => project.quote),
+    [projects],
+  );
+  const latestProjects = useMemo(
+    () => projectsWithQuotes.slice(-3).reverse(),
+    [projectsWithQuotes],
+  );
+  const randomCandidates = useMemo(() => {
+    const latestIds = new Set(latestProjects.map((project) => project.id));
+    return projectsWithQuotes.filter((project) => !latestIds.has(project.id));
+  }, [latestProjects, projectsWithQuotes]);
+
+  useEffect(() => {
+    const shuffled = [...randomCandidates];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+    const timeout = window.setTimeout(() => {
+      setRandomProjects(shuffled.slice(0, 3));
+    }, 0);
+    return () => window.clearTimeout(timeout);
+  }, [randomCandidates]);
+
+  const fallbackTestimonials = [...randomProjects, ...latestProjects].slice(0, 6).map((project) => ({
+    id: project.id,
+    projectSlug: project.slug,
+    projectTitle: project.title,
+    quote: project.quote || "",
+    author: project.quoteAuthor || "Plane Architect",
+    role: project.quoteAuthorRole || "",
+    rating: 5,
+  }));
+  const testimonials = managedTestimonials.length
+    ? managedTestimonials.slice(0, 6).map((item) => ({
+        ...item,
+        projectTitle: projects.find((project) => project.slug === item.projectSlug)?.title || "Plane Architect",
+      }))
+    : fallbackTestimonials;
+
+  const scrollTestimonials = (direction: -1 | 1) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollBy({
+      left: direction * scrollRef.current.clientWidth * 0.8,
+      behavior: "smooth",
+    });
+  };
+
+  if (testimonials.length === 0) return null;
+
+  return (
+    <section aria-labelledby="client-testimonials" className="border-t border-neutral-200 pt-10 sm:pt-14">
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-500">Testimonials</p>
+          <h2 id="client-testimonials" className="font-display text-3xl font-normal sm:text-4xl">
+            What Our Clients Say
+          </h2>
+        </div>
+        <div className="flex shrink-0 gap-2">
+          <button
+            type="button"
+            onClick={() => scrollTestimonials(-1)}
+            aria-label="Previous testimonials"
+            className="flex h-10 w-10 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollTestimonials(1)}
+            aria-label="Next testimonials"
+            className="flex h-10 w-10 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+      <div
+        ref={scrollRef}
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {testimonials.map((item) => {
+          const card = (
+            <>
+              <div>
+                <div className="mb-3 flex gap-1" aria-label={`${item.rating} out of 5 stars`}>
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <Star key={index} className={`h-3.5 w-3.5 ${index < item.rating ? "fill-current text-[#b18342]" : "text-neutral-300"}`} />
+                  ))}
+                </div>
+                <span aria-hidden="true" className="font-display text-4xl leading-none text-neutral-400">&ldquo;</span>
+                <blockquote className="mt-2 font-display text-lg leading-relaxed text-neutral-800">
+                  {item.quote}
+                </blockquote>
+              </div>
+              <div className="mt-8 border-t border-neutral-200 pt-4">
+                <p className="text-sm font-medium text-black">{item.author}</p>
+                {item.role && <p className="mt-1 text-xs text-neutral-500">{item.role}</p>}
+                <p className="mt-1 text-xs text-neutral-500">{item.projectTitle}</p>
+              </div>
+            </>
+          );
+          const className = "group flex w-[88%] shrink-0 snap-start flex-col justify-between border border-neutral-200 p-5 transition-colors hover:border-neutral-500 sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)] lg:p-6";
+          return item.projectSlug ? (
+            <Link key={item.id} href={`/projects/${item.projectSlug}`} className={className}>{card}</Link>
+          ) : (
+            <article key={item.id} className={className}>{card}</article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+export default function ProjectFeed({ projects, testimonials, activeCategory, activeSubcategory }: ProjectFeedProps) {
+  const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_BATCH);
+
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
-      // Category match
       if (activeCategory && activeCategory !== "all") {
         if (project.category.toLowerCase() !== activeCategory.toLowerCase()) {
           return false;
         }
       }
-      // Subcategory / Typology match
       if (activeSubcategory && activeSubcategory !== "all") {
         const matchesTypology =
           project.typology.toLowerCase().includes(activeSubcategory.toLowerCase()) ||
@@ -36,28 +155,42 @@ export default function ProjectFeed({
     });
   }, [projects, activeCategory, activeSubcategory]);
 
+  const visibleProjects = filteredProjects.slice(0, visibleCount);
+  const hasMoreProjects = visibleProjects.length < filteredProjects.length;
+
   return (
-    <div className="projects-container w-full overflow-x-hidden pt-[90px] md:pt-[110px] pb-24">
-      {/* Scaler matching architectural projects-scaler */}
-      <div
-        className="projects-scaler flex min-h-screen flex-col items-center select-none transition-transform duration-500 ease-out"
-        style={{
-          transform: `scale(${scale === 1 ? 1 : scale === 0.75 ? 0.85 : 0.7})`,
-          transformOrigin: "top center",
-        }}
-      >
-        {filteredProjects.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="text-sm uppercase tracking-widest text-[#797979]">
-              No projects found in this category
-            </p>
-          </div>
-        ) : (
-          filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} scale={scale} />
-          ))
-        )}
-      </div>
+    <div className="w-full px-5 pb-24 pt-10 sm:px-8 lg:px-16">
+      {filteredProjects.length === 0 ? (
+        <div className="py-24 text-center">
+          <p className="text-sm uppercase tracking-widest text-[#797979]">
+            No projects found in this category
+          </p>
+        </div>
+      ) : (
+        <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-14 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+          {visibleProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+      )}
+
+      {hasMoreProjects && (
+        <div className="mx-auto mt-16 flex max-w-[1600px] justify-center">
+          <button
+            type="button"
+            onClick={() => setVisibleCount((count) => count + PROJECTS_PER_BATCH)}
+            className="min-h-12 border border-neutral-400 px-8 text-sm uppercase tracking-[0.14em] transition-colors hover:border-black hover:bg-black hover:text-white"
+          >
+            See more projects
+          </button>
+        </div>
+      )}
+
+      {filteredProjects.length > 0 && !hasMoreProjects && (
+        <div className="mx-auto mt-20 w-full max-w-[1600px]">
+          <ClientTestimonials projects={projects} managedTestimonials={testimonials} />
+        </div>
+      )}
     </div>
   );
 }

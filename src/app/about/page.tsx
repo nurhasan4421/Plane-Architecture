@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import Link from "next/link";
 import Header from "@/components/Header";
-import NavigationDrawer from "@/components/NavigationDrawer";
-import ContactModal from "@/components/ContactModal";
 import Footer from "@/components/Footer";
 
 const LEADERSHIP = [
@@ -16,22 +15,9 @@ const LEADERSHIP = [
 ];
 
 export default function AboutPage() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none font-body">
-      <Header
-        onToggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
-        isDrawerOpen={isDrawerOpen}
-        activeCategory="architecture"
-      />
-
-      <NavigationDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        onOpenContact={() => setIsContactOpen(true)}
-      />
+      <Header activeCategory="architecture" />
 
       <div className="pt-28 pb-20 px-6 md:px-16 lg:px-28 max-w-6xl mx-auto w-full">
         {/* Intro Manifesto */}
@@ -115,17 +101,16 @@ export default function AboutPage() {
             We welcome commissions, collaborative competitions, academic partnerships, and career
             inquiries.
           </p>
-          <button
-            onClick={() => setIsContactOpen(true)}
-            className="px-6 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors cursor-pointer"
+          <Link
+            href="/contact"
+            className="inline-flex px-6 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors"
           >
             Contact Plane Architect
-          </button>
+          </Link>
         </section>
       </div>
 
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
-      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      <Footer />
     </div>
   );
 }

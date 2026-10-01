@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import IntroSplash from "@/components/IntroSplash";
+import SiteContentProvider from "@/components/SiteContentProvider";
 
 export const metadata: Metadata = {
   title: "PLANE ARCHITECT | Dhaka, Bangladesh",
@@ -42,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-white text-black min-h-screen selection:bg-black selection:text-white">
         <IntroSplash />
-        {children}
+        <SiteContentProvider>{children}</SiteContentProvider>
       </body>
     </html>
   );

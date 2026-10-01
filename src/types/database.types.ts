@@ -35,6 +35,9 @@ export interface Database {
           diagrams: Json | null;
           gallery: Json | null;
           credits: Json | null;
+          sort_order: number;
+          is_published: boolean;
+          hero_media_type: string;
           created_at: string;
         };
         Insert: {
@@ -62,6 +65,9 @@ export interface Database {
           diagrams?: Json | null;
           gallery?: Json | null;
           credits?: Json | null;
+          sort_order?: number;
+          is_published?: boolean;
+          hero_media_type?: string;
           created_at?: string;
         };
         Update: {
@@ -89,6 +95,9 @@ export interface Database {
           diagrams?: Json | null;
           gallery?: Json | null;
           credits?: Json | null;
+          sort_order?: number;
+          is_published?: boolean;
+          hero_media_type?: string;
           created_at?: string;
         };
       };
@@ -131,6 +140,11 @@ export interface Database {
           excerpt: string;
           image: string;
           read_time: string;
+          author: string;
+          source_url: string | null;
+          body: string;
+          sort_order: number;
+          is_published: boolean;
           created_at: string;
         };
         Insert: {
@@ -142,6 +156,11 @@ export interface Database {
           excerpt: string;
           image: string;
           read_time: string;
+          author?: string;
+          source_url?: string | null;
+          body?: string;
+          sort_order?: number;
+          is_published?: boolean;
           created_at?: string;
         };
         Update: {
@@ -153,7 +172,63 @@ export interface Database {
           excerpt?: string;
           image?: string;
           read_time?: string;
+          author?: string;
+          source_url?: string | null;
+          body?: string;
+          sort_order?: number;
+          is_published?: boolean;
           created_at?: string;
+        };
+      };
+      admin_users: {
+        Row: { user_id: string; created_at: string };
+        Insert: { user_id: string; created_at?: string };
+        Update: { user_id?: string; created_at?: string };
+      };
+      site_settings: {
+        Row: { singleton: boolean; settings: Json; updated_at: string };
+        Insert: { singleton?: boolean; settings?: Json; updated_at?: string };
+        Update: { singleton?: boolean; settings?: Json; updated_at?: string };
+      };
+      testimonials: {
+        Row: {
+          id: string;
+          project_slug: string | null;
+          author: string;
+          role: string;
+          quote: string;
+          image_url: string;
+          rating: number;
+          is_published: boolean;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          project_slug?: string | null;
+          author: string;
+          role?: string;
+          quote: string;
+          image_url?: string;
+          rating?: number;
+          is_published?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          project_slug?: string | null;
+          author?: string;
+          role?: string;
+          quote?: string;
+          image_url?: string;
+          rating?: number;
+          is_published?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
         };
       };
     };
