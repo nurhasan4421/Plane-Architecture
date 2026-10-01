@@ -3,7 +3,7 @@
 An architectural studio website based in **Dhaka, Bangladesh** (Dhaka, Bangladesh).
 
 - **Studio Name**: Plane Architect
-- **Address**: Dhala, Bangladesh
+- **Address**: Dhaka, Bangladesh
 - **Contact Email**: hello@planearchitect.com
 - **Phone**: +8801234567891
 - **Typography**:
