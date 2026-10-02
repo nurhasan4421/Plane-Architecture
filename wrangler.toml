@@ -1,4 +1,4 @@
-name = "plane-architect"
+name = "plane-architecture"
 main = ".open-next/worker.js"
 compatibility_date = "2026-09-26"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
@@ -10,4 +10,4 @@ binding = "ASSETS"
 
 [[services]]
 binding = "WORKER_SELF_REFERENCE"
-service = "plane-architect"
+service = "plane-architecture"
