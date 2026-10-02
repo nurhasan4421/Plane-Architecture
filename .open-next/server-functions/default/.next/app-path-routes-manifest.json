@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/about/page": "/about",
+  "/admin/page": "/admin",
+  "/contact/page": "/contact",
+  "/news/[slug]/page": "/news/[slug]",
+  "/news/page": "/news",
+  "/page": "/",
+  "/projects/[slug]/page": "/projects/[slug]"
+}
