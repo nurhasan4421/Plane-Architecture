@@ -27,18 +27,16 @@ export default function Header({
   }).length;
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [mobileCategory, setMobileCategory] = useState(activeCategory);
+  const [mobileCategory, setMobileCategory] = useState(activeCategory === "all" ? (categories[0]?.id || "architecture") : activeCategory);
   const [isLogoMenuOpen, setIsLogoMenuOpen] = useState(false);
   const [submenuOffset, setSubmenuOffset] = useState(0);
   const [hoveredSubcategory, setHoveredSubcategory] = useState<string | null>(null);
   const desktopBarRef = useRef<HTMLDivElement>(null);
 
   const hoveredConfig = categories.find((category) => category.id === hoveredCategory);
-  const mobileSubcategories = mobileCategory === "all"
-    ? [{ id: "all", label: "All projects", slug: "/" }]
-    : (categories.find((category) => category.id === mobileCategory) || categories[0]).subcategories;
   const mobileConfig =
     categories.find((category) => category.id === mobileCategory) || categories[0];
+  const mobileSubcategories = mobileConfig?.subcategories || [];
 
   return (
     <header
@@ -78,17 +76,6 @@ export default function Header({
         <nav
           className={`hidden lg:flex lg:flex-1 items-center ${categories.length <= 2 ? "justify-end" : "justify-center"} gap-7 xl:gap-10 text-sm xl:text-base tracking-[0.12em] uppercase font-medium text-[#6b6b6b]`}
         >
-          <button
-            type="button"
-            onMouseEnter={() => setHoveredCategory(null)}
-            onClick={() => {
-              setHoveredCategory(null);
-              onSelectCategory?.("all");
-            }}
-            className={`py-2 px-1 uppercase transition-colors duration-150 ${activeCategory === "all" ? "font-semibold text-black" : "hover:text-black"}`}
-          >
-            All Projects
-          </button>
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -189,18 +176,6 @@ export default function Header({
       {isMobileFilterOpen && (
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 bg-white shadow-lg lg:hidden">
           <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 py-2">
-            <button
-              type="button"
-              aria-pressed={mobileCategory === "all"}
-              onClick={() => setMobileCategory("all")}
-              className={`block w-full px-4 py-3 text-left text-xs font-medium uppercase tracking-wide transition-colors sm:px-6 sm:text-sm ${
-                mobileCategory === "all"
-                  ? "bg-black text-white"
-                  : "text-neutral-600 hover:bg-neutral-100 hover:text-black"
-              }`}
-            >
-              All Projects
-            </button>
             {categories.map((category) => (
               <button
                 key={category.id}
@@ -218,11 +193,11 @@ export default function Header({
             ))}
           </nav>
           <nav
-            aria-label={mobileCategory === "all" ? "All projects" : `${mobileConfig.label} subcategories`}
+            aria-label={`${mobileConfig.label} subcategories`}
             className="max-h-[min(70vh,480px)] overflow-y-auto px-4 py-3 sm:px-6"
           >
             <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400">
-              {mobileCategory === "all" ? "All Projects" : mobileConfig.label}
+              {mobileConfig.label}
             </p>
             <div className="flex flex-col">
               {mobileSubcategories.map((subcategory) => {

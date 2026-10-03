@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Project } from "@/types/project";
 
 interface FeaturedProjectCarouselProps {
@@ -12,11 +11,12 @@ interface FeaturedProjectCarouselProps {
 export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCarouselProps) {
   const slides = projects.slice(0, 5);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchDeltaXRef = useRef<number>(0);
 
   useEffect(() => {
-    if (isPaused || isInteracting || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (isInteracting || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
 
@@ -25,7 +25,7 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
     }, 6000);
 
     return () => window.clearInterval(timer);
-  }, [isInteracting, isPaused, slides.length]);
+  }, [isInteracting, slides.length]);
 
   if (slides.length === 0) return null;
 
@@ -33,11 +33,37 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
   const goToPrevious = () => setActiveIndex((index) => (index - 1 + slides.length) % slides.length);
   const goToNext = () => setActiveIndex((index) => (index + 1) % slides.length);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchDeltaXRef.current = 0;
+    setIsInteracting(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    touchDeltaXRef.current = e.touches[0].clientX - touchStartXRef.current;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartXRef.current !== null) {
+      const delta = touchDeltaXRef.current;
+      const minSwipeDistance = 45;
+      if (delta > minSwipeDistance) {
+        goToPrevious();
+      } else if (delta < -minSwipeDistance) {
+        goToNext();
+      }
+    }
+    touchStartXRef.current = null;
+    touchDeltaXRef.current = 0;
+    setIsInteracting(false);
+  };
+
   return (
     <section
       aria-label="Featured projects"
       aria-roledescription="carousel"
-      className="relative isolate h-svh min-h-[620px] w-full overflow-hidden bg-black font-body"
+      className="relative isolate h-svh min-h-[620px] w-full overflow-hidden bg-black font-body select-none"
       onMouseEnter={() => setIsInteracting(true)}
       onMouseLeave={() => setIsInteracting(false)}
       onFocusCapture={() => setIsInteracting(true)}
@@ -46,6 +72,10 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
           setIsInteracting(false);
         }
       }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
     >
       <div className="absolute inset-0">
         {slides.map((project, index) => {
@@ -94,7 +124,8 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
           </p>
         </div>
 
-        <div className="pointer-events-auto flex shrink-0 items-center justify-between gap-4 lg:flex-col lg:items-end">
+        {/* White dots for slide navigation (hidden on mobile, visible on desktop/tablet) */}
+        <div className="pointer-events-auto hidden md:flex shrink-0 items-center justify-between gap-4 lg:flex-col lg:items-end">
           <div className="flex items-center gap-2" aria-label={`Slide ${activeIndex + 1} of ${slides.length}`}>
             {slides.map((project, index) => (
               <button
@@ -108,33 +139,6 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
                 }`}
               />
             ))}
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={goToPrevious}
-              aria-label="Previous featured project"
-              className="flex h-11 w-11 items-center justify-center bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={goToNext}
-              aria-label="Next featured project"
-              className="flex h-11 w-11 items-center justify-center bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsPaused((paused) => !paused)}
-              aria-label={isPaused ? "Play featured projects" : "Pause featured projects"}
-              aria-pressed={isPaused}
-              className="flex h-11 w-11 items-center justify-center bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-            >
-              {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-            </button>
           </div>
         </div>
       </div>

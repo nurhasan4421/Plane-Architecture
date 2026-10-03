@@ -28,6 +28,8 @@ export default function HomePage() {
     setActiveSubcategory(subcategory);
   };
 
+  const showCarousel = settings.carouselEnabled && activeCategory === "all";
+
   return (
     <main className="min-h-screen bg-white text-black flex flex-col justify-between">
       {/* Top Header */}
@@ -37,7 +39,7 @@ export default function HomePage() {
         onSelectCategory={handleSelectCategory}
       />
 
-      {settings.carouselEnabled && (
+      {showCarousel && (
         <FeaturedProjectCarousel
           projects={settings.featuredProjectSlugs
             .map((slug) => projects.find((project) => project.slug === slug))
@@ -46,13 +48,15 @@ export default function HomePage() {
       )}
 
       {/* Main Project Feed */}
-      <ProjectFeed
-        key={`${activeCategory}:${activeSubcategory ?? "all"}`}
-        projects={projects}
-        activeCategory={activeCategory}
-        activeSubcategory={activeSubcategory}
-        testimonials={testimonials}
-      />
+      <div className={showCarousel ? "" : "pt-[68px] sm:pt-[78px] lg:pt-[90px]"}>
+        <ProjectFeed
+          key={`${activeCategory}:${activeSubcategory ?? "all"}`}
+          projects={projects}
+          activeCategory={activeCategory}
+          activeSubcategory={activeSubcategory}
+          testimonials={testimonials}
+        />
+      </div>
 
       {/* Footer */}
       <Footer onSelectCategory={handleSelectCategory} />
