@@ -186,37 +186,49 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 function mapProject(row: Database["public"]["Tables"]["projects"]["Row"]): Project {
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    location: row.location,
-    year: row.year,
-    client: row.client,
-    typology: row.typology,
-    category: row.category,
-    subcategory: row.subcategory,
-    sizeM2: row.size_m2,
-    sizeFt2: row.size_ft2 ?? undefined,
-    status: row.status as Project["status"],
-    aspectRatio: row.aspect_ratio,
-    heroImage: row.hero_image,
-    heroMediaType: row.hero_media_type === "video" ? "video" : "image",
-    iconSvg: row.icon_svg ?? undefined,
-    quote: row.quote ?? undefined,
-    quoteAuthor: row.quote_author ?? undefined,
-    quoteAuthorRole: row.quote_author_role ?? undefined,
-    description: row.description,
-    awards: (row.awards as string[] | null) ?? undefined,
-    collaborators: (row.collaborators as string[] | null) ?? undefined,
-    diagrams: (row.diagrams as unknown as Project["diagrams"]) ?? undefined,
-    gallery: (row.gallery as unknown as Project["gallery"]) ?? undefined,
-    credits: (row.credits as unknown as Project["credits"]) ?? undefined,
-    sortOrder: row.sort_order,
-    isPublished: row.is_published,
-    createdAt: row.created_at,
-  };
-}
+    const diagramsJson = row.diagrams as Record<string, unknown> | null;
+    const narrative = (diagramsJson && typeof diagramsJson === "object" && "narrative" in diagramsJson && typeof diagramsJson.narrative === "object")
+      ? (diagramsJson.narrative as Record<string, string | undefined>)
+      : {};
+    return {
+      id: row.id,
+      slug: row.slug,
+      title: row.title,
+      location: row.location,
+      year: row.year,
+      client: row.client,
+      typology: row.typology,
+      category: row.category,
+      subcategory: row.subcategory,
+      sizeM2: row.size_m2,
+      sizeFt2: row.size_ft2 ?? undefined,
+      status: row.status as Project["status"],
+      aspectRatio: row.aspect_ratio,
+      heroImage: row.hero_image,
+      heroMediaType: row.hero_media_type === "video" ? "video" : "image",
+      iconSvg: row.icon_svg ?? undefined,
+      quote: row.quote ?? undefined,
+      quoteAuthor: row.quote_author ?? undefined,
+      quoteAuthorRole: row.quote_author_role ?? undefined,
+      description: row.description,
+      awards: (row.awards as string[] | null) ?? undefined,
+      collaborators: (row.collaborators as string[] | null) ?? undefined,
+      diagrams: (Array.isArray(row.diagrams) ? row.diagrams : (diagramsJson && Array.isArray((diagramsJson as Record<string, unknown>).steps) ? (diagramsJson as Record<string, unknown>).steps : undefined)) as unknown as Project["diagrams"],
+      gallery: (row.gallery as unknown as Project["gallery"]) ?? undefined,
+      credits: (row.credits as unknown as Project["credits"]) ?? undefined,
+      materials: narrative.materials,
+      climateStrategy: narrative.climateStrategy,
+      structuralSystem: narrative.structuralSystem,
+      siteArea: narrative.siteArea,
+      historyContext: narrative.historyContext,
+      designConcept: narrative.designConcept,
+      planningStory: narrative.planningStory,
+      sustainabilityStory: narrative.sustainabilityStory,
+      sortOrder: row.sort_order,
+      isPublished: row.is_published,
+      createdAt: row.created_at,
+    };
+  }
 
 function mapNews(row: Database["public"]["Tables"]["news"]["Row"]): NewsItem {
   return {
@@ -313,8 +325,19 @@ export async function saveAdminCmsContent(state: CmsContentState, deleted: CmsDe
       quote_author_role: project.quoteAuthorRole ?? null,
       description: project.description,
       awards: (project.awards ?? []) as Json,
-      collaborators: (project.collaborators ?? []) as Json,
-      diagrams: (project.diagrams ?? []) as unknown as Json,
+      diagrams: {
+        narrative: {
+          materials: project.materials,
+          climateStrategy: project.climateStrategy,
+          structuralSystem: project.structuralSystem,
+          siteArea: project.siteArea,
+          historyContext: project.historyContext,
+          designConcept: project.designConcept,
+          planningStory: project.planningStory,
+          sustainabilityStory: project.sustainabilityStory,
+        },
+        steps: Array.isArray(project.diagrams) ? project.diagrams : [],
+      } as unknown as Json,
       gallery: (project.gallery ?? []) as unknown as Json,
       credits: (project.credits ?? []) as unknown as Json,
       sort_order: project.sortOrder ?? 0,
@@ -361,6 +384,9 @@ export async function saveAdminCmsContent(state: CmsContentState, deleted: CmsDe
 }
 
 export async function getProjects(): Promise<Project[]> {
+  // Always use local projects as the baseline so code-defined projects are always visible.
+  const localProjects = PROJECTS;
+
   if (!isSupabaseConfigured || !supabase) return readLocalCmsState().projects;
   const client = supabase as NonNullable<typeof supabase>;
   const response = await client
@@ -369,8 +395,20 @@ export async function getProjects(): Promise<Project[]> {
     .eq("is_published", true)
     .order("sort_order", { ascending: true }) as QueryResult<Database["public"]["Tables"]["projects"]["Row"][]>;
   const { data, error } = response;
-  if (error) return readLocalCmsState().projects;
-  return (data ?? []).map(mapProject);
+
+  // On error or empty DB, fall back to local projects
+  if (error || !data || data.length === 0) return readLocalCmsState().projects;
+
+  const supabaseProjects = data.map(mapProject);
+  const supabaseBySlug = new Map(supabaseProjects.map((p) => [p.slug, p]));
+  const localSlugs = new Set(localProjects.map((p) => p.slug));
+
+  // Local projects with Supabase override applied where available (admin edits win)
+  const merged = localProjects.map((p) => supabaseBySlug.get(p.slug) ?? p);
+  // Append any projects created via admin that don't exist in local code
+  const extraProjects = supabaseProjects.filter((p) => !localSlugs.has(p.slug));
+
+  return [...merged, ...extraProjects];
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
@@ -384,9 +422,14 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       .maybeSingle() as QueryResult<Database["public"]["Tables"]["projects"]["Row"]>;
     const { data, error } = response;
     if (!error && data) return mapProject(data);
-    if (!error) return null;
+    // If not found in Supabase, fall through to local data below
   }
-  return readLocalCmsState().projects.find((project) => project.slug === slug) ?? null;
+  // Check localStorage-saved projects first, then fall back to code-defined PROJECTS
+  return (
+    readLocalCmsState().projects.find((project) => project.slug === slug) ??
+    PROJECTS.find((project) => project.slug === slug) ??
+    null
+  );
 }
 
 export async function getNewsItems(): Promise<NewsItem[]> {

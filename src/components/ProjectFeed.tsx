@@ -15,7 +15,7 @@ interface ProjectFeedProps {
   showSortFilter?: boolean;
 }
 
-const PROJECTS_PER_BATCH = 20;
+const PROJECTS_PER_BATCH = 30;
 
 function ClientTestimonials({ projects, managedTestimonials }: { projects: Project[]; managedTestimonials: ProjectTestimonial[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -73,59 +73,58 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
   if (testimonials.length === 0) return null;
 
   return (
-    <section aria-labelledby="client-testimonials" className="border-t border-neutral-200 pt-10 sm:pt-14">
-      <div className="mb-6 flex items-end justify-between gap-4">
+    <section aria-labelledby="client-testimonials" className="border-t border-neutral-200 pt-6 sm:pt-8">
+      <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-500">Testimonials</p>
-          <h2 id="client-testimonials" className="font-display text-3xl font-normal sm:text-4xl">
+          <p className="mb-1 text-[9px] uppercase tracking-[0.2em] text-neutral-400">Testimonials</p>
+          <h2 id="client-testimonials" className="font-display text-xl sm:text-2xl font-normal text-black">
             What Our Clients Say
           </h2>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="hidden sm:flex shrink-0 gap-1.5">
           <button
             type="button"
             onClick={() => scrollTestimonials(-1)}
             aria-label="Previous testimonials"
-            className="flex h-10 w-10 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+            className="flex h-8 w-8 items-center justify-center border border-neutral-200 bg-white transition-colors hover:border-black hover:bg-neutral-50"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             type="button"
             onClick={() => scrollTestimonials(1)}
             aria-label="Next testimonials"
-            className="flex h-10 w-10 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+            className="flex h-8 w-8 items-center justify-center border border-neutral-200 bg-white transition-colors hover:border-black hover:bg-neutral-50"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>
       <div
         ref={scrollRef}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {testimonials.map((item) => {
           const card = (
             <>
               <div>
-                <div className="mb-3 flex gap-1" aria-label={`${item.rating} out of 5 stars`}>
+                <div className="mb-2 flex gap-0.5" aria-label={`${item.rating} out of 5 stars`}>
                   {Array.from({ length: 5 }, (_, index) => (
-                    <Star key={index} className={`h-3.5 w-3.5 ${index < item.rating ? "fill-current text-[#b18342]" : "text-neutral-300"}`} />
+                    <Star key={index} className={`h-3 w-3 ${index < item.rating ? "fill-current text-[#b18342]" : "text-neutral-200"}`} />
                   ))}
                 </div>
-                <span aria-hidden="true" className="font-display text-4xl leading-none text-neutral-400">&ldquo;</span>
-                <blockquote className="mt-2 font-display text-lg leading-relaxed text-neutral-800">
-                  {item.quote}
+                <blockquote className="font-display text-xs sm:text-sm leading-relaxed text-neutral-800 line-clamp-3">
+                  &ldquo;{item.quote}&rdquo;
                 </blockquote>
               </div>
-              <div className="mt-8 border-t border-neutral-200 pt-4">
-                <p className="text-sm font-medium text-black">{item.author}</p>
-                {item.role && <p className="mt-1 text-xs text-neutral-500">{item.role}</p>}
-                <p className="mt-1 text-xs text-neutral-500">{item.projectTitle}</p>
+              <div className="mt-3 border-t border-neutral-100 pt-2.5">
+                <p className="text-xs font-semibold text-black">{item.author}</p>
+                {item.role && <p className="mt-0.5 text-[10px] text-neutral-400 truncate">{item.role}</p>}
+                <p className="mt-0.5 text-[10px] text-neutral-400 truncate">{item.projectTitle}</p>
               </div>
             </>
           );
-          const className = "group flex w-[88%] shrink-0 snap-start flex-col justify-between border border-neutral-200 p-5 transition-colors hover:border-neutral-500 sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)] lg:p-6";
+          const className = "group flex w-[75%] max-w-[280px] shrink-0 snap-start flex-col justify-between border border-neutral-200 bg-white p-3.5 sm:p-4 transition-colors hover:border-neutral-500 sm:w-[260px] lg:w-[280px]";
           return item.projectSlug ? (
             <Link key={item.id} href={`/projects/${item.projectSlug}`} className={className}>{card}</Link>
           ) : (

@@ -34,6 +34,15 @@ import { getAdminCmsContent, saveAdminCmsContent } from "@/lib/site-content";
 import type { CmsDeletedContent, SiteCategory } from "@/lib/site-content";
 import { NewsItem, Project, ProjectTestimonial } from "@/types/project";
 
+const DEFAULT_COLLAGE_CAPTIONS = [
+  "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD",
+  "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE",
+  "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS",
+  "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY",
+  "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING",
+  "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE",
+];
+
 const emptyProject = (): Project => ({
   id: crypto.randomUUID(),
   slug: "new-project",
@@ -41,19 +50,39 @@ const emptyProject = (): Project => ({
   location: "Dhaka, Bangladesh",
   year: String(new Date().getFullYear()),
   client: "Plane Architect",
-  typology: "Architecture",
+  typology: "Culture",
   category: "architecture",
   subcategory: "culture",
   sizeM2: "5,000",
+  sizeFt2: "53,800",
   status: "Concept",
   aspectRatio: "16 / 9",
   heroImage: "",
-  description: "Add a project description.",
-  quote: "",
+  description: "A flagship architectural commission negotiating daylight, climate, and materiality.",
+  quote: "Architecture in the Bengal delta must breathe with water, light, and monsoon rhythm.",
   quoteAuthor: "Plane Architect",
   quoteAuthorRole: "Design Principal",
+  materials: "Board-formed concrete, local terracotta jali, low-E insulated glazing",
+  climateStrategy: "Deep perimeter porticos, natural stack cross-ventilation, shaded courtyards",
+  structuralSystem: "Cast-in-place reinforced concrete & post-tensioned slabs",
+  siteArea: "12,000 m² urban waterfront parcel",
+  historyContext: "Situated in Dhaka, Bangladesh, the project responds to the rich cultural, alluvial, and urban evolution of its setting.",
+  designConcept: "Conceived as an expressive interplay of solid stereotomic mass and porous transitional voids, the architecture choreographs natural light.",
+  planningStory: "Constructed through close collaboration with regional master artisans and structural engineers to achieve crisp tectonic tolerances.",
+  sustainabilityStory: "Rooted in passive bioclimatic resilience, deep overhangs and cross-ventilation mitigate operational cooling energy.",
+  credits: [
+    { role: "Lead Architect", people: ["Plane Architect"] },
+    { role: "Design Director", people: ["Design Principal"] },
+    { role: "Structural Engineering", people: ["Delta Structural Engineering Atelier"] },
+    { role: "Climate & Environmental Systems", people: ["Atelier Bioclimatic Systems"] },
+    { role: "Landscape Architecture", people: ["Studio Alluvial Landscapes"] },
+    { role: "General Contractor", people: ["Apex Construction & Infrastructure Consortium"] },
+  ],
+  collaborators: ["Delta Structural Engineering Atelier", "Atelier Bioclimatic Systems", "Studio Alluvial Landscapes"],
+  awards: ["Design Excellence Citation", "Regional Sustainable Building Honor"],
   isPublished: false,
   sortOrder: 0,
+  gallery: DEFAULT_COLLAGE_CAPTIONS.map((caption) => ({ url: "", caption })),
 });
 
 const emptyNews = (): NewsItem => ({
@@ -278,6 +307,354 @@ function SupabaseMediaField({
       </div>
       {uploaded && <p role="status" className="mt-2 text-xs text-[#426454]">Uploaded to Supabase Storage.</p>}
       {uploadError && <p role="alert" className="mt-2 text-xs text-red-600">{uploadError}</p>}
+    </div>
+  );
+}
+
+function ProjectCollageAdminSlot({
+  slotNumber,
+  slotTitle,
+  aspectClass,
+  badgePosition,
+  item,
+  onChange,
+}: {
+  slotNumber: number;
+  slotTitle: string;
+  aspectClass: string;
+  badgePosition: "top" | "bottom";
+  item: { url: string; caption?: string };
+  onChange: (updated: { url: string; caption?: string }) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+    setUploadError("");
+    if (!supabase) {
+      setUploadError("Supabase is not configured.");
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const objectPath = `images/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("site-media").upload(objectPath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) throw error;
+      const { data } = supabase.storage.from("site-media").getPublicUrl(objectPath);
+      onChange({ ...item, url: data.publicUrl });
+    } catch (err: unknown) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2 rounded-[6px] border border-black/10 bg-white p-2.5 shadow-xs">
+      <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-neutral-500 font-semibold">
+        <span>Slot {slotNumber}: {slotTitle}</span>
+        {uploading && <span className="text-amber-600">Uploading...</span>}
+      </div>
+
+      {/* Visual aspect preview matching the website collage */}
+      <div className={`relative w-full ${aspectClass} overflow-hidden rounded-[4px] bg-[#ebeae6]`}>
+        {item.url ? (
+          <img src={item.url} alt={item.caption || `Slot ${slotNumber}`} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center p-3 text-neutral-400">
+            <FileImage className="h-5 w-5 mb-1 text-neutral-300" />
+            <span className="text-[9px] uppercase tracking-wider text-neutral-400">Empty Photo</span>
+          </div>
+        )}
+
+        {/* Live caption badge matching the website overlay */}
+        <span
+          className={`absolute ${
+            badgePosition === "top" ? "top-2 left-2" : "bottom-2 left-2"
+          } max-w-[90%] truncate bg-black/85 px-2 py-0.5 text-[8px] sm:text-[9px] font-medium uppercase tracking-wider text-white shadow-sm`}
+        >
+          {item.caption || `VIEW ${slotNumber}`}
+        </span>
+      </div>
+
+      {/* URL & Upload button */}
+      <div className="flex items-center gap-1.5">
+        <input
+          type="text"
+          value={item.url || ""}
+          onChange={(e) => onChange({ ...item, url: e.target.value })}
+          placeholder="Image URL..."
+          className="h-7 min-w-0 flex-1 rounded-[3px] border border-black/10 bg-white px-2 text-[11px] text-black outline-none focus:border-black placeholder:text-neutral-400"
+        />
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleUpload}
+          className="sr-only"
+        />
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          title="Upload image file"
+          className="inline-flex h-7 items-center justify-center rounded-[3px] border border-black/15 bg-neutral-50 px-2 text-[9px] font-medium uppercase tracking-wider text-neutral-700 hover:border-black disabled:opacity-50 shrink-0"
+        >
+          <Upload className="h-3 w-3 mr-1" /> Upload
+        </button>
+      </div>
+
+      {/* Caption text */}
+      <div>
+        <input
+          type="text"
+          value={item.caption || ""}
+          onChange={(e) => onChange({ ...item, caption: e.target.value })}
+          placeholder="Overlay Caption (e.g. VIEW 1 CONSTRUCTED...)"
+          className="h-7 w-full rounded-[3px] border border-black/10 bg-white px-2 text-[10px] uppercase tracking-wide text-neutral-700 outline-none focus:border-black placeholder:text-neutral-400"
+        />
+      </div>
+
+      {uploadError && <p className="text-[10px] text-red-600">{uploadError}</p>}
+    </div>
+  );
+}
+
+function AdminCollageGrid({
+  gallery,
+  onChange,
+}: {
+  gallery?: { url: string; caption?: string }[];
+  onChange: (gallery: { url: string; caption?: string }[]) => void;
+}) {
+  const slots = useMemo(() => {
+    const list = [...(gallery || [])];
+    while (list.length < 6) {
+      const idx = list.length;
+      list.push({ url: "", caption: DEFAULT_COLLAGE_CAPTIONS[idx] || `VIEW ${idx + 1}` });
+    }
+    return list.slice(0, 6);
+  }, [gallery]);
+
+  const updateSlot = (index: number, updated: { url: string; caption?: string }) => {
+    const next = [...slots];
+    next[index] = updated;
+    onChange(next);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-500">
+            6-Photo Featured Collage (Aligned Website UI Match)
+          </p>
+          <p className="text-xs text-neutral-500">
+            All 3 columns are mathematically aligned on all sides and bottom. Upload 6 distinct images and set captions.
+          </p>
+        </div>
+      </div>
+
+      {/* Live Synced Collage Preview - 100% Flush Aligned On All Sides */}
+      <div className="rounded-[6px] border border-black/15 bg-[#171717] p-3 shadow-inner">
+        <p className="mb-2 text-[9px] uppercase tracking-[0.14em] text-neutral-400 font-medium">
+          Live Website Collage Silhouette (Side & Bottom Aligned)
+        </p>
+        <div className="grid grid-cols-3 gap-2 w-full h-[260px] sm:h-[320px]">
+          {/* Col 1 */}
+          <div className="flex flex-col gap-2 h-full min-h-0">
+            <div className="relative w-full flex-[0.38] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[0].url ? <img src={slots[0].url} alt={slots[0].caption || "Slot 1"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 1</div>}
+              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[0].caption || "VIEW 1"}</span>
+            </div>
+            <div className="relative w-full flex-[0.62] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[1].url ? <img src={slots[1].url} alt={slots[1].caption || "Slot 2"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 2</div>}
+              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[1].caption || "VIEW 2"}</span>
+            </div>
+          </div>
+
+          {/* Col 2 */}
+          <div className="flex flex-col gap-2 h-full min-h-0">
+            <div className="relative w-full flex-[0.45] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[2].url ? <img src={slots[2].url} alt={slots[2].caption || "Slot 3"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 3</div>}
+              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[2].caption || "VIEW 3"}</span>
+            </div>
+            <div className="relative w-full flex-[0.55] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[3].url ? <img src={slots[3].url} alt={slots[3].caption || "Slot 4"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 4</div>}
+              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[3].caption || "VIEW 4"}</span>
+            </div>
+          </div>
+
+          {/* Col 3 */}
+          <div className="flex flex-col gap-2 h-full min-h-0">
+            <div className="relative w-full flex-[0.65] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[4].url ? <img src={slots[4].url} alt={slots[4].caption || "Slot 5"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 5</div>}
+              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[4].caption || "VIEW 5"}</span>
+            </div>
+            <div className="relative w-full flex-[0.35] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
+              {slots[5].url ? <img src={slots[5].url} alt={slots[5].caption || "Slot 6"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 6</div>}
+              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[5].caption || "VIEW 6"}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 rounded-[8px] border border-black/10 bg-[#f4f3ef] p-3 sm:p-4">
+        {/* Column 1 */}
+        <div className="flex flex-col gap-3">
+          <ProjectCollageAdminSlot
+            slotNumber={1}
+            slotTitle="Top Landscape (38% H)"
+            aspectClass="aspect-[16/9]"
+            badgePosition="top"
+            item={slots[0]}
+            onChange={(updated) => updateSlot(0, updated)}
+          />
+          <ProjectCollageAdminSlot
+            slotNumber={2}
+            slotTitle="Bottom Tall (62% H)"
+            aspectClass="aspect-[3/4]"
+            badgePosition="bottom"
+            item={slots[1]}
+            onChange={(updated) => updateSlot(1, updated)}
+          />
+        </div>
+
+        {/* Column 2 */}
+        <div className="flex flex-col gap-3">
+          <ProjectCollageAdminSlot
+            slotNumber={3}
+            slotTitle="Top Square (45% H)"
+            aspectClass="aspect-[1/1]"
+            badgePosition="top"
+            item={slots[2]}
+            onChange={(updated) => updateSlot(2, updated)}
+          />
+          <ProjectCollageAdminSlot
+            slotNumber={4}
+            slotTitle="Bottom Tall (55% H)"
+            aspectClass="aspect-[3/4]"
+            badgePosition="bottom"
+            item={slots[3]}
+            onChange={(updated) => updateSlot(3, updated)}
+          />
+        </div>
+
+        {/* Column 3 */}
+        <div className="flex flex-col gap-3">
+          <ProjectCollageAdminSlot
+            slotNumber={5}
+            slotTitle="Top Spire (65% H)"
+            aspectClass="aspect-[2/3]"
+            badgePosition="top"
+            item={slots[4]}
+            onChange={(updated) => updateSlot(4, updated)}
+          />
+          <ProjectCollageAdminSlot
+            slotNumber={6}
+            slotTitle="Bottom Landscape (35% H)"
+            aspectClass="aspect-[4/3]"
+            badgePosition="bottom"
+            item={slots[5]}
+            onChange={(updated) => updateSlot(5, updated)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminCreditsEditor({
+  credits,
+  onChange,
+}: {
+  credits?: { role: string; people: string[] }[];
+  onChange: (credits: { role: string; people: string[] }[]) => void;
+}) {
+  const list = credits && credits.length > 0 ? credits : [
+    { role: "Lead Architect", people: ["Plane Architect"] },
+    { role: "Design Director", people: ["Principal Architect"] },
+    { role: "Structural Engineering", people: ["Delta Structural Engineering Atelier"] },
+    { role: "Climate & Environmental Systems", people: ["Atelier Bioclimatic Systems"] },
+  ];
+
+  const updateRole = (index: number, newRole: string) => {
+    const next = [...list];
+    next[index] = { ...next[index], role: newRole };
+    onChange(next);
+  };
+
+  const updatePeople = (index: number, peopleStr: string) => {
+    const next = [...list];
+    next[index] = {
+      ...next[index],
+      people: peopleStr.split(",").map((s) => s.trim()).filter(Boolean),
+    };
+    onChange(next);
+  };
+
+  const addCredit = () => {
+    onChange([...list, { role: "Engineering / Consulting Partner", people: ["Consultant / Firm Name"] }]);
+  };
+
+  const removeCredit = (index: number) => {
+    onChange(list.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-500">Project Credits & Team Roles</p>
+          <p className="text-xs text-neutral-500">Define roles and architects, engineers, or firms who designed the project.</p>
+        </div>
+        <button
+          type="button"
+          onClick={addCredit}
+          className="inline-flex items-center gap-1 rounded-[3px] border border-black/15 bg-white px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-black hover:border-black cursor-pointer shadow-2xs"
+        >
+          <Plus className="h-3 w-3" /> Add Credit Role
+        </button>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        {list.map((credit, idx) => (
+          <div key={idx} className="flex flex-col gap-2 rounded-[6px] border border-black/10 bg-white p-3 shadow-2xs">
+            <div className="flex items-center justify-between gap-2">
+              <input
+                type="text"
+                value={credit.role}
+                onChange={(e) => updateRole(idx, e.target.value)}
+                placeholder="Role (e.g. Lead Architect, Structural Engineer)"
+                className="h-7 flex-1 rounded-[3px] border border-black/10 px-2 text-xs font-semibold text-black outline-none focus:border-black placeholder:text-neutral-400"
+              />
+              <button
+                type="button"
+                onClick={() => removeCredit(idx)}
+                title="Remove credit role"
+                className="flex h-7 w-7 items-center justify-center rounded-[3px] text-neutral-400 hover:text-red-600 transition cursor-pointer"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <input
+              type="text"
+              value={credit.people.join(", ")}
+              onChange={(e) => updatePeople(idx, e.target.value)}
+              placeholder="Names / Firms (comma-separated, e.g. Plane Architect, Jane Doe)"
+              className="h-7 w-full rounded-[3px] border border-black/10 px-2 text-xs text-neutral-700 outline-none focus:border-black placeholder:text-neutral-400"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -652,7 +1029,7 @@ export default function AdminPage() {
     setTestimonialDrafts((current) => current.filter((item) => item.id !== selectedTestimonial.id));
     setSelectedTestimonialId(testimonialDrafts.find((item) => item.id !== selectedTestimonial.id)?.id ?? "");
   };
-  const updateProject = (field: keyof Project, value: string | boolean | number | null) => {
+  const updateProject = (field: keyof Project, value: unknown) => {
     if (!selectedProject) return;
     if (field === "category" || field === "subcategory") setProjectCategoryFilter(null);
     setProjectDrafts((current) => current.map((item) => item.id === selectedProject.id ? { ...item, [field]: value } : item));
@@ -867,7 +1244,211 @@ export default function AdminPage() {
                 <section className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white">
                   {activeSection === "projects" && selectedProject && <>
                     <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Project details</p><h3 className="mt-1 truncate font-display text-2xl">{selectedProject.title}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedProject.isPublished ?? true} /><button type="button" onClick={deleteProject} title="Delete project" aria-label="Delete project" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Project title" value={selectedProject.title} onChange={(value) => updateProject("title", value)} /><AdminField label="URL slug" value={selectedProject.slug} onChange={(value) => updateProject("slug", value)} /><AdminField label="Location" value={selectedProject.location} onChange={(value) => updateProject("location", value)} /><AdminField label="Year" value={selectedProject.year} onChange={(value) => updateProject("year", value)} /><AdminField label="Client" value={selectedProject.client} onChange={(value) => updateProject("client", value)} /><AdminField label="Category" value={selectedProject.category} onChange={(value) => updateProject("category", value)} /><AdminField label="Subcategory" value={selectedProject.subcategory} onChange={(value) => updateProject("subcategory", value)} /><AdminField label="Typology" value={selectedProject.typology} onChange={(value) => updateProject("typology", value)} /><AdminField label="Area (m²)" value={selectedProject.sizeM2} onChange={(value) => updateProject("sizeM2", value)} /><AdminField label="Area (ft²)" value={selectedProject.sizeFt2 ?? ""} onChange={(value) => updateProject("sizeFt2", value)} /><label className={labelClass}>Status<select value={selectedProject.status} onChange={(event) => updateProject("status", event.target.value)} className={inputClass}><option>Completed</option><option>In Progress</option><option>Competition Win</option><option>Concept</option></select></label><AdminField label="Sort order" type="number" value={String(selectedProject.sortOrder ?? 0)} onChange={(value) => updateProject("sortOrder", Number(value))} /></div><div><p className={labelClass}>Cover media</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedProject.heroImage ? <img src={selectedProject.heroImage} alt={`Cover preview for ${selectedProject.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image or video URL" value={selectedProject.heroImage} onChange={(value) => updateProject("heroImage", value)} /></div><label className={`${labelClass} mt-4`}>Media type<select value={selectedProject.heroMediaType ?? "image"} onChange={(event) => updateProject("heroMediaType", event.target.value)} className={inputClass}><option value="image">Image</option><option value="video">Video</option></select></label><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedProject.isPublished ?? true} onChange={(event) => updateProject("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish project</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this on the public website</span></span></label></div></div><div className="border-t border-black/10 pt-6"><p className={`${labelClass} mb-4`}>Project story</p><div className="grid gap-4 sm:grid-cols-2"><AdminField label="Description" value={selectedProject.description} onChange={(value) => updateProject("description", value)} rows={5} className="sm:col-span-2" /><AdminField label="Project quote" value={selectedProject.quote ?? ""} onChange={(value) => updateProject("quote", value)} rows={3} /><div className="grid content-start gap-4"><AdminField label="Quote author" value={selectedProject.quoteAuthor ?? ""} onChange={(value) => updateProject("quoteAuthor", value)} /><AdminField label="Author role" value={selectedProject.quoteAuthorRole ?? ""} onChange={(value) => updateProject("quoteAuthorRole", value)} /></div></div></div></div>
+                    <div className="space-y-7 p-5 sm:p-7">
+                      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]">
+                        <div className="grid content-start gap-4 sm:grid-cols-2">
+                          <AdminField label="Project title" value={selectedProject.title} onChange={(value) => updateProject("title", value)} />
+                          <AdminField label="URL slug" value={selectedProject.slug} onChange={(value) => updateProject("slug", value)} />
+                          <AdminField label="Location" value={selectedProject.location} onChange={(value) => updateProject("location", value)} />
+                          <AdminField label="Year" value={selectedProject.year} onChange={(value) => updateProject("year", value)} />
+                          <AdminField label="Client" value={selectedProject.client} onChange={(value) => updateProject("client", value)} />
+                          <AdminField label="Category" value={selectedProject.category} onChange={(value) => updateProject("category", value)} />
+                          <AdminField label="Subcategory" value={selectedProject.subcategory} onChange={(value) => updateProject("subcategory", value)} />
+                          <AdminField label="Typology" value={selectedProject.typology} onChange={(value) => updateProject("typology", value)} />
+                          <AdminField label="Area (m²)" value={selectedProject.sizeM2} onChange={(value) => updateProject("sizeM2", value)} />
+                          <AdminField label="Area (ft²)" value={selectedProject.sizeFt2 ?? ""} onChange={(value) => updateProject("sizeFt2", value)} />
+                          <label className={labelClass}>Status
+                            <select value={selectedProject.status} onChange={(event) => updateProject("status", event.target.value)} className={inputClass}>
+                              <option>Completed</option>
+                              <option>In Progress</option>
+                              <option>Competition Win</option>
+                              <option>Concept</option>
+                            </select>
+                          </label>
+                          <AdminField label="Sort order" type="number" value={String(selectedProject.sortOrder ?? 0)} onChange={(value) => updateProject("sortOrder", Number(value))} />
+                        </div>
+                        <div>
+                          <p className={labelClass}>Header Cover Media</p>
+                          <div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">
+                            {selectedProject.heroImage ? (
+                              <img src={selectedProject.heroImage} alt={`Cover preview for ${selectedProject.title}`} className="h-full w-full object-cover" />
+                            ) : (
+                              <div className="flex h-full items-center justify-center text-neutral-400">
+                                <FileImage className="h-6 w-6" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="mt-4">
+                            <SupabaseMediaField label="Header image / video URL" value={selectedProject.heroImage} onChange={(value) => updateProject("heroImage", value)} />
+                          </div>
+                          <label className={`${labelClass} mt-4`}>Media type
+                            <select value={selectedProject.heroMediaType ?? "image"} onChange={(event) => updateProject("heroMediaType", event.target.value)} className={inputClass}>
+                              <option value="image">Image</option>
+                              <option value="video">Video</option>
+                            </select>
+                          </label>
+                          <label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700">
+                            <input type="checkbox" checked={selectedProject.isPublished ?? true} onChange={(event) => updateProject("isPublished", event.target.checked)} className="h-4 w-4 accent-black" />
+                            <span>
+                              <span className="block text-xs font-medium">Publish project</span>
+                              <span className="mt-0.5 block text-[10px] text-neutral-500">Show this on the public website</span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* 2. Project Overview & Architectural Specifications (Before Feature Images) */}
+                      <div className="border-t border-black/10 pt-6">
+                        <p className={`${labelClass} mb-4`}>Project Overview & Architectural Specifications</p>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <AdminField
+                            label="Project overview & summary"
+                            value={selectedProject.description}
+                            onChange={(value) => updateProject("description", value)}
+                            rows={4}
+                            className="sm:col-span-2"
+                            placeholder="A flagship cultural landmark along Dhaka's riverfront..."
+                          />
+                          <AdminField
+                            label="Materiality"
+                            value={selectedProject.materials ?? ""}
+                            onChange={(value) => updateProject("materials", value)}
+                            placeholder="Hand-molded terracotta brick jali, exposed board-formed concrete..."
+                          />
+                          <AdminField
+                            label="Climate Strategy"
+                            value={selectedProject.climateStrategy ?? ""}
+                            onChange={(value) => updateProject("climateStrategy", value)}
+                            placeholder="Deep perimeter porticos, natural stack cross-ventilation..."
+                          />
+                          <AdminField
+                            label="Structural System"
+                            value={selectedProject.structuralSystem ?? ""}
+                            onChange={(value) => updateProject("structuralSystem", value)}
+                            placeholder="Post-tensioned concrete slabs, perimeter shear walls..."
+                          />
+                          <AdminField
+                            label="Site Area"
+                            value={selectedProject.siteArea ?? ""}
+                            onChange={(value) => updateProject("siteArea", value)}
+                            placeholder="Urban Waterfront Plot / 32,000 m²..."
+                          />
+                        </div>
+                      </div>
+
+                      {/* 3. Feature Images (6-Photo Collage Aligned Website UI) */}
+                      <div className="border-t border-black/10 pt-6">
+                        <AdminCollageGrid
+                          gallery={selectedProject.gallery}
+                          onChange={(newGallery) => updateProject("gallery", newGallery)}
+                        />
+                      </div>
+
+                      {/* 4. Architectural Narrative, History & Design Concept */}
+                      <div className="border-t border-black/10 pt-6">
+                        <div className="mb-4">
+                          <p className={labelClass}>Design Biography & Architectural Concept</p>
+                          <p className="text-xs text-neutral-500">
+                            In-depth architectural narrative covering site heritage, spatial form, tectonic craftsmanship, and ecological resilience.
+                          </p>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <AdminField
+                            label="Site Context & History"
+                            value={selectedProject.historyContext ?? ""}
+                            onChange={(value) => updateProject("historyContext", value)}
+                            rows={4}
+                            placeholder="How the project relates to regional heritage, topography, and urban context..."
+                          />
+                          <AdminField
+                            label="Spatial Concept & Form"
+                            value={selectedProject.designConcept ?? ""}
+                            onChange={(value) => updateProject("designConcept", value)}
+                            rows={4}
+                            placeholder="Core architectural ideas, massing, daylight choreography, and volume hierarchy..."
+                          />
+                          <AdminField
+                            label="Planning, Craft & Construction"
+                            value={selectedProject.planningStory ?? ""}
+                            onChange={(value) => updateProject("planningStory", value)}
+                            rows={4}
+                            placeholder="Tectonic assembly, collaboration with artisan craftsmen and structural engineers..."
+                          />
+                          <AdminField
+                            label="Climate Strategy & Ecology"
+                            value={selectedProject.sustainabilityStory ?? ""}
+                            onChange={(value) => updateProject("sustainabilityStory", value)}
+                            rows={4}
+                            placeholder="Bioclimatic performance, stack ventilation, shading, water harvesting..."
+                          />
+                        </div>
+                      </div>
+
+                      {/* 5. Project Credits, Partners & Engineers */}
+                      <div className="border-t border-black/10 pt-6 space-y-5">
+                        <AdminCreditsEditor
+                          credits={selectedProject.credits}
+                          onChange={(newCredits) => updateProject("credits", newCredits)}
+                        />
+
+                        <div className="grid gap-4 sm:grid-cols-2 border-t border-black/5 pt-4">
+                          <AdminField
+                            label="Engineers & Consulting Partners"
+                            value={(selectedProject.collaborators || []).join(", ")}
+                            onChange={(value) =>
+                              updateProject(
+                                "collaborators",
+                                value.split(",").map((s) => s.trim()).filter(Boolean)
+                              )
+                            }
+                            placeholder="Bengal Structural Engineers, Atelier Bioclimatic, Studio Alluvial (comma-separated)"
+                          />
+                          <AdminField
+                            label="Awards & Recognition"
+                            value={(selectedProject.awards || []).join(", ")}
+                            onChange={(value) =>
+                              updateProject(
+                                "awards",
+                                value.split(",").map((s) => s.trim()).filter(Boolean)
+                              )
+                            }
+                            placeholder="Delta Architecture Citation 2025, WAF Finalist (comma-separated)"
+                          />
+                        </div>
+                      </div>
+
+                      {/* 6. Project Owner / Client Testimonial */}
+                      <div className="border-t border-black/10 pt-6">
+                        <div className="mb-4">
+                          <p className={labelClass}>Project Owner / Client Testimonial</p>
+                          <p className="text-xs text-neutral-500">
+                            Rendered as a refined, focused architectural card at the bottom of the project page.
+                          </p>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <AdminField
+                            label="Testimonial quote"
+                            value={selectedProject.quote ?? ""}
+                            onChange={(value) => updateProject("quote", value)}
+                            rows={3}
+                            className="sm:col-span-2"
+                            placeholder="Architecture in the Bengal delta must breathe with water, light, and monsoon rhythm..."
+                          />
+                          <AdminField
+                            label="Client / Quote author"
+                            value={selectedProject.quoteAuthor ?? ""}
+                            onChange={(value) => updateProject("quoteAuthor", value)}
+                            placeholder="e.g. National Arts Trust / Principal Architect"
+                          />
+                          <AdminField
+                            label="Author role or title"
+                            value={selectedProject.quoteAuthorRole ?? ""}
+                            onChange={(value) => updateProject("quoteAuthorRole", value)}
+                            placeholder="e.g. Chairman, Board of Trustees"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </>}
 
                   {activeSection === "news" && selectedNews && <>

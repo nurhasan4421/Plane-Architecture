@@ -71,6 +71,14 @@ export interface Project {
     mediaType?: "image" | "video";
   }[];
   credits?: ProjectCredit[];
+  materials?: string;
+  climateStrategy?: string;
+  structuralSystem?: string;
+  siteArea?: string;
+  historyContext?: string;
+  designConcept?: string;
+  planningStory?: string;
+  sustainabilityStory?: string;
   sortOrder?: number;
   isPublished?: boolean;
   createdAt?: string;
