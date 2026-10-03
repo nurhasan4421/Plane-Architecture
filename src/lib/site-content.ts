@@ -139,7 +139,7 @@ const fallbackSettings: SiteSettings = {
     ],
   },
   contact: {
-    heading: "Let's make Room for what's next.",
+    heading: "LET'S MAKE ROOM FOR WHAT'S NEXT.",
     intro: "Tell us about the place, the people, and the possibility. Our Dhaka studio will be in touch.",
     inquiryTypes: ["New Project", "Masterplanning", "Press & Media", "Careers", "General"],
     budgetOptions: ["Under BDT 10 lakh", "BDT 10-50 lakh", "BDT 50 lakh-2 crore", "Above BDT 2 crore", "Not sure yet"],

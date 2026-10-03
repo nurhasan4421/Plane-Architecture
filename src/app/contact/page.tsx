@@ -64,7 +64,7 @@ export default function ContactPage() {
           <div>
             <p className="mb-4 text-xs uppercase tracking-[0.2em] text-neutral-500">Plane Architect / Dhaka</p>
             <h1 className="max-w-3xl font-display text-4xl font-normal leading-tight sm:text-5xl lg:text-6xl">
-              Let&apos;s make room for what&apos;s next.
+              LET&apos;S MAKE ROOM FOR WHAT&apos;S NEXT.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
               Tell us about the place, the people, and the possibility. Our Dhaka studio will be in touch.
