@@ -109,6 +109,26 @@
   }
 }
 
+@keyframes carouselProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.carousel-progress-line {
+  transform-origin: left center;
+  animation: carouselProgress 6000ms linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-progress-line {
+    animation: none;
+  }
+}
+
 /* Selection */
 ::selection {
   background-color: #000000;

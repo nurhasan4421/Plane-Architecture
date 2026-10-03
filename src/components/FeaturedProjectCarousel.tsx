@@ -110,6 +110,14 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
         className="featured-project-enter absolute inset-x-0 bottom-0 z-10 mx-auto flex w-full flex-col gap-8 px-5 pb-7 pt-32 text-white sm:px-8 sm:pb-10 lg:w-[80%] lg:flex-row lg:items-end lg:justify-between lg:px-0 lg:pb-14"
       >
         <div className="max-w-5xl">
+          {/* Minimal animated stroke line above category & project name for mobile */}
+          <div className="mb-3 h-[2px] w-20 overflow-hidden rounded-full bg-white/25 backdrop-blur-xs md:hidden" aria-hidden="true">
+            <div
+              key={`line-top-${activeIndex}`}
+              className="carousel-progress-line h-full w-full rounded-full bg-white"
+            />
+          </div>
+
           <p className="mb-3 text-xs uppercase tracking-[0.18em] text-white drop-shadow-md sm:text-sm">
             <span className="sm:hidden">{activeProject.category} / {activeProject.location}</span>
             <span className="hidden sm:inline">{activeProject.category} / {activeProject.typology} / {activeProject.year} / {activeProject.location}</span>
