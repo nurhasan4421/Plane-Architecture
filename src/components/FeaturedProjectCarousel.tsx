@@ -95,7 +95,7 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
                 src={project.heroImage}
                 alt={project.title}
                 fetchPriority={isActive ? "high" : "auto"}
-                className="h-full w-full object-cover opacity-75 transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.02]"
+                className="h-full w-full object-cover opacity-75 transition-opacity duration-700 ease-out"
               />
             </Link>
           );

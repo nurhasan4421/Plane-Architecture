@@ -50,11 +50,13 @@ export default function HomePage() {
       {/* Main Project Feed */}
       <div className={showCarousel ? "" : "pt-[68px] sm:pt-[78px] lg:pt-[90px]"}>
         <ProjectFeed
-          key={`${activeCategory}:${activeSubcategory ?? "all"}`}
+          key={`${activeCategory}:${activeSubcategory ?? "all"}:${settings.carouselEnabled ? "carousel" : "direct"}`}
           projects={projects}
           activeCategory={activeCategory}
           activeSubcategory={activeSubcategory}
           testimonials={testimonials}
+          initialSort={!settings.carouselEnabled && activeCategory === "all" ? "random" : "default"}
+          showSortFilter={!settings.carouselEnabled && activeCategory === "all"}
         />
       </div>
 

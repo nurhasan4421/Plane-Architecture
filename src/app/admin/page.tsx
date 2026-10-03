@@ -18,6 +18,7 @@ import {
   Search,
   Settings2,
   ShieldCheck,
+  SlidersHorizontal,
   Save,
   Trash2,
   Upload,
@@ -81,7 +82,7 @@ const emptyTestimonial = (): ProjectTestimonial => ({
   createdAt: new Date().toISOString(),
 });
 
-type AdminSection = "overview" | "projects" | "news" | "testimonials" | "categories" | "settings";
+type AdminSection = "overview" | "projects" | "carousel" | "news" | "testimonials" | "categories" | "settings";
 type ProjectTreeSelection = { categoryId: string; subcategoryId: string };
 
 const inputClass = "mt-1.5 w-full border border-black/15 bg-white px-3.5 py-2.5 text-sm text-[#171717] outline-none transition placeholder:text-neutral-400 focus:border-black";
@@ -90,6 +91,7 @@ const labelClass = "block text-[10px] font-medium uppercase tracking-[0.14em] te
 const navItems: { key: AdminSection; label: string; icon: LucideIcon }[] = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
   { key: "projects", label: "Projects", icon: FolderKanban },
+  { key: "carousel", label: "Carousel", icon: SlidersHorizontal },
   { key: "news", label: "Journal", icon: BookOpen },
   { key: "testimonials", label: "Testimonials", icon: UsersRound },
   { key: "categories", label: "Categories", icon: ListTree },
@@ -743,6 +745,7 @@ export default function AdminPage() {
   const sectionTitle: Record<AdminSection, string> = {
     overview: "Overview",
     projects: "Projects",
+    carousel: "Carousel",
     news: "Journal",
     testimonials: "Testimonials",
     categories: "Categories",
@@ -761,6 +764,7 @@ export default function AdminPage() {
               <button key={key} type="button" onClick={() => openSection(key)} aria-current={activeSection === key ? "page" : undefined} className={`flex w-full items-center gap-3 border-l-2 px-3.5 py-2.5 text-left text-sm transition ${activeSection === key ? "border-black bg-[#f4f3ef] font-medium text-black" : "border-transparent text-neutral-500 hover:bg-[#faf9f6] hover:text-black"}`}>
                 <Icon className="h-4 w-4" strokeWidth={1.6} />{label}
                 {key === "projects" && <span className="ml-auto text-[10px] text-neutral-400">{projectDrafts.length}</span>}
+                {key === "carousel" && <span className="ml-auto text-[10px] text-neutral-400">{settingsDraft.carouselEnabled ? `${settingsDraft.featuredProjectSlugs.length}/5` : "Off"}</span>}
                 {key === "news" && <span className="ml-auto text-[10px] text-neutral-400">{newsDrafts.length}</span>}
                 {key === "testimonials" && <span className="ml-auto text-[10px] text-neutral-400">{testimonialDrafts.length}</span>}
                 {key === "categories" && <span className="ml-auto text-[10px] text-neutral-400">{settingsDraft.categories.length}/5</span>}
@@ -814,15 +818,17 @@ export default function AdminPage() {
                   <div className="mb-4 border-b border-black/10 pb-3"><p className={labelClass}>Quick access</p><h3 className="mt-1.5 font-display text-2xl">Your collections</h3></div>
                   {navItems.slice(1).map(({ key, label, icon: Icon }) => {
                     const count = key === "projects" ? projectDrafts.length
+                      : key === "carousel" ? (settingsDraft.carouselEnabled ? `${settingsDraft.featuredProjectSlugs.length}/5` : "Disabled")
                       : key === "news" ? newsDrafts.length
                       : key === "testimonials" ? testimonialDrafts.length
                       : key === "categories" ? settingsDraft.categories.length
                       : null;
                     const description = key === "projects" ? "Portfolio entries and project imagery"
+                      : key === "carousel" ? "Homepage 5-slide showcase & on/off toggle"
                       : key === "news" ? "Studio news and journal stories"
                       : key === "testimonials" ? "Client voices and project references"
                       : key === "categories" ? "Navbar categories and project submenus"
-                      : "Studio details and homepage options";
+                      : "Studio details and profile options";
                     return (
                       <button key={key} type="button" aria-label={`Open ${label}`} onClick={() => openSection(key)} className="group flex w-full items-center gap-4 py-4 text-left transition hover:bg-white">
                         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[8px] border border-black/10 bg-white text-neutral-600"><Icon className="h-4 w-4" strokeWidth={1.6} /></span>
@@ -965,10 +971,246 @@ export default function AdminPage() {
               </div>
             </div>}
 
-            {activeSection === "settings" && <div className="max-w-4xl">
-              <section className="mb-7 border-b border-black/10 pb-6"><p className={labelClass}>Studio profile</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">The details visitors see</h2><p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">Update contact information, identity, and the homepage carousel.</p></section>
-              <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white"><div className="border-b border-black/10 px-5 py-4 sm:px-7"><p className={labelClass}>Identity</p><h3 className="mt-1 font-display text-xl">Studio information</h3></div><div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7"><AdminField label="Studio name" value={settingsDraft.siteName} onChange={(value) => setSettingsDraft({ ...settingsDraft, siteName: value })} /><AdminField label="Tagline" value={settingsDraft.tagline} onChange={(value) => setSettingsDraft({ ...settingsDraft, tagline: value })} /><AdminField label="Contact email" type="email" value={settingsDraft.email} onChange={(value) => setSettingsDraft({ ...settingsDraft, email: value })} /><AdminField label="Phone number" value={settingsDraft.phone} onChange={(value) => setSettingsDraft({ ...settingsDraft, phone: value })} /><AdminField label="Studio address" value={settingsDraft.address} onChange={(value) => setSettingsDraft({ ...settingsDraft, address: value })} className="sm:col-span-2" /><AdminField label="Logo image URL" value={settingsDraft.logoUrl} onChange={(value) => setSettingsDraft({ ...settingsDraft, logoUrl: value })} className="sm:col-span-2" /></div></section>
-              <section className="mt-6 overflow-hidden rounded-[8px] border border-black/10 bg-white"><div className="border-b border-black/10 px-5 py-4 sm:px-7"><p className={labelClass}>Homepage</p><h3 className="mt-1 font-display text-xl">Featured experience</h3></div><div className="flex items-center justify-between gap-5 p-5 sm:px-7"><span><span className="block text-sm font-medium">Project carousel</span><span className="mt-1 block text-xs text-neutral-500">Show the featured project carousel on the homepage.</span></span><button type="button" role="switch" aria-checked={settingsDraft.carouselEnabled} onClick={() => setSettingsDraft({ ...settingsDraft, carouselEnabled: !settingsDraft.carouselEnabled })} className={`relative h-6 w-11 shrink-0 transition ${settingsDraft.carouselEnabled ? "bg-black" : "bg-neutral-300"}`}><span className={`absolute top-1 h-4 w-4 bg-white transition ${settingsDraft.carouselEnabled ? "left-6" : "left-1"}`} /></button></div></section>
+            {activeSection === "carousel" && <div className="max-w-4xl space-y-7">
+              <section className="border-b border-black/10 pb-6">
+                <p className={labelClass}>Homepage showcase</p>
+                <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="font-display text-3xl sm:text-4xl">Featured project carousel</h2>
+                    <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
+                      Configure the 5 featured projects shown on the homepage hero carousel. Turn it off to display the project feed directly.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 self-start rounded-[8px] border border-black/10 bg-white px-4 py-3 sm:self-auto">
+                    <span className="text-xs font-medium uppercase tracking-[0.1em] text-neutral-700">
+                      {settingsDraft.carouselEnabled ? "Carousel Active" : "Carousel Off"}
+                    </span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={settingsDraft.carouselEnabled}
+                      onClick={() => setSettingsDraft({ ...settingsDraft, carouselEnabled: !settingsDraft.carouselEnabled })}
+                      className={`relative h-6 w-11 shrink-0 rounded-full transition ${settingsDraft.carouselEnabled ? "bg-black" : "bg-neutral-300"}`}
+                    >
+                      <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-all ${settingsDraft.carouselEnabled ? "left-6" : "left-1"}`} />
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {!settingsDraft.carouselEnabled && (
+                <div className="rounded-[8px] border border-amber-200 bg-amber-50/60 p-4 text-xs leading-5 text-amber-900">
+                  <p className="font-medium">Carousel is currently turned OFF</p>
+                  <p className="mt-1 text-amber-800">
+                    The homepage directly displays all projects in random order with filter icons (Random, Latest, Oldest).
+                  </p>
+                </div>
+              )}
+
+              <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
+                <div className="flex flex-col gap-1 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                  <div>
+                    <p className={labelClass}>Slot allocation</p>
+                    <h3 className="mt-1 font-display text-xl">Carousel projects (5 slots)</h3>
+                  </div>
+                  <span className="text-xs text-neutral-500">
+                    {settingsDraft.featuredProjectSlugs.length} of 5 selected
+                  </span>
+                </div>
+
+                <div className="divide-y divide-black/10 p-5 sm:p-7">
+                  {Array.from({ length: 5 }).map((_, slotIndex) => {
+                    const currentSlug = settingsDraft.featuredProjectSlugs[slotIndex] ?? "";
+                    const currentProject = projectDrafts.find((project) => project.slug === currentSlug);
+
+                    return (
+                      <div key={slotIndex} className={`py-5 first:pt-0 last:pb-0 ${slotIndex > 0 ? "pt-5" : ""}`}>
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#171717] text-xs font-mono font-medium text-white">
+                              0{slotIndex + 1}
+                            </span>
+                            <div>
+                              <p className="text-sm font-medium">{currentProject?.title ?? "Empty slot"}</p>
+                              <p className="text-xs text-neutral-500">
+                                {currentProject ? `${currentProject.year} · ${currentProject.category} · ${currentProject.location}` : "Select a project to feature in this slide"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <label className="text-[10px] uppercase tracking-[0.1em] text-neutral-500 sm:sr-only">Assign project</label>
+                            <select
+                              value={currentSlug}
+                              onChange={(e) => {
+                                const newSlug = e.target.value;
+                                const updatedSlugs = [...settingsDraft.featuredProjectSlugs];
+                                updatedSlugs[slotIndex] = newSlug;
+                                setSettingsDraft({
+                                  ...settingsDraft,
+                                  featuredProjectSlugs: updatedSlugs.slice(0, 5),
+                                });
+                              }}
+                              className="h-9 min-w-[220px] rounded-[4px] border border-black/15 bg-white px-3 text-xs text-black outline-none transition focus:border-black"
+                            >
+                              <option value="">-- Choose project --</option>
+                              {projectDrafts.map((project) => (
+                                <option key={project.id} value={project.slug}>
+                                  {project.title} ({project.year})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {currentProject && (
+                          <div className="mt-4 grid gap-4 rounded-[6px] border border-black/8 bg-[#faf9f6] p-4 sm:grid-cols-[140px_minmax(0,1fr)]">
+                            <div className="relative aspect-[16/10] overflow-hidden rounded-[4px] border border-black/10 bg-neutral-200">
+                              {currentProject.heroImage ? (
+                                <img
+                                  src={currentProject.heroImage}
+                                  alt={currentProject.title}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center text-[10px] text-neutral-400">
+                                  No image
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-3">
+                              <SupabaseMediaField
+                                label="Slide hero image"
+                                value={currentProject.heroImage}
+                                onChange={(url) => {
+                                  setProjectDrafts((current) =>
+                                    current.map((item) =>
+                                      item.id === currentProject.id ? { ...item, heroImage: url } : item
+                                    )
+                                  );
+                                }}
+                              />
+                              <div className="grid gap-3 sm:grid-cols-2">
+                                <AdminField
+                                  label="Project title"
+                                  value={currentProject.title}
+                                  onChange={(value) => {
+                                    setProjectDrafts((current) =>
+                                      current.map((item) =>
+                                        item.id === currentProject.id ? { ...item, title: value } : item
+                                      )
+                                    );
+                                  }}
+                                />
+                                <AdminField
+                                  label="Location"
+                                  value={currentProject.location}
+                                  onChange={(value) => {
+                                    setProjectDrafts((current) =>
+                                      current.map((item) =>
+                                        item.id === currentProject.id ? { ...item, location: value } : item
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <AdminField
+                                label="Slide description"
+                                value={currentProject.description}
+                                rows={2}
+                                onChange={(value) => {
+                                  setProjectDrafts((current) =>
+                                    current.map((item) =>
+                                      item.id === currentProject.id ? { ...item, description: value } : item
+                                    )
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            </div>}
+
+            {activeSection === "settings" && <div className="max-w-4xl space-y-7">
+              <section className="border-b border-black/10 pb-6">
+                <p className={labelClass}>Studio profile</p>
+                <h2 className="mt-2 font-display text-3xl sm:text-4xl">Studio details & settings</h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
+                  Update your identity, studio logo upload, contact email, phone number, and address displayed across the website.
+                </p>
+              </section>
+
+              <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
+                <div className="border-b border-black/10 px-5 py-4 sm:px-7">
+                  <p className={labelClass}>Identity & Contact</p>
+                  <h3 className="mt-1 font-display text-xl">Studio information</h3>
+                </div>
+                <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
+                  <AdminField
+                    label="Studio name"
+                    value={settingsDraft.siteName}
+                    onChange={(value) => setSettingsDraft({ ...settingsDraft, siteName: value })}
+                  />
+                  <AdminField
+                    label="Tagline"
+                    value={settingsDraft.tagline}
+                    onChange={(value) => setSettingsDraft({ ...settingsDraft, tagline: value })}
+                  />
+                  <AdminField
+                    label="Contact email"
+                    type="email"
+                    value={settingsDraft.email}
+                    onChange={(value) => setSettingsDraft({ ...settingsDraft, email: value })}
+                  />
+                  <AdminField
+                    label="Phone number"
+                    value={settingsDraft.phone}
+                    onChange={(value) => setSettingsDraft({ ...settingsDraft, phone: value })}
+                  />
+                  <AdminField
+                    label="Studio address"
+                    value={settingsDraft.address}
+                    onChange={(value) => setSettingsDraft({ ...settingsDraft, address: value })}
+                    className="sm:col-span-2"
+                  />
+                  <div className="sm:col-span-2">
+                    <SupabaseMediaField
+                      label="Studio logo"
+                      value={settingsDraft.logoUrl}
+                      onChange={(url) => setSettingsDraft({ ...settingsDraft, logoUrl: url })}
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
+                <div className="border-b border-black/10 px-5 py-4 sm:px-7">
+                  <p className={labelClass}>Homepage</p>
+                  <h3 className="mt-1 font-display text-xl">Featured carousel toggle</h3>
+                </div>
+                <div className="flex items-center justify-between gap-5 p-5 sm:px-7">
+                  <span>
+                    <span className="block text-sm font-medium">Project carousel</span>
+                    <span className="mt-1 block text-xs text-neutral-500">
+                      Show or hide the featured 5-slide project carousel on the homepage.
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={settingsDraft.carouselEnabled}
+                    onClick={() => setSettingsDraft({ ...settingsDraft, carouselEnabled: !settingsDraft.carouselEnabled })}
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition ${settingsDraft.carouselEnabled ? "bg-black" : "bg-neutral-300"}`}
+                  >
+                    <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-all ${settingsDraft.carouselEnabled ? "left-6" : "left-1"}`} />
+                  </button>
+                </div>
+              </section>
             </div>}
           </main>
           </AdminTaxonomyContext.Provider>

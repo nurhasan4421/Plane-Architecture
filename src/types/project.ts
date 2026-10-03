@@ -73,6 +73,7 @@ export interface Project {
   credits?: ProjectCredit[];
   sortOrder?: number;
   isPublished?: boolean;
+  createdAt?: string;
 }
 
 export interface NewsItem {

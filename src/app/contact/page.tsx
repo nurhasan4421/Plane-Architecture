@@ -6,18 +6,18 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { submitContactInquiry } from "@/lib/supabase";
 
-const HEADQUARTERS = {
-  address: "Gulshan Architectural Quarter, Dhaka 1212, Bangladesh",
-  phone: "+8801234567891",
-  email: "hello@planearchitect.com",
-};
-
-const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://www.instagram.com/plane.architect/", platform: "instagram" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/plane-architect/", platform: "linkedin" },
-];
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function ContactPage() {
+  const { settings } = useSiteContent();
+  const address = settings.address || "Gulshan Architectural Quarter, Dhaka 1212, Bangladesh";
+  const phone = settings.phone || "+8801234567891";
+  const email = settings.email || "hello@planearchitect.com";
+  const socialLinks = settings.socialLinks?.length ? settings.socialLinks : [
+    { label: "Instagram", url: "https://www.instagram.com/plane.architect/" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/company/plane-architect/" },
+  ];
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -62,12 +62,12 @@ export default function ContactPage() {
       <main className="pt-[86px] font-body">
         <section className="mx-auto grid max-w-[1440px] gap-12 px-5 pb-14 pt-10 sm:px-8 md:gap-16 md:pb-20 md:pt-16 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:px-16">
           <div>
-            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-neutral-500">Plane Architect / Dhaka</p>
+            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-neutral-500">{settings.siteName} / Dhaka</p>
             <h1 className="max-w-3xl font-display text-4xl font-normal leading-tight sm:text-5xl lg:text-6xl">
-              LET&apos;S MAKE ROOM FOR WHAT&apos;S NEXT.
+              {settings.contact?.heading || "LET'S MAKE ROOM FOR WHAT'S NEXT."}
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-              Tell us about the place, the people, and the possibility. Our Dhaka studio will be in touch.
+              {settings.contact?.intro || "Tell us about the place, the people, and the possibility. Our Dhaka studio will be in touch."}
             </p>
           </div>
 
@@ -92,35 +92,38 @@ export default function ContactPage() {
               <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500">One studio, open to the world</p>
               <h2 className="font-display text-3xl font-normal sm:text-4xl">Visit or get in touch</h2>
               <div className="mt-8 space-y-5 text-base leading-7 text-neutral-700">
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(HEADQUARTERS.address)}`} target="_blank" rel="noreferrer" className="flex items-start gap-4 hover:text-black">
+                <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`} target="_blank" rel="noreferrer" className="flex items-start gap-4 hover:text-black">
                   <MapPin className="mt-1 h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
-                  <span>{HEADQUARTERS.address}</span>
+                  <span>{address}</span>
                 </a>
-                <a href={`tel:${HEADQUARTERS.phone}`} className="flex items-center gap-4 hover:text-black">
+                <a href={`tel:${phone}`} className="flex items-center gap-4 hover:text-black">
                   <Phone className="h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
-                  <span>{HEADQUARTERS.phone}</span>
+                  <span>{phone}</span>
                 </a>
-                <a href={`mailto:${HEADQUARTERS.email}`} className="flex items-center gap-4 hover:text-black">
+                <a href={`mailto:${email}`} className="flex items-center gap-4 hover:text-black">
                   <Mail className="h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
-                  <span>{HEADQUARTERS.email}</span>
+                  <span>{email}</span>
                 </a>
               </div>
               <div className="mt-8 flex items-center gap-3">
-                {SOCIAL_LINKS.map(({ label, href, platform }) => (
-                  <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} title={label} className="flex h-11 w-11 items-center justify-center border border-neutral-300 text-neutral-700 transition-colors hover:border-black hover:bg-black hover:text-white">
-                    {platform === "instagram" ? (
-                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
-                        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-                        <circle cx="17.5" cy="6.8" r="1" fill="currentColor" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-                        <path d="M5.2 8.7a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8ZM3.6 10h3.2v10H3.6V10Zm5.2 0h3.1v1.4h.1c.4-.8 1.5-1.7 3.1-1.7 3.3 0 3.9 2.1 3.9 4.9V20h-3.2v-4.8c0-1.2 0-2.8-1.8-2.8s-2.1 1.3-2.1 2.7V20H8.8V10Z" />
-                      </svg>
-                    )}
-                  </a>
-                ))}
+                {socialLinks.map(({ label, url }) => {
+                  const isInstagram = label.toLowerCase().includes("instagram");
+                  return (
+                    <a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label} title={label} className="flex h-11 w-11 items-center justify-center border border-neutral-300 text-neutral-700 transition-colors hover:border-black hover:bg-black hover:text-white">
+                      {isInstagram ? (
+                        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
+                          <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
+                          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+                          <circle cx="17.5" cy="6.8" r="1" fill="currentColor" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+                          <path d="M5.2 8.7a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8ZM3.6 10h3.2v10H3.6V10Zm5.2 0h3.1v1.4h.1c.4-.8 1.5-1.7 3.1-1.7 3.3 0 3.9 2.1 3.9 4.9V20h-3.2v-4.8c0-1.2 0-2.8-1.8-2.8s-2.1 1.3-2.1 2.7V20H8.8V10Z" />
+                        </svg>
+                      )}
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
@@ -145,22 +148,18 @@ export default function ContactPage() {
                   <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
                     Inquiry type
                     <select value={formData.type} onChange={(event) => setFormData({ ...formData, type: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black">
-                      <option value="New Project">New project</option>
-                      <option value="Masterplanning">Masterplanning</option>
-                      <option value="Press & Media">Press & media</option>
-                      <option value="Careers">Careers</option>
-                      <option value="General">General inquiry</option>
+                      {(settings.contact?.inquiryTypes?.length ? settings.contact.inquiryTypes : ["New Project", "Masterplanning", "Press & Media", "Careers", "General"]).map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
                     </select>
                   </label>
                   <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
                     Estimated budget
                     <select value={formData.budget} onChange={(event) => setFormData({ ...formData, budget: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black">
                       <option value="">Select a range</option>
-                      <option value="Under BDT 10 lakh">Under BDT 10 lakh</option>
-                      <option value="BDT 10-50 lakh">BDT 10-50 lakh</option>
-                      <option value="BDT 50 lakh-2 crore">BDT 50 lakh-2 crore</option>
-                      <option value="Above BDT 2 crore">Above BDT 2 crore</option>
-                      <option value="Not sure yet">Not sure yet</option>
+                      {(settings.contact?.budgetOptions?.length ? settings.contact.budgetOptions : ["Under BDT 10 lakh", "BDT 10-50 lakh", "BDT 50 lakh-2 crore", "Above BDT 2 crore", "Not sure yet"]).map((budget) => (
+                        <option key={budget} value={budget}>{budget}</option>
+                      ))}
                     </select>
                   </label>
                   <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 sm:col-span-2">

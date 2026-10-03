@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useSiteContent } from "./SiteContentProvider";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ export default function NavigationDrawer({
   isOpen,
   onClose,
 }: NavigationDrawerProps) {
+  const { settings } = useSiteContent();
+
   return (
     <nav
       data-site-menu
@@ -41,10 +44,10 @@ export default function NavigationDrawer({
           </Link>
         </div>
         <div className="flex flex-col justify-center border-t border-neutral-200 pt-6 text-xs uppercase tracking-wider text-neutral-500 md:border-l md:border-t-0 md:pl-10 md:pt-0">
-          <p className="font-display text-base font-medium text-black sm:text-lg">Plane Architect</p>
-          <p className="mt-2">Dhaka, Bangladesh</p>
-          <a href="tel:+8801234567891" className="mt-1 transition-colors hover:text-black">+8801234567891</a>
-          <a href="mailto:hello@planearchitect.com" className="mt-1 transition-colors hover:text-black">hello@planearchitect.com</a>
+          <p className="font-display text-base font-medium text-black sm:text-lg">{settings.siteName}</p>
+          <p className="mt-2">{settings.tagline || "Dhaka, Bangladesh"}</p>
+          <a href={`tel:${settings.phone}`} className="mt-1 transition-colors hover:text-black">{settings.phone}</a>
+          <a href={`mailto:${settings.email}`} className="mt-1 transition-colors hover:text-black">{settings.email}</a>
         </div>
       </div>
     </nav>

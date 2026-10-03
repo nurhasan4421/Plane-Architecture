@@ -4,8 +4,9 @@ import React from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
-const LEADERSHIP = [
+const FALLBACK_LEADERSHIP = [
   { name: "K. M. Rahman", role: "Principal Architect & Founder", studio: "Dhaka" },
   { name: "S. N. Chowdhury", role: "Director of Urban Design & Partner", studio: "Dhaka" },
   { name: "Tariq Ahmed", role: "Head of Environmental Engineering", studio: "Dhaka" },
@@ -15,6 +16,9 @@ const LEADERSHIP = [
 ];
 
 export default function AboutPage() {
+  const { settings } = useSiteContent();
+  const leadership = settings.about?.leadership?.length ? settings.about.leadership : FALLBACK_LEADERSHIP;
+
   return (
     <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none font-body">
       <Header activeCategory="architecture" />
@@ -23,11 +27,10 @@ export default function AboutPage() {
         {/* Intro Manifesto */}
         <section className="mb-20">
           <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-3">
-            About Plane Architect • Dhala, Bangladesh
+            {settings.about?.eyebrow || `About ${settings.siteName} • ${settings.tagline}`}
           </span>
           <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-normal leading-tight tracking-tight text-black max-w-4xl mb-10">
-            Plane Architect is an architectural and spatial laboratory based in Dhaka, Bangladesh,
-            investigating how geometric planes mediate climate, water, and human community.
+            {settings.about?.headline || `${settings.siteName} is an architectural and spatial laboratory based in Dhaka, Bangladesh, investigating how geometric planes mediate climate, water, and human community.`}
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-neutral-700 font-body">
@@ -77,7 +80,7 @@ export default function AboutPage() {
             Studio Partners & Directors
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 font-body">
-            {LEADERSHIP.map((leader, idx) => (
+            {leadership.map((leader, idx) => (
               <div key={idx} className="border-b border-neutral-100 pb-4">
                 <h3 className="font-display text-sm font-semibold uppercase text-black">
                   {leader.name}
@@ -93,9 +96,9 @@ export default function AboutPage() {
 
         {/* Studio Info & Inquiries */}
         <section id="careers" className="border-t border-neutral-200 pt-16 text-center font-body">
-          <h2 className="font-display text-xl font-normal text-black mb-2">Connect With Plane Architect</h2>
+          <h2 className="font-display text-xl font-normal text-black mb-2">Connect With {settings.siteName}</h2>
           <p className="text-xs text-[#797979] uppercase tracking-wider max-w-lg mx-auto mb-2">
-            Dhala, Bangladesh • +8801234567891 • hello@planearchitect.com
+            {settings.tagline || "Dhaka, Bangladesh"} • {settings.phone} • {settings.email}
           </p>
           <p className="text-xs text-neutral-500 max-w-md mx-auto mb-6">
             We welcome commissions, collaborative competitions, academic partnerships, and career
@@ -105,7 +108,7 @@ export default function AboutPage() {
             href="/contact"
             className="inline-flex px-6 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors"
           >
-            Contact Plane Architect
+            Contact {settings.siteName}
           </Link>
         </section>
       </div>

@@ -214,6 +214,7 @@ function mapProject(row: Database["public"]["Tables"]["projects"]["Row"]): Proje
     credits: (row.credits as unknown as Project["credits"]) ?? undefined,
     sortOrder: row.sort_order,
     isPublished: row.is_published,
+    createdAt: row.created_at,
   };
 }
 

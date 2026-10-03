@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, Shuffle, Star } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { Project, ProjectTestimonial } from "@/types/project";
 
@@ -11,6 +11,8 @@ interface ProjectFeedProps {
   testimonials: ProjectTestimonial[];
   activeCategory: string;
   activeSubcategory?: string;
+  initialSort?: "default" | "random" | "latest" | "oldest";
+  showSortFilter?: boolean;
 }
 
 const PROJECTS_PER_BATCH = 20;
@@ -135,10 +137,20 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
   );
 }
 
-export default function ProjectFeed({ projects, testimonials, activeCategory, activeSubcategory }: ProjectFeedProps) {
+export default function ProjectFeed({
+  projects,
+  testimonials,
+  activeCategory,
+  activeSubcategory,
+  initialSort = "default",
+  showSortFilter = false,
+}: ProjectFeedProps) {
   const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_BATCH);
+  const [sortOrder, setSortOrder] = useState<"default" | "random" | "latest" | "oldest">(initialSort);
+  const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
+  const [randomSeed, setRandomSeed] = useState(1);
 
-  const filteredProjects = useMemo(() => {
+  const baseProjects = useMemo(() => {
     return projects.filter((project) => {
       if (activeCategory && activeCategory !== "all") {
         if (project.category.toLowerCase() !== activeCategory.toLowerCase()) {
@@ -155,11 +167,103 @@ export default function ProjectFeed({ projects, testimonials, activeCategory, ac
     });
   }, [projects, activeCategory, activeSubcategory]);
 
+  const filteredProjects = useMemo(() => {
+    const list = [...baseProjects];
+    if (sortOrder === "random") {
+      // Deterministic shuffle with seed so it doesn't flicker on every render
+      for (let i = list.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.sin(i * 9999 + randomSeed) * 10000) % (i + 1);
+        const index = Math.abs(j);
+        [list[i], list[index]] = [list[index], list[i]];
+      }
+      return list;
+    }
+    if (sortOrder === "latest") {
+      return list.sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : (parseInt(a.year, 10) || 0);
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : (parseInt(b.year, 10) || 0);
+        return timeB - timeA;
+      });
+    }
+    if (sortOrder === "oldest") {
+      return list.sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : (parseInt(a.year, 10) || 0);
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : (parseInt(b.year, 10) || 0);
+        return timeA - timeB;
+      });
+    }
+    return list;
+  }, [baseProjects, sortOrder, randomSeed]);
+
   const visibleProjects = filteredProjects.slice(0, visibleCount);
   const hasMoreProjects = visibleProjects.length < filteredProjects.length;
 
   return (
     <div className="w-full px-5 pb-24 pt-10 sm:px-8 lg:px-16">
+      {/* Top Filter & Sort Bar (shows when carousel is off or sort filter is requested) */}
+      {showSortFilter && (
+        <div className="mx-auto mb-8 flex max-w-[1600px] items-center justify-between border-b border-neutral-100 pb-4">
+          <p className="text-xs uppercase tracking-[0.16em] text-neutral-400">
+            {filteredProjects.length} {filteredProjects.length === 1 ? "project" : "projects"}
+          </p>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsSortMenuOpen((open) => !open)}
+              className="inline-flex items-center gap-2 border border-neutral-300 bg-white px-3.5 py-1.5 text-xs uppercase tracking-[0.14em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer"
+              aria-label="Filter projects by order"
+              aria-expanded={isSortMenuOpen}
+            >
+              <ArrowUpDown className="h-3.5 w-3.5" />
+              <span>
+                {sortOrder === "random" ? "Random" : sortOrder === "latest" ? "Latest" : sortOrder === "oldest" ? "Oldest" : "Sort"}
+              </span>
+              <ChevronDown className="h-3 w-3 text-neutral-400" />
+            </button>
+
+            {isSortMenuOpen && (
+              <div
+                className="absolute right-0 top-full z-20 mt-1.5 w-40 border border-neutral-200 bg-white py-1 shadow-lg font-body"
+                onMouseLeave={() => setIsSortMenuOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSortOrder("random");
+                    setRandomSeed((s) => s + 1);
+                    setIsSortMenuOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "random" ? "font-semibold text-black" : "text-neutral-600"}`}
+                >
+                  <span>Random</span>
+                  <Shuffle className="h-3 w-3 text-neutral-400" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSortOrder("latest");
+                    setIsSortMenuOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "latest" ? "font-semibold text-black" : "text-neutral-600"}`}
+                >
+                  <span>Latest</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSortOrder("oldest");
+                    setIsSortMenuOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "oldest" ? "font-semibold text-black" : "text-neutral-600"}`}
+                >
+                  <span>Oldest</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {filteredProjects.length === 0 ? (
         <div className="py-24 text-center">
           <p className="text-sm uppercase tracking-widest text-[#797979]">

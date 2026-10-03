@@ -3,48 +3,51 @@
 import React, { useState } from "react";
 import { X, Check } from "lucide-react";
 import { submitContactInquiry } from "@/lib/supabase";
+import { useSiteContent } from "./SiteContentProvider";
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const STUDIOS = [
-  {
-    city: "Dhaka",
-    country: "Bangladesh (Headquarters)",
-    address: "Gulshan Architectural Quarter, Dhaka 1212, Bangladesh",
-    phone: "+8801234567891",
-    email: "hello@planearchitect.com",
-    isHQ: true,
-  },
-  {
-    city: "Chittagong",
-    country: "Bangladesh (Coastal Division)",
-    address: "Agrabad Commercial Area, Chittagong 4100",
-    phone: "+8801234567891",
-    email: "ctg@planearchitect.com",
-    isHQ: false,
-  },
-  {
-    city: "Sylhet",
-    country: "Bangladesh (Highland Studio)",
-    address: "Zindabazar Tea Valley Corridor, Sylhet 3100",
-    phone: "+8801234567891",
-    email: "sylhet@planearchitect.com",
-    isHQ: false,
-  },
-  {
-    city: "Singapore",
-    country: "Southeast Asia Liaison",
-    address: "Marina Bay Financial Centre, Tower 1, Singapore",
-    phone: "+65 6789 0123",
-    email: "sg@planearchitect.com",
-    isHQ: false,
-  },
-];
-
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
+  const { settings } = useSiteContent();
+
+  const studios = [
+    {
+      city: "Dhaka",
+      country: "Bangladesh (Headquarters)",
+      address: settings.address || "Gulshan Architectural Quarter, Dhaka 1212, Bangladesh",
+      phone: settings.phone || "+8801234567891",
+      email: settings.email || "hello@planearchitect.com",
+      isHQ: true,
+    },
+    {
+      city: "Chittagong",
+      country: "Bangladesh (Coastal Division)",
+      address: "Agrabad Commercial Area, Chittagong 4100",
+      phone: settings.phone || "+8801234567891",
+      email: "ctg@planearchitect.com",
+      isHQ: false,
+    },
+    {
+      city: "Sylhet",
+      country: "Bangladesh (Highland Studio)",
+      address: "Zindabazar Tea Valley Corridor, Sylhet 3100",
+      phone: settings.phone || "+8801234567891",
+      email: "sylhet@planearchitect.com",
+      isHQ: false,
+    },
+    {
+      city: "Singapore",
+      country: "Southeast Asia Liaison",
+      address: "Marina Bay Financial Centre, Tower 1, Singapore",
+      phone: "+65 6789 0123",
+      email: "sg@planearchitect.com",
+      isHQ: false,
+    },
+  ];
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -91,10 +94,10 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
           <div>
             <h2 className="font-display text-base md:text-lg font-normal uppercase tracking-wider text-black">
-              Contact Plane Architect
+              Contact {settings.siteName}
             </h2>
             <p className="font-body text-[11px] text-[#797979] uppercase tracking-wider">
-              Dhaka, Bangladesh • +8801234567891 • hello@planearchitect.com
+              {settings.tagline || "Dhaka, Bangladesh"} • {settings.phone} • {settings.email}
             </p>
           </div>
           <button
@@ -182,7 +185,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                       onChange={(e) => setFormData({ ...formData, office: e.target.value })}
                       className="w-full px-3 py-2 border border-neutral-300 text-xs text-black focus:outline-none focus:border-black rounded-none bg-white"
                     >
-                      {STUDIOS.map((s) => (
+                      {studios.map((s) => (
                         <option key={s.city} value={s.city}>
                           {s.city}
                         </option>
@@ -243,7 +246,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               Studios & Directory
             </h3>
             <div className="space-y-4">
-              {STUDIOS.map((studio) => (
+              {studios.map((studio) => (
                 <div key={studio.city} className="border-b border-neutral-100 pb-3">
                   <div className="flex items-center justify-between">
                     <span className="font-display text-xs font-semibold uppercase text-black">
