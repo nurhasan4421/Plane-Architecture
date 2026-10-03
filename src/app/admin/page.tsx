@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   Save,
   Trash2,
+  Upload,
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
@@ -186,6 +187,94 @@ function AdminField({
         />
       )}
     </label>
+  );
+}
+
+function SupabaseMediaField({
+  label,
+  value,
+  onChange,
+  allowVideo = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (url: string, mediaType?: "image" | "video") => void;
+  allowVideo?: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploaded, setUploaded] = useState(false);
+  const acceptedTypes = new Set([
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/avif",
+    "image/heic",
+    "image/heif",
+    "image/gif",
+    ...(allowVideo ? ["video/mp4", "video/webm", "video/quicktime"] : []),
+  ]);
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    setUploadError("");
+    setUploaded(false);
+
+    if (!supabase) {
+      setUploadError("Supabase is not configured.");
+      input.value = "";
+      return;
+    }
+    if (!acceptedTypes.has(file.type)) {
+      setUploadError("Choose a supported image file" + (allowVideo ? " or MP4, WebM, or MOV video." : "."));
+      input.value = "";
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      setUploadError("Files must be 50 MB or smaller.");
+      input.value = "";
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const mediaFolder = file.type.startsWith("video/") ? "videos" : "images";
+      const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "bin";
+      const objectPath = `${mediaFolder}/${crypto.randomUUID()}.${extension}`;
+      const { error } = await supabase.storage.from("site-media").upload(objectPath, file, {
+        cacheControl: "3600",
+        contentType: file.type,
+        upsert: false,
+      });
+      if (error) throw error;
+
+      const { data } = supabase.storage.from("site-media").getPublicUrl(objectPath);
+      onChange(data.publicUrl, file.type.startsWith("video/") ? "video" : "image");
+      setUploaded(true);
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : "Upload failed. Check the Supabase Storage bucket and admin policy.");
+    } finally {
+      setUploading(false);
+      input.value = "";
+    }
+  };
+
+  return (
+    <div>
+      <AdminField label={label} value={value} onChange={(url) => { setUploaded(false); onChange(url); }} placeholder="https://..." />
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <input ref={inputRef} type="file" accept={allowVideo ? "image/*,video/mp4,video/webm,video/quicktime" : "image/*"} onChange={handleUpload} className="sr-only" aria-label={`Upload ${label.toLowerCase()}`} />
+        <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="inline-flex h-8 items-center gap-2 rounded-[4px] border border-black/15 px-3 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black disabled:cursor-wait disabled:opacity-50">
+          <Upload className="h-3.5 w-3.5" />{uploading ? "Uploading..." : "Upload from device"}
+        </button>
+        <span className="text-[10px] text-neutral-400">Supabase Storage · 50 MB max</span>
+      </div>
+      {uploaded && <p role="status" className="mt-2 text-xs text-[#426454]">Uploaded to Supabase Storage.</p>}
+      {uploadError && <p role="alert" className="mt-2 text-xs text-red-600">{uploadError}</p>}
+    </div>
   );
 }
 
@@ -770,17 +859,17 @@ export default function AdminPage() {
                 <section className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white">
                   {activeSection === "projects" && selectedProject && <>
                     <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Project details</p><h3 className="mt-1 truncate font-display text-2xl">{selectedProject.title}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedProject.isPublished ?? true} /><button type="button" onClick={deleteProject} title="Delete project" aria-label="Delete project" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Project title" value={selectedProject.title} onChange={(value) => updateProject("title", value)} /><AdminField label="URL slug" value={selectedProject.slug} onChange={(value) => updateProject("slug", value)} /><AdminField label="Location" value={selectedProject.location} onChange={(value) => updateProject("location", value)} /><AdminField label="Year" value={selectedProject.year} onChange={(value) => updateProject("year", value)} /><AdminField label="Client" value={selectedProject.client} onChange={(value) => updateProject("client", value)} /><AdminField label="Category" value={selectedProject.category} onChange={(value) => updateProject("category", value)} /><AdminField label="Subcategory" value={selectedProject.subcategory} onChange={(value) => updateProject("subcategory", value)} /><AdminField label="Typology" value={selectedProject.typology} onChange={(value) => updateProject("typology", value)} /><AdminField label="Area (m²)" value={selectedProject.sizeM2} onChange={(value) => updateProject("sizeM2", value)} /><AdminField label="Area (ft²)" value={selectedProject.sizeFt2 ?? ""} onChange={(value) => updateProject("sizeFt2", value)} /><label className={labelClass}>Status<select value={selectedProject.status} onChange={(event) => updateProject("status", event.target.value)} className={inputClass}><option>Completed</option><option>In Progress</option><option>Competition Win</option><option>Concept</option></select></label><AdminField label="Sort order" type="number" value={String(selectedProject.sortOrder ?? 0)} onChange={(value) => updateProject("sortOrder", Number(value))} /></div><div><p className={labelClass}>Cover media</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedProject.heroImage ? <img src={selectedProject.heroImage} alt={`Cover preview for ${selectedProject.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><AdminField label="Image or video URL" value={selectedProject.heroImage} onChange={(value) => updateProject("heroImage", value)} placeholder="https://..." className="mt-4" /><label className={`${labelClass} mt-4`}>Media type<select value={selectedProject.heroMediaType ?? "image"} onChange={(event) => updateProject("heroMediaType", event.target.value)} className={inputClass}><option value="image">Image</option><option value="video">Video</option></select></label><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedProject.isPublished ?? true} onChange={(event) => updateProject("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish project</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this on the public website</span></span></label></div></div><div className="border-t border-black/10 pt-6"><p className={`${labelClass} mb-4`}>Project story</p><div className="grid gap-4 sm:grid-cols-2"><AdminField label="Description" value={selectedProject.description} onChange={(value) => updateProject("description", value)} rows={5} className="sm:col-span-2" /><AdminField label="Project quote" value={selectedProject.quote ?? ""} onChange={(value) => updateProject("quote", value)} rows={3} /><div className="grid content-start gap-4"><AdminField label="Quote author" value={selectedProject.quoteAuthor ?? ""} onChange={(value) => updateProject("quoteAuthor", value)} /><AdminField label="Author role" value={selectedProject.quoteAuthorRole ?? ""} onChange={(value) => updateProject("quoteAuthorRole", value)} /></div></div></div></div>
+                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Project title" value={selectedProject.title} onChange={(value) => updateProject("title", value)} /><AdminField label="URL slug" value={selectedProject.slug} onChange={(value) => updateProject("slug", value)} /><AdminField label="Location" value={selectedProject.location} onChange={(value) => updateProject("location", value)} /><AdminField label="Year" value={selectedProject.year} onChange={(value) => updateProject("year", value)} /><AdminField label="Client" value={selectedProject.client} onChange={(value) => updateProject("client", value)} /><AdminField label="Category" value={selectedProject.category} onChange={(value) => updateProject("category", value)} /><AdminField label="Subcategory" value={selectedProject.subcategory} onChange={(value) => updateProject("subcategory", value)} /><AdminField label="Typology" value={selectedProject.typology} onChange={(value) => updateProject("typology", value)} /><AdminField label="Area (m²)" value={selectedProject.sizeM2} onChange={(value) => updateProject("sizeM2", value)} /><AdminField label="Area (ft²)" value={selectedProject.sizeFt2 ?? ""} onChange={(value) => updateProject("sizeFt2", value)} /><label className={labelClass}>Status<select value={selectedProject.status} onChange={(event) => updateProject("status", event.target.value)} className={inputClass}><option>Completed</option><option>In Progress</option><option>Competition Win</option><option>Concept</option></select></label><AdminField label="Sort order" type="number" value={String(selectedProject.sortOrder ?? 0)} onChange={(value) => updateProject("sortOrder", Number(value))} /></div><div><p className={labelClass}>Cover media</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedProject.heroImage ? <img src={selectedProject.heroImage} alt={`Cover preview for ${selectedProject.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image or video URL" value={selectedProject.heroImage} onChange={(value) => updateProject("heroImage", value)} /></div><label className={`${labelClass} mt-4`}>Media type<select value={selectedProject.heroMediaType ?? "image"} onChange={(event) => updateProject("heroMediaType", event.target.value)} className={inputClass}><option value="image">Image</option><option value="video">Video</option></select></label><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedProject.isPublished ?? true} onChange={(event) => updateProject("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish project</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this on the public website</span></span></label></div></div><div className="border-t border-black/10 pt-6"><p className={`${labelClass} mb-4`}>Project story</p><div className="grid gap-4 sm:grid-cols-2"><AdminField label="Description" value={selectedProject.description} onChange={(value) => updateProject("description", value)} rows={5} className="sm:col-span-2" /><AdminField label="Project quote" value={selectedProject.quote ?? ""} onChange={(value) => updateProject("quote", value)} rows={3} /><div className="grid content-start gap-4"><AdminField label="Quote author" value={selectedProject.quoteAuthor ?? ""} onChange={(value) => updateProject("quoteAuthor", value)} /><AdminField label="Author role" value={selectedProject.quoteAuthorRole ?? ""} onChange={(value) => updateProject("quoteAuthorRole", value)} /></div></div></div></div>
                   </>}
 
                   {activeSection === "news" && selectedNews && <>
                     <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Journal entry</p><h3 className="mt-1 truncate font-display text-2xl">{selectedNews.title}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedNews.isPublished ?? true} /><button type="button" onClick={deleteNews} title="Delete story" aria-label="Delete story" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Story title" value={selectedNews.title} onChange={(value) => updateNews("title", value)} className="sm:col-span-2" /><AdminField label="URL slug" value={selectedNews.slug} onChange={(value) => updateNews("slug", value)} /><AdminField label="Publication date" value={selectedNews.date} onChange={(value) => updateNews("date", value)} /><AdminField label="Author" value={selectedNews.author ?? ""} onChange={(value) => updateNews("author", value)} /><AdminField label="Category" value={selectedNews.category} onChange={(value) => updateNews("category", value)} /><AdminField label="Read time" value={selectedNews.readTime} onChange={(value) => updateNews("readTime", value)} /><AdminField label="Sort order" type="number" value={String(selectedNews.sortOrder ?? 0)} onChange={(value) => updateNews("sortOrder", Number(value))} /><AdminField label="Source URL" value={selectedNews.sourceUrl ?? ""} onChange={(value) => updateNews("sourceUrl", value)} className="sm:col-span-2" /></div><div><p className={labelClass}>Cover image</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedNews.image ? <img src={selectedNews.image} alt={`Cover preview for ${selectedNews.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><AdminField label="Image URL" value={selectedNews.image} onChange={(value) => updateNews("image", value)} placeholder="https://..." className="mt-4" /><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedNews.isPublished ?? true} onChange={(event) => updateNews("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish story</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this in the journal</span></span></label></div></div><div className="grid gap-4 border-t border-black/10 pt-6"><AdminField label="Short introduction" value={selectedNews.excerpt} onChange={(value) => updateNews("excerpt", value)} rows={3} /><AdminField label="Article body" value={selectedNews.body ?? ""} onChange={(value) => updateNews("body", value)} rows={9} /></div></div>
+                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Story title" value={selectedNews.title} onChange={(value) => updateNews("title", value)} className="sm:col-span-2" /><AdminField label="URL slug" value={selectedNews.slug} onChange={(value) => updateNews("slug", value)} /><AdminField label="Publication date" value={selectedNews.date} onChange={(value) => updateNews("date", value)} /><AdminField label="Author" value={selectedNews.author ?? ""} onChange={(value) => updateNews("author", value)} /><AdminField label="Category" value={selectedNews.category} onChange={(value) => updateNews("category", value)} /><AdminField label="Read time" value={selectedNews.readTime} onChange={(value) => updateNews("readTime", value)} /><AdminField label="Sort order" type="number" value={String(selectedNews.sortOrder ?? 0)} onChange={(value) => updateNews("sortOrder", Number(value))} /><AdminField label="Source URL" value={selectedNews.sourceUrl ?? ""} onChange={(value) => updateNews("sourceUrl", value)} className="sm:col-span-2" /></div><div><p className={labelClass}>Cover image</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedNews.image ? <img src={selectedNews.image} alt={`Cover preview for ${selectedNews.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image URL" value={selectedNews.image} onChange={(value) => updateNews("image", value)} /></div><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedNews.isPublished ?? true} onChange={(event) => updateNews("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish story</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this in the journal</span></span></label></div></div><div className="grid gap-4 border-t border-black/10 pt-6"><AdminField label="Short introduction" value={selectedNews.excerpt} onChange={(value) => updateNews("excerpt", value)} rows={3} /><AdminField label="Article body" value={selectedNews.body ?? ""} onChange={(value) => updateNews("body", value)} rows={9} /></div></div>
                   </>}
 
                   {activeSection === "testimonials" && selectedTestimonial && <>
                     <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Client voice</p><h3 className="mt-1 truncate font-display text-2xl">{selectedTestimonial.author || "New testimonial"}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedTestimonial.isPublished} /><button type="button" onClick={deleteTestimonial} title="Delete testimonial" aria-label="Delete testimonial" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Client name" value={selectedTestimonial.author} onChange={(value) => updateTestimonial(selectedTestimonial.id, "author", value)} /><AdminField label="Role or organization" value={selectedTestimonial.role} onChange={(value) => updateTestimonial(selectedTestimonial.id, "role", value)} /><AdminField label="Testimonial" value={selectedTestimonial.quote} onChange={(value) => updateTestimonial(selectedTestimonial.id, "quote", value)} rows={6} className="sm:col-span-2" /><AdminField label="Related project slug" value={selectedTestimonial.projectSlug ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "projectSlug", value || null)} placeholder="Optional" /><AdminField label="Rating (1-5)" type="number" value={String(selectedTestimonial.rating)} onChange={(value) => updateTestimonial(selectedTestimonial.id, "rating", Number(value))} /><label className="flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700 sm:col-span-2"><input type="checkbox" checked={selectedTestimonial.isPublished} onChange={(event) => updateTestimonial(selectedTestimonial.id, "isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish testimonial</span><span className="mt-0.5 block text-[10px] text-neutral-500">Display this client voice on the website</span></span></label></div><div><p className={labelClass}>Portrait</p><div className="mt-1.5 flex aspect-[4/3] items-center justify-center overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedTestimonial.image ? <img src={selectedTestimonial.image} alt={`Portrait preview of ${selectedTestimonial.author}`} className="h-full w-full object-cover" /> : <div className="text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><AdminField label="Image URL" value={selectedTestimonial.image ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "image", value)} placeholder="https://..." className="mt-4" /><p className="mt-2 text-[10px] leading-4 text-neutral-500">Paste a direct image URL to preview the client portrait.</p></div></div>
+                    <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Client name" value={selectedTestimonial.author} onChange={(value) => updateTestimonial(selectedTestimonial.id, "author", value)} /><AdminField label="Role or organization" value={selectedTestimonial.role} onChange={(value) => updateTestimonial(selectedTestimonial.id, "role", value)} /><AdminField label="Testimonial" value={selectedTestimonial.quote} onChange={(value) => updateTestimonial(selectedTestimonial.id, "quote", value)} rows={6} className="sm:col-span-2" /><AdminField label="Related project slug" value={selectedTestimonial.projectSlug ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "projectSlug", value || null)} placeholder="Optional" /><AdminField label="Rating (1-5)" type="number" value={String(selectedTestimonial.rating)} onChange={(value) => updateTestimonial(selectedTestimonial.id, "rating", Number(value))} /><label className="flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700 sm:col-span-2"><input type="checkbox" checked={selectedTestimonial.isPublished} onChange={(event) => updateTestimonial(selectedTestimonial.id, "isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish testimonial</span><span className="mt-0.5 block text-[10px] text-neutral-500">Display this client voice on the website</span></span></label></div><div><p className={labelClass}>Portrait</p><div className="mt-1.5 flex aspect-[4/3] items-center justify-center overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedTestimonial.image ? <img src={selectedTestimonial.image} alt={`Portrait preview of ${selectedTestimonial.author}`} className="h-full w-full object-cover" /> : <div className="text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image URL" value={selectedTestimonial.image ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "image", value)} /></div><p className="mt-2 text-[10px] leading-4 text-neutral-500">Choose a local file or paste a direct image URL.</p></div></div>
                   </>}
 
                   {((activeSection === "projects" && !selectedProject) || (activeSection === "news" && !selectedNews) || (activeSection === "testimonials" && !selectedTestimonial)) && <div className="flex min-h-[320px] flex-col items-center justify-center px-6 text-center"><FileImage className="h-8 w-8 text-neutral-300" /><p className="mt-4 font-display text-xl">Nothing selected</p><p className="mt-2 text-sm text-neutral-500">Create an item or choose one from the collection list.</p></div>}
