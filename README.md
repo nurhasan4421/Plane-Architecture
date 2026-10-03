@@ -16,7 +16,7 @@ Built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Supabase
 
 ## ✨ Features
 
-- **Plane Geometric Intro Splash**: Minimalist geometric vector animation revealing the Plane Architect Dhaka mark.
+- **Plane Geometric Intro Splash**: Minimalist geometric vector animation revealing the Plane Architect Dhaka mark..
 - **Architectural Wireframe Logo**: Scalable SVG vector mark combining intersecting architectural planes and Ledger wordmark.
 - **Left-Aligned Project Cards**: Monogram/glyph SVG icons in black square frames, exact typographic hierarchy with Ledger titles and Jost body specifications.
 - **Dynamic Scale Controls (S / M / L)**: Custom architectural view scaler with smooth cubic-bezier transitions.
