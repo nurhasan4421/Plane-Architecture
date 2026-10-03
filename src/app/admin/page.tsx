@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
+  ArrowDown,
+  ArrowUp,
   ArrowUpRight,
   BookOpen,
   Check,
@@ -978,10 +980,10 @@ export default function AdminPage() {
                   <div>
                     <h2 className="font-display text-3xl sm:text-4xl">Featured project carousel</h2>
                     <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
-                      Configure the 5 featured projects shown on the homepage hero carousel. Turn it off to display the project feed directly.
+                      Manage the 5 projects displayed on the homepage carousel. You can fill in the project details directly for each slot and reorder their sequence.
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 self-start rounded-[8px] border border-black/10 bg-white px-4 py-3 sm:self-auto">
+                  <div className="flex items-center gap-3 self-start rounded-[8px] border border-black/10 bg-white px-4 py-3 sm:self-auto shadow-xs">
                     <span className="text-xs font-medium uppercase tracking-[0.1em] text-neutral-700">
                       {settingsDraft.carouselEnabled ? "Carousel Active" : "Carousel Off"}
                     </span>
@@ -1002,7 +1004,7 @@ export default function AdminPage() {
                 <div className="rounded-[8px] border border-amber-200 bg-amber-50/60 p-4 text-xs leading-5 text-amber-900">
                   <p className="font-medium">Carousel is currently turned OFF</p>
                   <p className="mt-1 text-amber-800">
-                    The homepage directly displays all projects in random order with filter icons (Random, Latest, Oldest).
+                    The homepage directly displays all projects in random order with a filter icon (Random, Latest, Oldest).
                   </p>
                 </div>
               )}
@@ -1010,61 +1012,148 @@ export default function AdminPage() {
               <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
                 <div className="flex flex-col gap-1 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
                   <div>
-                    <p className={labelClass}>Slot allocation</p>
-                    <h3 className="mt-1 font-display text-xl">Carousel projects (5 slots)</h3>
+                    <p className={labelClass}>Carousel Sequence</p>
+                    <h3 className="mt-1 font-display text-xl">5 Carousel Projects</h3>
                   </div>
-                  <span className="text-xs text-neutral-500">
-                    {settingsDraft.featuredProjectSlugs.length} of 5 selected
-                  </span>
+                  <p className="text-xs text-neutral-500">
+                    5 of 5 slots configured · Use arrows to change slide order
+                  </p>
                 </div>
 
                 <div className="divide-y divide-black/10 p-5 sm:p-7">
                   {Array.from({ length: 5 }).map((_, slotIndex) => {
-                    const currentSlug = settingsDraft.featuredProjectSlugs[slotIndex] ?? "";
-                    const currentProject = projectDrafts.find((project) => project.slug === currentSlug);
+                    // Ensure the slot has a project slug assigned
+                    let currentSlug = settingsDraft.featuredProjectSlugs[slotIndex];
+                    let currentProject = projectDrafts.find((project) => project.slug === currentSlug);
+
+                    if (!currentProject) {
+                      // Fallback: pick any unused project or create a default slot project
+                      const usedSlugs = new Set(settingsDraft.featuredProjectSlugs.filter(Boolean));
+                      const candidate = projectDrafts.find((p) => !usedSlugs.has(p.slug)) || projectDrafts[slotIndex];
+                      if (candidate) {
+                        currentSlug = candidate.slug;
+                        currentProject = candidate;
+                      } else {
+                        // Create a new project draft for this slot so fields are immediately editable
+                        const newSlotProject: Project = {
+                          ...emptyProject(),
+                          slug: `carousel-project-${slotIndex + 1}`,
+                          title: `Carousel Project 0${slotIndex + 1}`,
+                          isPublished: true,
+                        };
+                        currentSlug = newSlotProject.slug;
+                        currentProject = newSlotProject;
+                      }
+                    }
+
+                    const moveSlot = (direction: -1 | 1) => {
+                      const targetIndex = slotIndex + direction;
+                      if (targetIndex < 0 || targetIndex >= 5) return;
+                      const nextSlugs = [...settingsDraft.featuredProjectSlugs];
+                      while (nextSlugs.length < 5) {
+                        nextSlugs.push(projectDrafts[nextSlugs.length]?.slug || `carousel-project-${nextSlugs.length + 1}`);
+                      }
+                      const temp = nextSlugs[slotIndex];
+                      nextSlugs[slotIndex] = nextSlugs[targetIndex];
+                      nextSlugs[targetIndex] = temp;
+                      setSettingsDraft({
+                        ...settingsDraft,
+                        featuredProjectSlugs: nextSlugs.slice(0, 5),
+                      });
+                    };
+
+                    const updateSlotProjectField = (field: keyof Project, value: string | boolean | number) => {
+                      if (!currentProject) return;
+                      const targetId = currentProject.id;
+                      const isExisting = projectDrafts.some((p) => p.id === targetId);
+
+                      if (isExisting) {
+                        setProjectDrafts((prev) =>
+                          prev.map((item) => (item.id === targetId ? { ...item, [field]: value } : item))
+                        );
+                      } else {
+                        const newProj = { ...currentProject, [field]: value };
+                        setProjectDrafts((prev) => [...prev, newProj]);
+                      }
+
+                      // If slug changed, keep settingsDraft.featuredProjectSlugs in sync
+                      if (field === "slug" && typeof value === "string") {
+                        const nextSlugs = [...settingsDraft.featuredProjectSlugs];
+                        nextSlugs[slotIndex] = value;
+                        setSettingsDraft({ ...settingsDraft, featuredProjectSlugs: nextSlugs.slice(0, 5) });
+                      }
+                    };
 
                     return (
-                      <div key={slotIndex} className={`py-5 first:pt-0 last:pb-0 ${slotIndex > 0 ? "pt-5" : ""}`}>
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div key={slotIndex} className={`py-6 first:pt-0 last:pb-0`}>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-black/5 pb-4">
                           <div className="flex items-center gap-3">
                             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#171717] text-xs font-mono font-medium text-white">
                               0{slotIndex + 1}
                             </span>
                             <div>
-                              <p className="text-sm font-medium">{currentProject?.title ?? "Empty slot"}</p>
-                              <p className="text-xs text-neutral-500">
-                                {currentProject ? `${currentProject.year} · ${currentProject.category} · ${currentProject.location}` : "Select a project to feature in this slide"}
-                              </p>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs uppercase tracking-[0.14em] font-medium text-neutral-500">
+                                  Position {slotIndex + 1}
+                                </span>
+                                <span className="text-xs text-neutral-400">·</span>
+                                <span className="text-sm font-medium text-black">
+                                  {currentProject.title || `Project Slot 0${slotIndex + 1}`}
+                                </span>
+                              </div>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <label className="text-[10px] uppercase tracking-[0.1em] text-neutral-500 sm:sr-only">Assign project</label>
+                            <button
+                              type="button"
+                              onClick={() => moveSlot(-1)}
+                              disabled={slotIndex === 0}
+                              title="Move up in carousel order"
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-[4px] border border-black/15 bg-white text-neutral-700 transition hover:border-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveSlot(1)}
+                              disabled={slotIndex === 4}
+                              title="Move down in carousel order"
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-[4px] border border-black/15 bg-white text-neutral-700 transition hover:border-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+
                             <select
-                              value={currentSlug}
+                              value={currentProject.slug}
                               onChange={(e) => {
-                                const newSlug = e.target.value;
-                                const updatedSlugs = [...settingsDraft.featuredProjectSlugs];
-                                updatedSlugs[slotIndex] = newSlug;
+                                const selectedSlug = e.target.value;
+                                if (!selectedSlug) return;
+                                const nextSlugs = [...settingsDraft.featuredProjectSlugs];
+                                while (nextSlugs.length < 5) nextSlugs.push("");
+                                nextSlugs[slotIndex] = selectedSlug;
                                 setSettingsDraft({
                                   ...settingsDraft,
-                                  featuredProjectSlugs: updatedSlugs.slice(0, 5),
+                                  featuredProjectSlugs: nextSlugs.slice(0, 5),
                                 });
                               }}
-                              className="h-9 min-w-[220px] rounded-[4px] border border-black/15 bg-white px-3 text-xs text-black outline-none transition focus:border-black"
+                              className="h-8 rounded-[4px] border border-black/15 bg-white px-2.5 text-xs text-black outline-none transition focus:border-black max-w-[200px]"
                             >
-                              <option value="">-- Choose project --</option>
-                              {projectDrafts.map((project) => (
-                                <option key={project.id} value={project.slug}>
-                                  {project.title} ({project.year})
-                                </option>
-                              ))}
+                              <option value={currentProject.slug}>Assign: {currentProject.title}</option>
+                              {projectDrafts
+                                .filter((p) => p.slug !== currentProject?.slug)
+                                .map((p) => (
+                                  <option key={p.id} value={p.slug}>
+                                    Switch to: {p.title} ({p.year})
+                                  </option>
+                                ))}
                             </select>
                           </div>
                         </div>
 
-                        {currentProject && (
-                          <div className="mt-4 grid gap-4 rounded-[6px] border border-black/8 bg-[#faf9f6] p-4 sm:grid-cols-[140px_minmax(0,1fr)]">
+                        {/* Direct input fields for this carousel slot project */}
+                        <div className="mt-5 grid gap-5 rounded-[6px] border border-black/10 bg-[#faf9f6] p-4 sm:p-5 lg:grid-cols-[180px_minmax(0,1fr)]">
+                          <div>
                             <div className="relative aspect-[16/10] overflow-hidden rounded-[4px] border border-black/10 bg-neutral-200">
                               {currentProject.heroImage ? (
                                 <img
@@ -1074,61 +1163,62 @@ export default function AdminPage() {
                                 />
                               ) : (
                                 <div className="flex h-full w-full items-center justify-center text-[10px] text-neutral-400">
-                                  No image
+                                  No image set
                                 </div>
                               )}
                             </div>
-                            <div className="space-y-3">
+                            <div className="mt-3">
                               <SupabaseMediaField
-                                label="Slide hero image"
+                                label="Carousel hero image"
                                 value={currentProject.heroImage}
-                                onChange={(url) => {
-                                  setProjectDrafts((current) =>
-                                    current.map((item) =>
-                                      item.id === currentProject.id ? { ...item, heroImage: url } : item
-                                    )
-                                  );
-                                }}
-                              />
-                              <div className="grid gap-3 sm:grid-cols-2">
-                                <AdminField
-                                  label="Project title"
-                                  value={currentProject.title}
-                                  onChange={(value) => {
-                                    setProjectDrafts((current) =>
-                                      current.map((item) =>
-                                        item.id === currentProject.id ? { ...item, title: value } : item
-                                      )
-                                    );
-                                  }}
-                                />
-                                <AdminField
-                                  label="Location"
-                                  value={currentProject.location}
-                                  onChange={(value) => {
-                                    setProjectDrafts((current) =>
-                                      current.map((item) =>
-                                        item.id === currentProject.id ? { ...item, location: value } : item
-                                      )
-                                    );
-                                  }}
-                                />
-                              </div>
-                              <AdminField
-                                label="Slide description"
-                                value={currentProject.description}
-                                rows={2}
-                                onChange={(value) => {
-                                  setProjectDrafts((current) =>
-                                    current.map((item) =>
-                                      item.id === currentProject.id ? { ...item, description: value } : item
-                                    )
-                                  );
-                                }}
+                                onChange={(url) => updateSlotProjectField("heroImage", url)}
                               />
                             </div>
                           </div>
-                        )}
+
+                          <div className="space-y-4">
+                            <div className="grid gap-4 sm:grid-cols-2">
+                              <AdminField
+                                label="Project title"
+                                value={currentProject.title}
+                                onChange={(val) => updateSlotProjectField("title", val)}
+                              />
+                              <AdminField
+                                label="Slug (URL identifier)"
+                                value={currentProject.slug}
+                                onChange={(val) => updateSlotProjectField("slug", val.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}
+                              />
+                            </div>
+
+                            <div className="grid gap-4 sm:grid-cols-3">
+                              <AdminField
+                                label="Year"
+                                value={currentProject.year}
+                                onChange={(val) => updateSlotProjectField("year", val)}
+                              />
+                              <AdminField
+                                label="Location"
+                                value={currentProject.location}
+                                onChange={(val) => updateSlotProjectField("location", val)}
+                              />
+                              <AdminField
+                                label="Typology / Subcategory"
+                                value={currentProject.typology || currentProject.subcategory || "Culture"}
+                                onChange={(val) => {
+                                  updateSlotProjectField("typology", val);
+                                  updateSlotProjectField("subcategory", val.toLowerCase());
+                                }}
+                              />
+                            </div>
+
+                            <AdminField
+                              label="Slide description"
+                              value={currentProject.description}
+                              rows={3}
+                              onChange={(val) => updateSlotProjectField("description", val)}
+                            />
+                          </div>
+                        </div>
                       </div>
                     );
                   })}

@@ -200,9 +200,9 @@ export default function ProjectFeed({
 
   return (
     <div className="w-full px-5 pb-24 pt-10 sm:px-8 lg:px-16">
-      {/* Top Filter & Sort Bar (shows when carousel is off or sort filter is requested) */}
+      {/* Filter bar: hidden on mobile per user requirements, desktop shows clean filter icon with floating popover */}
       {showSortFilter && (
-        <div className="mx-auto mb-8 flex max-w-[1600px] items-center justify-between border-b border-neutral-100 pb-4">
+        <div className="mx-auto mb-8 hidden sm:flex max-w-[1600px] items-center justify-between border-b border-neutral-100 pb-4">
           <p className="text-xs uppercase tracking-[0.16em] text-neutral-400">
             {filteredProjects.length} {filteredProjects.length === 1 ? "project" : "projects"}
           </p>
@@ -211,22 +211,22 @@ export default function ProjectFeed({
             <button
               type="button"
               onClick={() => setIsSortMenuOpen((open) => !open)}
-              className="inline-flex items-center gap-2 border border-neutral-300 bg-white px-3.5 py-1.5 text-xs uppercase tracking-[0.14em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-[4px] border border-neutral-200 bg-white text-neutral-600 transition hover:border-black hover:text-black cursor-pointer shadow-xs"
               aria-label="Filter projects by order"
+              title={`Filter: ${sortOrder === "random" ? "Random" : sortOrder === "latest" ? "Latest" : sortOrder === "oldest" ? "Oldest" : "Default"}`}
               aria-expanded={isSortMenuOpen}
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
-              <span>
-                {sortOrder === "random" ? "Random" : sortOrder === "latest" ? "Latest" : sortOrder === "oldest" ? "Oldest" : "Sort"}
-              </span>
-              <ChevronDown className="h-3 w-3 text-neutral-400" />
             </button>
 
             {isSortMenuOpen && (
               <div
-                className="absolute right-0 top-full z-20 mt-1.5 w-40 border border-neutral-200 bg-white py-1 shadow-lg font-body"
+                className="absolute right-0 top-full z-30 mt-2 w-44 rounded-[6px] border border-neutral-200 bg-white/95 p-1 shadow-xl backdrop-blur-md font-body"
                 onMouseLeave={() => setIsSortMenuOpen(false)}
               >
+                <div className="px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-neutral-400 font-medium border-b border-neutral-100 mb-1">
+                  Sort Projects
+                </div>
                 <button
                   type="button"
                   onClick={() => {
@@ -234,7 +234,7 @@ export default function ProjectFeed({
                     setRandomSeed((s) => s + 1);
                     setIsSortMenuOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "random" ? "font-semibold text-black" : "text-neutral-600"}`}
+                  className={`flex w-full items-center justify-between rounded-[4px] px-3 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-100 ${sortOrder === "random" ? "font-semibold text-black bg-neutral-50" : "text-neutral-600"}`}
                 >
                   <span>Random</span>
                   <Shuffle className="h-3 w-3 text-neutral-400" />
@@ -245,7 +245,7 @@ export default function ProjectFeed({
                     setSortOrder("latest");
                     setIsSortMenuOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "latest" ? "font-semibold text-black" : "text-neutral-600"}`}
+                  className={`flex w-full items-center justify-between rounded-[4px] px-3 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-100 ${sortOrder === "latest" ? "font-semibold text-black bg-neutral-50" : "text-neutral-600"}`}
                 >
                   <span>Latest</span>
                 </button>
@@ -255,7 +255,7 @@ export default function ProjectFeed({
                     setSortOrder("oldest");
                     setIsSortMenuOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-50 ${sortOrder === "oldest" ? "font-semibold text-black" : "text-neutral-600"}`}
+                  className={`flex w-full items-center justify-between rounded-[4px] px-3 py-2 text-left text-xs uppercase tracking-[0.12em] transition hover:bg-neutral-100 ${sortOrder === "oldest" ? "font-semibold text-black bg-neutral-50" : "text-neutral-600"}`}
                 >
                   <span>Oldest</span>
                 </button>
