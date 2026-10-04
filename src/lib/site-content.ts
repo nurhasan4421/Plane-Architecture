@@ -281,13 +281,19 @@ export async function getAdminCmsContent(): Promise<CmsContentState> {
   const testimonialsResult = testimonialsQuery as QueryResult<Database["public"]["Tables"]["testimonials"]["Row"][]>;
   const queryError = settingsResult.error || projectsResult.error || newsResult.error || testimonialsResult.error;
 
-  if (queryError) throw new Error(queryError.message || "Unable to load CMS content from Supabase.");
+  const localProjects = PROJECTS;
+  const supabaseProjects = (projectsResult.data ?? []).map(mapProject);
+  const supabaseBySlug = new Map(supabaseProjects.map((p) => [p.slug, p]));
+  const localSlugs = new Set(localProjects.map((p) => p.slug));
+
+  const mergedProjects = localProjects.map((p) => supabaseBySlug.get(p.slug) ?? p);
+  const extraProjects = supabaseProjects.filter((p) => !localSlugs.has(p.slug));
 
   return {
     settings: mapSiteSettings(settingsResult.data?.settings),
-    projects: (projectsResult.data ?? []).map(mapProject),
-    news: (newsResult.data ?? []).map(mapNews),
-    testimonials: (testimonialsResult.data ?? []).map(mapTestimonial),
+    projects: [...mergedProjects, ...extraProjects],
+    news: (newsResult.data && newsResult.data.length > 0) ? newsResult.data.map(mapNews) : NEWS_ITEMS,
+    testimonials: (testimonialsResult.data && testimonialsResult.data.length > 0) ? testimonialsResult.data.map(mapTestimonial) : readLocalCmsState().testimonials,
   };
 }
 
@@ -325,6 +331,7 @@ export async function saveAdminCmsContent(state: CmsContentState, deleted: CmsDe
       quote_author_role: project.quoteAuthorRole ?? null,
       description: project.description,
       awards: (project.awards ?? []) as Json,
+      collaborators: (project.collaborators ?? []) as Json,
       diagrams: {
         narrative: {
           materials: project.materials,

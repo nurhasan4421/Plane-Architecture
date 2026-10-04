@@ -10,21 +10,28 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  Clock,
   FileImage,
   FolderKanban,
+  GitCommit,
+  History,
   LayoutDashboard,
   ListTree,
   Lock,
   LogOut,
   Plus,
+  Redo2,
+  RotateCcw,
   Search,
   Settings2,
   ShieldCheck,
   SlidersHorizontal,
   Save,
   Trash2,
+  Undo2,
   Upload,
   UsersRound,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { useSiteContent } from "@/components/SiteContentProvider";
@@ -33,6 +40,7 @@ import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { getAdminCmsContent, saveAdminCmsContent } from "@/lib/site-content";
 import type { CmsDeletedContent, SiteCategory } from "@/lib/site-content";
 import { NewsItem, Project, ProjectTestimonial } from "@/types/project";
+import { formatImageUrl } from "@/lib/image-utils";
 
 const DEFAULT_COLLAGE_CAPTIONS = [
   "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD",
@@ -297,13 +305,21 @@ function SupabaseMediaField({
 
   return (
     <div>
-      <AdminField label={label} value={value} onChange={(url) => { setUploaded(false); onChange(url); }} placeholder="https://..." />
+      <AdminField
+        label={label}
+        value={value}
+        onChange={(url) => {
+          setUploaded(false);
+          onChange(formatImageUrl(url));
+        }}
+        placeholder="https://... or Google Drive share link"
+      />
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
         <input ref={inputRef} type="file" accept={allowVideo ? "image/*,video/mp4,video/webm,video/quicktime" : "image/*"} onChange={handleUpload} className="sr-only" aria-label={`Upload ${label.toLowerCase()}`} />
         <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="inline-flex h-8 items-center gap-2 rounded-[4px] border border-black/15 px-3 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black disabled:cursor-wait disabled:opacity-50">
           <Upload className="h-3.5 w-3.5" />{uploading ? "Uploading..." : "Upload from device"}
         </button>
-        <span className="text-[10px] text-neutral-400">Supabase Storage · 50 MB max</span>
+        <span className="text-[10px] text-neutral-400">Supabase Storage · 50 MB max · Google Drive links supported</span>
       </div>
       {uploaded && <p role="status" className="mt-2 text-xs text-[#426454]">Uploaded to Supabase Storage.</p>}
       {uploadError && <p role="alert" className="mt-2 text-xs text-red-600">{uploadError}</p>}
@@ -367,7 +383,7 @@ function ProjectCollageAdminSlot({
       {/* Visual aspect preview matching the website collage */}
       <div className={`relative w-full ${aspectClass} overflow-hidden rounded-[4px] bg-[#ebeae6]`}>
         {item.url ? (
-          <img src={item.url} alt={item.caption || `Slot ${slotNumber}`} className="h-full w-full object-cover" />
+          <img src={formatImageUrl(item.url)} alt={item.caption || `Slot ${slotNumber}`} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full flex-col items-center justify-center p-3 text-neutral-400">
             <FileImage className="h-5 w-5 mb-1 text-neutral-300" />
@@ -390,8 +406,8 @@ function ProjectCollageAdminSlot({
         <input
           type="text"
           value={item.url || ""}
-          onChange={(e) => onChange({ ...item, url: e.target.value })}
-          placeholder="Image URL..."
+          onChange={(e) => onChange({ ...item, url: formatImageUrl(e.target.value) })}
+          placeholder="Image URL or Google Drive link..."
           className="h-7 min-w-0 flex-1 rounded-[3px] border border-black/10 bg-white px-2 text-[11px] text-black outline-none focus:border-black placeholder:text-neutral-400"
         />
         <input
@@ -406,7 +422,7 @@ function ProjectCollageAdminSlot({
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
           title="Upload image file"
-          className="inline-flex h-7 items-center justify-center rounded-[3px] border border-black/15 bg-neutral-50 px-2 text-[9px] font-medium uppercase tracking-wider text-neutral-700 hover:border-black disabled:opacity-50 shrink-0"
+          className="inline-flex h-7 items-center justify-center rounded-[3px] border border-black/15 bg-neutral-50 px-2 text-[9px] font-medium uppercase tracking-wider text-neutral-700 hover:border-black disabled:opacity-50 shrink-0 cursor-pointer"
         >
           <Upload className="h-3 w-3 mr-1" /> Upload
         </button>
@@ -446,8 +462,13 @@ function AdminCollageGrid({
 
   const updateSlot = (index: number, updated: { url: string; caption?: string }) => {
     const next = [...slots];
-    next[index] = updated;
-    onChange(next);
+    next[index] = {
+      ...updated,
+      url: formatImageUrl(updated.url),
+    };
+    // Preserve any extended gallery items beyond index 5
+    const existingExtended = (gallery || []).slice(6);
+    onChange([...next, ...existingExtended]);
   };
 
   return (
@@ -458,7 +479,7 @@ function AdminCollageGrid({
             6-Photo Featured Collage (Aligned Website UI Match)
           </p>
           <p className="text-xs text-neutral-500">
-            All 3 columns are mathematically aligned on all sides and bottom. Upload 6 distinct images and set captions.
+            All 3 columns are mathematically aligned on all sides and bottom. Direct Google Drive links & uploaded photos supported.
           </p>
         </div>
       </div>
@@ -472,11 +493,11 @@ function AdminCollageGrid({
           {/* Col 1 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.38] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[0].url ? <img src={slots[0].url} alt={slots[0].caption || "Slot 1"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 1</div>}
+              {slots[0].url ? <img src={formatImageUrl(slots[0].url)} alt={slots[0].caption || "Slot 1"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 1</div>}
               <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[0].caption || "VIEW 1"}</span>
             </div>
             <div className="relative w-full flex-[0.62] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[1].url ? <img src={slots[1].url} alt={slots[1].caption || "Slot 2"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 2</div>}
+              {slots[1].url ? <img src={formatImageUrl(slots[1].url)} alt={slots[1].caption || "Slot 2"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 2</div>}
               <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[1].caption || "VIEW 2"}</span>
             </div>
           </div>
@@ -484,11 +505,11 @@ function AdminCollageGrid({
           {/* Col 2 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.45] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[2].url ? <img src={slots[2].url} alt={slots[2].caption || "Slot 3"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 3</div>}
+              {slots[2].url ? <img src={formatImageUrl(slots[2].url)} alt={slots[2].caption || "Slot 3"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 3</div>}
               <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[2].caption || "VIEW 3"}</span>
             </div>
             <div className="relative w-full flex-[0.55] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[3].url ? <img src={slots[3].url} alt={slots[3].caption || "Slot 4"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 4</div>}
+              {slots[3].url ? <img src={formatImageUrl(slots[3].url)} alt={slots[3].caption || "Slot 4"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 4</div>}
               <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[3].caption || "VIEW 4"}</span>
             </div>
           </div>
@@ -496,11 +517,11 @@ function AdminCollageGrid({
           {/* Col 3 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.65] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[4].url ? <img src={slots[4].url} alt={slots[4].caption || "Slot 5"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 5</div>}
+              {slots[4].url ? <img src={formatImageUrl(slots[4].url)} alt={slots[4].caption || "Slot 5"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 5</div>}
               <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[4].caption || "VIEW 5"}</span>
             </div>
             <div className="relative w-full flex-[0.35] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[5].url ? <img src={slots[5].url} alt={slots[5].caption || "Slot 6"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 6</div>}
+              {slots[5].url ? <img src={formatImageUrl(slots[5].url)} alt={slots[5].caption || "Slot 6"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 6</div>}
               <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[5].caption || "VIEW 6"}</span>
             </div>
           </div>
@@ -568,6 +589,206 @@ function AdminCollageGrid({
           />
         </div>
       </div>
+    </div>
+  );
+}
+
+function AdminExtendedGallery({
+  gallery,
+  onChange,
+}: {
+  gallery?: { url: string; caption?: string }[];
+  onChange: (gallery: { url: string; caption?: string }[]) => void;
+}) {
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [uploadError, setUploadError] = useState("");
+
+  const additionalImages = useMemo(() => {
+    return (gallery || []).slice(6);
+  }, [gallery]);
+
+  const updateAdditionalImage = (index: number, updated: { url: string; caption?: string }) => {
+    const full = [...(gallery || [])];
+    while (full.length < 6) full.push({ url: "", caption: "" });
+    full[6 + index] = {
+      ...updated,
+      url: formatImageUrl(updated.url),
+    };
+    onChange(full);
+  };
+
+  const addImage = () => {
+    const full = [...(gallery || [])];
+    while (full.length < 6) full.push({ url: "", caption: "" });
+    full.push({
+      url: "",
+      caption: `View ${full.length + 1} - Additional Context & Detail`,
+    });
+    onChange(full);
+  };
+
+  const removeImage = (index: number) => {
+    const full = [...(gallery || [])];
+    full.splice(6 + index, 1);
+    onChange(full);
+  };
+
+  const moveImage = (index: number, direction: -1 | 1) => {
+    const full = [...(gallery || [])];
+    const targetIdx = 6 + index + direction;
+    if (targetIdx < 6 || targetIdx >= full.length) return;
+    const temp = full[6 + index];
+    full[6 + index] = full[targetIdx];
+    full[targetIdx] = temp;
+    onChange(full);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+    setUploadError("");
+    if (!supabase) {
+      setUploadError("Supabase is not configured.");
+      return;
+    }
+    setUploadingIndex(index);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const objectPath = `images/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("site-media").upload(objectPath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) throw error;
+      const { data } = supabase.storage.from("site-media").getPublicUrl(objectPath);
+      updateAdditionalImage(index, { ...additionalImages[index], url: data.publicUrl });
+    } catch (err: unknown) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingIndex(null);
+      event.target.value = "";
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-black/10 pb-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-500">
+            Additional Views & Extended Gallery (Images 7+)
+          </p>
+          <p className="text-xs text-neutral-500">
+            Photographs added here appear in the &ldquo;Additional Views&rdquo; section and in the full-screen photo lightbox on the project page. Supports Google Drive links & uploads.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={addImage}
+          className="inline-flex h-8 items-center gap-1.5 self-start sm:self-auto rounded-[4px] bg-[#171717] px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-neutral-700 cursor-pointer shrink-0 shadow-2xs"
+        >
+          <Plus className="h-3.5 w-3.5" /> Add Photograph
+        </button>
+      </div>
+
+      {uploadError && <p className="text-xs text-red-600">{uploadError}</p>}
+
+      {additionalImages.length === 0 ? (
+        <div className="rounded-[6px] border border-dashed border-black/15 bg-[#faf9f6] p-6 text-center">
+          <FileImage className="mx-auto h-7 w-7 text-neutral-300 mb-2" />
+          <p className="text-xs font-medium text-neutral-700">No additional gallery photos yet</p>
+          <p className="text-[11px] text-neutral-500 mt-1 max-w-sm mx-auto">
+            The first 6 photos form the core architectural feature collage. Any extra photos you add here will display in the Additional Views grid.
+          </p>
+          <button
+            type="button"
+            onClick={addImage}
+            className="mt-3 inline-flex items-center gap-1 rounded-[3px] border border-black/15 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-black hover:border-black cursor-pointer shadow-2xs"
+          >
+            <Plus className="h-3 w-3" /> Add View 7
+          </button>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {additionalImages.map((img, idx) => (
+            <div key={idx} className="flex flex-col gap-2 rounded-[6px] border border-black/10 bg-white p-3 shadow-2xs">
+              <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-neutral-500 font-semibold">
+                <span>View {idx + 7}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveImage(idx, -1)}
+                    disabled={idx === 0}
+                    title="Move earlier"
+                    className="p-1 text-neutral-400 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ArrowUp className="h-3 w-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveImage(idx, 1)}
+                    disabled={idx === additionalImages.length - 1}
+                    title="Move later"
+                    className="p-1 text-neutral-400 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ArrowDown className="h-3 w-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeImage(idx)}
+                    title="Delete image"
+                    className="p-1 text-neutral-400 hover:text-red-600 transition cursor-pointer"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[3px] bg-neutral-100 border border-black/10">
+                {img.url ? (
+                  <img src={formatImageUrl(img.url)} alt={img.caption || `View ${idx + 7}`} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full flex-col items-center justify-center p-2 text-neutral-400">
+                    <FileImage className="h-5 w-5 mb-1 text-neutral-300" />
+                    <span className="text-[9px] uppercase tracking-wider text-neutral-400">No Image</span>
+                  </div>
+                )}
+                {uploadingIndex === idx && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-[10px] font-medium text-white">
+                    Uploading...
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="text"
+                  value={img.url || ""}
+                  onChange={(e) => updateAdditionalImage(idx, { ...img, url: e.target.value })}
+                  placeholder="URL or Google Drive link..."
+                  className="h-7 min-w-0 flex-1 rounded-[3px] border border-black/10 bg-white px-2 text-[11px] text-black outline-none focus:border-black placeholder:text-neutral-400"
+                />
+                <label className="inline-flex h-7 items-center justify-center rounded-[3px] border border-black/15 bg-neutral-50 px-2 text-[9px] font-medium uppercase tracking-wider text-neutral-700 hover:border-black cursor-pointer shrink-0">
+                  <Upload className="h-3 w-3 mr-1" /> Upload
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, idx)}
+                    className="sr-only"
+                  />
+                </label>
+              </div>
+
+              <input
+                type="text"
+                value={img.caption || ""}
+                onChange={(e) => updateAdditionalImage(idx, { ...img, caption: e.target.value })}
+                placeholder={`Caption for View ${idx + 7}...`}
+                className="h-7 w-full rounded-[3px] border border-black/10 bg-white px-2 text-[10px] uppercase tracking-wide text-neutral-700 outline-none focus:border-black placeholder:text-neutral-400"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -729,6 +950,73 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
+  // Version Control & Auto-save State
+  const [commitMessage, setCommitMessage] = useState("");
+  const [versionHistory, setVersionHistory] = useState<{
+    id: string;
+    timestamp: string;
+    message: string;
+    summary: string[];
+    snapshot: {
+      projects: Project[];
+      settings: typeof settings;
+      news: NewsItem[];
+      testimonials: ProjectTestimonial[];
+    };
+  }[]>([]);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [undoStack, setUndoStack] = useState<{
+    projects: Project[];
+    settings: typeof settings;
+    news: NewsItem[];
+    testimonials: ProjectTestimonial[];
+  }[]>([]);
+  const [redoStack, setRedoStack] = useState<{
+    projects: Project[];
+    settings: typeof settings;
+    news: NewsItem[];
+    testimonials: ProjectTestimonial[];
+  }[]>([]);
+
+  // Load version history and persistent drafts on mount
+  useEffect(() => {
+    try {
+      const storedHistory = localStorage.getItem("plane_admin_version_history_v3");
+      if (storedHistory) {
+        setVersionHistory(JSON.parse(storedHistory));
+      }
+      const storedDrafts = localStorage.getItem("plane_admin_drafts_v3");
+      if (storedDrafts) {
+        const parsed = JSON.parse(storedDrafts);
+        if (parsed.projects && parsed.projects.length > 0) {
+          setProjectDrafts(parsed.projects);
+          if (parsed.settings) setSettingsDraft(parsed.settings);
+          if (parsed.news) setNewsDrafts(parsed.news);
+          if (parsed.testimonials) setTestimonialDrafts(parsed.testimonials);
+          if (parsed.selectedProjectId) setSelectedProjectId(parsed.selectedProjectId);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Auto-save every single input change to localStorage immediately
+  useEffect(() => {
+    if (!contentLoaded) return;
+    try {
+      localStorage.setItem("plane_admin_drafts_v3", JSON.stringify({
+        projects: projectDrafts,
+        settings: settingsDraft,
+        news: newsDrafts,
+        testimonials: testimonialDrafts,
+        selectedProjectId,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [projectDrafts, settingsDraft, newsDrafts, testimonialDrafts, selectedProjectId, contentLoaded]);
+
   useEffect(() => {
     let ignore = false;
 
@@ -789,6 +1077,23 @@ export default function AdminPage() {
     void getAdminCmsContent()
       .then((content) => {
         if (cancelled) return;
+        // Check if user has active unsaved edits in localStorage
+        const localDraftsRaw = typeof window !== "undefined" ? localStorage.getItem("plane_admin_drafts_v3") : null;
+        if (localDraftsRaw) {
+          try {
+            const parsed = JSON.parse(localDraftsRaw);
+            if (parsed.projects && parsed.projects.length > 0) {
+              setProjectDrafts(parsed.projects);
+              if (parsed.settings) setSettingsDraft(parsed.settings);
+              if (parsed.news) setNewsDrafts(parsed.news);
+              if (parsed.testimonials) setTestimonialDrafts(parsed.testimonials);
+              if (parsed.selectedProjectId) setSelectedProjectId(parsed.selectedProjectId);
+              setDeletedContent({ projects: [], news: [], testimonials: [] });
+              setContentLoaded(true);
+              return;
+            }
+          } catch {}
+        }
         setSettingsDraft(content.settings);
         setProjectDrafts(content.projects);
         setNewsDrafts(content.news);
@@ -879,6 +1184,76 @@ export default function AdminPage() {
     setLoginLoading(false);
   };
 
+  const pushToUndoStack = () => {
+    setUndoStack((prev) => [
+      ...prev.slice(-39),
+      {
+        projects: projectDrafts,
+        settings: settingsDraft,
+        news: newsDrafts,
+        testimonials: testimonialDrafts,
+      },
+    ]);
+    setRedoStack([]);
+  };
+
+  const handleUndo = () => {
+    if (undoStack.length === 0) return;
+    const current = {
+      projects: projectDrafts,
+      settings: settingsDraft,
+      news: newsDrafts,
+      testimonials: testimonialDrafts,
+    };
+    const previous = undoStack[undoStack.length - 1];
+    setUndoStack((prev) => prev.slice(0, -1));
+    setRedoStack((prev) => [...prev, current]);
+
+    setProjectDrafts(previous.projects);
+    setSettingsDraft(previous.settings);
+    setNewsDrafts(previous.news);
+    setTestimonialDrafts(previous.testimonials);
+  };
+
+  const handleRedo = () => {
+    if (redoStack.length === 0) return;
+    const current = {
+      projects: projectDrafts,
+      settings: settingsDraft,
+      news: newsDrafts,
+      testimonials: testimonialDrafts,
+    };
+    const next = redoStack[redoStack.length - 1];
+    setRedoStack((prev) => prev.slice(0, -1));
+    setUndoStack((prev) => [...prev, current]);
+
+    setProjectDrafts(next.projects);
+    setSettingsDraft(next.settings);
+    setNewsDrafts(next.news);
+    setTestimonialDrafts(next.testimonials);
+  };
+
+  const revertToVersion = (version: (typeof versionHistory)[0]) => {
+    pushToUndoStack();
+    setProjectDrafts(version.snapshot.projects);
+    setSettingsDraft(version.snapshot.settings);
+    setNewsDrafts(version.snapshot.news);
+    setTestimonialDrafts(version.snapshot.testimonials);
+    setIsHistoryOpen(false);
+    setSaveState(`Restored version: "${version.message}"`);
+  };
+
+  const discardDraft = () => {
+    if (!confirm("Are you sure you want to discard unsaved local changes and reload from the server?")) return;
+    try {
+      localStorage.removeItem("plane_admin_drafts_v3");
+    } catch {}
+    setLoadAttempt((c) => c + 1);
+    setUndoStack([]);
+    setRedoStack([]);
+    setSaveState("Local draft discarded");
+  };
+
   const handleSave = async () => {
     if (!contentLoaded || saveState === "Saving...") return;
     setSaveError("");
@@ -893,11 +1268,59 @@ export default function AdminPage() {
       setDeletedContent({ projects: [], news: [], testimonials: [] });
       await refreshSettings();
       setSaveState("Saved to Supabase");
+
+      const timestamp = new Date().toISOString();
+      const message = commitMessage.trim() || `Update • ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+      const summary: string[] = [];
+      if (selectedProject) summary.push(`Saved "${selectedProject.title}"`);
+      summary.push(`${projectDrafts.length} total projects in studio`);
+
+      const newVersion = {
+        id: `v-${Date.now()}`,
+        timestamp,
+        message,
+        summary,
+        snapshot: {
+          projects: projectDrafts,
+          settings: settingsDraft,
+          news: newsDrafts,
+          testimonials: testimonialDrafts,
+        },
+      };
+
+      const nextHistory = [newVersion, ...versionHistory.slice(0, 29)];
+      setVersionHistory(nextHistory);
+      try {
+        localStorage.setItem("plane_admin_version_history_v3", JSON.stringify(nextHistory));
+      } catch {}
+      setCommitMessage("");
     } catch (error) {
       setSaveState("Ready");
       setSaveError(error instanceof Error ? error.message : "Unable to save changes to Supabase.");
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        void handleSave();
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
+        if (e.shiftKey) {
+          e.preventDefault();
+          handleRedo();
+        } else {
+          e.preventDefault();
+          handleUndo();
+        }
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        handleRedo();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSave, handleUndo, handleRedo]);
 
   const handleLogout = async () => {
     await supabase?.auth.signOut();
@@ -1013,32 +1436,38 @@ export default function AdminPage() {
   };
   const deleteProject = () => {
     if (!selectedProject) return;
+    pushToUndoStack();
     setDeletedContent((current) => ({ ...current, projects: [...current.projects, selectedProject.id] }));
     setProjectDrafts((current) => current.filter((item) => item.id !== selectedProject.id));
     setSelectedProjectId(projectDrafts.find((item) => item.id !== selectedProject.id)?.id ?? "");
   };
   const deleteNews = () => {
     if (!selectedNews) return;
+    pushToUndoStack();
     setDeletedContent((current) => ({ ...current, news: [...current.news, selectedNews.id] }));
     setNewsDrafts((current) => current.filter((item) => item.id !== selectedNews.id));
     setSelectedNewsId(newsDrafts.find((item) => item.id !== selectedNews.id)?.id ?? "");
   };
   const deleteTestimonial = () => {
     if (!selectedTestimonial) return;
+    pushToUndoStack();
     setDeletedContent((current) => ({ ...current, testimonials: [...current.testimonials, selectedTestimonial.id] }));
     setTestimonialDrafts((current) => current.filter((item) => item.id !== selectedTestimonial.id));
     setSelectedTestimonialId(testimonialDrafts.find((item) => item.id !== selectedTestimonial.id)?.id ?? "");
   };
   const updateProject = (field: keyof Project, value: unknown) => {
     if (!selectedProject) return;
+    pushToUndoStack();
     if (field === "category" || field === "subcategory") setProjectCategoryFilter(null);
     setProjectDrafts((current) => current.map((item) => item.id === selectedProject.id ? { ...item, [field]: value } : item));
   };
   const updateNews = (field: keyof NewsItem, value: string | boolean | number | null) => {
     if (!selectedNews) return;
+    pushToUndoStack();
     setNewsDrafts((current) => current.map((item) => item.id === selectedNews.id ? { ...item, [field]: value } : item));
   };
   const updateTestimonial = (id: string, field: keyof ProjectTestimonial, value: string | boolean | number | null) => {
+    pushToUndoStack();
     setTestimonialDrafts((current) => current.map((item) => item.id === id ? { ...item, [field]: value } : item));
   };
 
@@ -1172,7 +1601,7 @@ export default function AdminPage() {
             onCategoryChange: selectProjectCategory,
             onSubcategoryChange: (value) => updateProject("subcategory", value),
           }}>
-          <main className="mx-auto max-w-[1440px] px-4 pb-20 pt-7 sm:px-7 sm:pt-9 xl:px-10">
+          <main className="mx-auto max-w-[1440px] px-4 pb-32 pt-7 sm:px-7 sm:pt-9 xl:px-10">
             {saveError && <p role="alert" className="mb-5 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">Supabase save failed: {saveError}</p>}
             {saveState !== "Ready" && <div role="status" className="mb-5 flex items-center gap-2 rounded-[8px] border-l-2 border-[#668b72] bg-white px-4 py-3 text-xs text-neutral-600"><Check className="h-4 w-4 text-[#426454]" />{saveState === "Saving..." ? "Saving changes to Supabase..." : "Changes saved to Supabase. Published content has been refreshed."}</div>}
 
@@ -1344,7 +1773,15 @@ export default function AdminPage() {
                         />
                       </div>
 
-                      {/* 4. Architectural Narrative, History & Design Concept */}
+                      {/* 4. Additional Views & Extended Gallery (Images 7+) */}
+                      <div className="border-t border-black/10 pt-6">
+                        <AdminExtendedGallery
+                          gallery={selectedProject.gallery}
+                          onChange={(newGallery) => updateProject("gallery", newGallery)}
+                        />
+                      </div>
+
+                      {/* 5. Architectural Narrative, History & Design Concept */}
                       <div className="border-t border-black/10 pt-6">
                         <div className="mb-4">
                           <p className={labelClass}>Design Biography & Architectural Concept</p>
@@ -1885,6 +2322,170 @@ export default function AdminPage() {
             </div>}
           </main>
           </AdminTaxonomyContext.Provider>
+
+          {/* VS Code Style Mini Commit Bar Docked at Bottom */}
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-neutral-800 bg-[#181818] text-white shadow-2xl font-body">
+            <div className="mx-auto flex h-12 max-w-[1600px] items-center justify-between px-3 sm:px-6 text-xs">
+              {/* Left: Source control badge & current context */}
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] text-neutral-300">
+                  <GitCommit className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+                  <span className="hidden sm:inline font-semibold">main</span>
+                </div>
+                <span className="text-neutral-600 hidden sm:inline">|</span>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                  <span className="truncate text-neutral-200 text-[11px] font-medium max-w-[140px] sm:max-w-[220px]">
+                    {selectedProject ? selectedProject.title : "Studio CMS"}
+                  </span>
+                  <span className="text-[10px] text-neutral-400 hidden lg:inline">
+                    (Auto-saved to localStorage)
+                  </span>
+                </div>
+              </div>
+
+              {/* Center: Commit message input and Save button */}
+              <div className="flex items-center gap-2 max-w-lg flex-1 mx-2 sm:mx-4">
+                <input
+                  type="text"
+                  value={commitMessage}
+                  onChange={(e) => setCommitMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") void handleSave();
+                  }}
+                  placeholder="Commit message (e.g. Update features, collage photos, specs)..."
+                  className="h-8 w-full rounded-[4px] border border-neutral-700 bg-neutral-900 px-3 text-[11px] text-neutral-100 outline-none transition placeholder:text-neutral-500 focus:border-blue-400"
+                />
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={!contentLoaded || saveState === "Saving..."}
+                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-[4px] bg-blue-600 hover:bg-blue-500 px-3.5 text-[10px] font-semibold uppercase tracking-wider text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Save className="h-3 w-3" />
+                  <span>{saveState === "Saving..." ? "Saving..." : "Commit & Save"}</span>
+                </button>
+              </div>
+
+              {/* Right: Quick actions: Undo / Redo / History / Discard */}
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleUndo}
+                  disabled={undoStack.length === 0}
+                  title="Undo (Ctrl+Z / Cmd+Z)"
+                  className="flex h-8 w-8 items-center justify-center rounded-[4px] text-neutral-400 hover:bg-neutral-800 hover:text-white transition disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Undo2 className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRedo}
+                  disabled={redoStack.length === 0}
+                  title="Redo (Ctrl+Y / Cmd+Shift+Z)"
+                  className="flex h-8 w-8 items-center justify-center rounded-[4px] text-neutral-400 hover:bg-neutral-800 hover:text-white transition disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Redo2 className="h-3.5 w-3.5" />
+                </button>
+                <div className="h-4 w-[1px] bg-neutral-700 mx-1 hidden sm:block" />
+                <button
+                  type="button"
+                  onClick={() => setIsHistoryOpen(true)}
+                  title="View version history timeline and rollback"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-[4px] border border-neutral-700 bg-neutral-900 px-2.5 text-[10px] font-medium text-neutral-300 hover:border-neutral-500 hover:text-white transition cursor-pointer"
+                >
+                  <History className="h-3.5 w-3.5 text-blue-400" />
+                  <span className="hidden sm:inline">History ({versionHistory.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={discardDraft}
+                  title="Discard local draft and reload original"
+                  className="hidden sm:inline-flex h-8 items-center gap-1 rounded-[4px] px-2 text-[10px] font-medium text-neutral-400 hover:bg-red-950/60 hover:text-red-400 transition cursor-pointer"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  <span>Discard</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Version History Modal */}
+          {isHistoryOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs select-none">
+              <div className="flex h-[82vh] w-full max-w-2xl flex-col rounded-[8px] border border-neutral-700 bg-[#1e1e1e] text-white shadow-2xl overflow-hidden">
+                <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-4">
+                  <div className="flex items-center gap-2.5">
+                    <History className="h-5 w-5 text-blue-400" />
+                    <div>
+                      <h3 className="font-display text-lg font-medium text-white">Version History & Commits</h3>
+                      <p className="text-[11px] text-neutral-400">
+                        {versionHistory.length} saved versions in local record · Revert to any state anytime
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsHistoryOpen(false)}
+                    className="rounded-[4px] p-1.5 text-neutral-400 hover:bg-neutral-800 hover:text-white transition cursor-pointer"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-5 divide-y divide-neutral-800">
+                  {versionHistory.length === 0 ? (
+                    <div className="py-16 text-center text-neutral-400">
+                      <Clock className="mx-auto h-8 w-8 text-neutral-500 mb-3" />
+                      <p className="text-sm font-medium text-neutral-200">No commits recorded yet</p>
+                      <p className="text-xs text-neutral-500 mt-1 max-w-sm mx-auto">
+                        Each time you click &ldquo;Commit & Save&rdquo; or save changes to Supabase, an immutable snapshot will be logged here for full undo/redo.
+                      </p>
+                    </div>
+                  ) : (
+                    versionHistory.map((version) => (
+                      <div key={version.id} className="py-3.5 first:pt-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <GitCommit className="h-4 w-4 text-emerald-400 shrink-0" />
+                            <span className="font-medium text-sm text-neutral-100 truncate">{version.message}</span>
+                          </div>
+                          <div className="mt-1 flex items-center gap-2 text-[11px] text-neutral-400 font-mono">
+                            <span>{new Date(version.timestamp).toLocaleString()}</span>
+                            <span>·</span>
+                            <span>{version.snapshot.projects?.length || 0} projects</span>
+                          </div>
+                          {version.summary && version.summary.length > 0 && (
+                            <p className="mt-1 text-[11px] text-neutral-400 truncate">
+                              {version.summary.join(" · ")}
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => revertToVersion(version)}
+                          className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-[4px] border border-neutral-700 bg-neutral-800 px-3 text-[11px] font-medium text-white transition hover:bg-blue-600 hover:border-blue-500 cursor-pointer shadow-xs"
+                        >
+                          <RotateCcw className="h-3 w-3" /> Revert to this version
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="border-t border-neutral-800 bg-[#161616] px-5 py-3 flex items-center justify-between text-xs text-neutral-400">
+                  <span>Reverting applies the snapshot to the active editor.</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsHistoryOpen(false)}
+                    className="rounded-[4px] bg-neutral-800 px-3.5 py-1 text-xs text-white hover:bg-neutral-700 transition cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

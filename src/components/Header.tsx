@@ -53,7 +53,12 @@ export default function Header({
           <div
             className="relative flex items-center"
             onMouseEnter={() => {
+              setHoveredCategory(null);
               if (window.matchMedia("(hover: hover)").matches) setIsLogoMenuOpen(true);
+            }}
+            onFocus={() => {
+              setHoveredCategory(null);
+              setIsLogoMenuOpen(true);
             }}
             onBlur={(event) => {
               const nextTarget = event.relatedTarget as HTMLElement | null;
@@ -126,10 +131,10 @@ export default function Header({
       </div>
 
       <div
-        aria-hidden={!hoveredConfig}
-        inert={!hoveredConfig}
+        aria-hidden={!hoveredConfig || isLogoMenuOpen}
+        inert={!hoveredConfig || isLogoMenuOpen}
         className={`absolute left-1/2 right-auto top-full z-40 w-screen -translate-x-1/2 overflow-hidden bg-white shadow-lg transition-[max-height,opacity,transform] duration-500 ease-out ${
-          hoveredConfig
+          hoveredConfig && !isLogoMenuOpen
             ? "max-h-[520px] translate-y-0 opacity-100"
             : "pointer-events-none max-h-0 -translate-y-3 opacity-0"
         }`}
