@@ -69,6 +69,7 @@ export interface Project {
     caption?: string;
     aspectRatio?: string;
     mediaType?: "image" | "video";
+    isFeature?: boolean;
   }[];
   credits?: ProjectCredit[];
   materials?: string;

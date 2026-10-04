@@ -269,9 +269,6 @@ export default function HorizontalProjectViewer({
                     alt={image.caption || `Collage view ${index + 1}`}
                     className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                   />
-                  <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm">
-                    {image.caption || `VIEW ${index + 1}`}
-                  </span>
                 </button>
               ))}
             </div>
@@ -293,9 +290,6 @@ export default function HorizontalProjectViewer({
                     alt={image.caption || `Collage view ${index + 1}`}
                     className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  <span className="absolute left-2 bottom-2 max-w-[90%] truncate bg-black/85 px-2 py-0.5 text-[8px] font-medium uppercase tracking-wider text-white shadow-sm">
-                    {image.caption || `VIEW ${index + 1}`}
-                  </span>
                 </button>
               ))}
             </div>
