@@ -194,7 +194,7 @@ export default function Header({
         </div>
       </div>
 
-      {/* Mobile Menu (Hamburger open: Horizontal panel first, then Category/Subcategory menus below) */}
+      {/* Mobile Menu (Hamburger open: Horizontal panel first, then Category/Subcategory menus, then CTA below) */}
       {isMobileNavOpen && (
         <div className="lg:hidden border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] shadow-2xl animate-in fade-in slide-in-from-top-1 duration-200">
           {/* 1. Horizontal Panel: News, FAQ, Contact, About */}
@@ -216,22 +216,11 @@ export default function Header({
                 </Link>
               ))}
             </nav>
-
-            {/* Mobile: Start Project Quick CTA */}
-            <div className="flex justify-center pb-2.5 px-3">
-              <Link
-                href="/start-project"
-                onClick={() => setIsMobileNavOpen(false)}
-                className="inline-flex items-center gap-2 px-5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-[#294b3d] dark:hover:bg-neutral-200"
-              >
-                Start Project →
-              </Link>
-            </div>
           </div>
 
-          {/* 2. Below that: Navbar Menus & Submenu (Same UI as before) */}
+          {/* 2. Middle: Navbar Menus & Submenu */}
           <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-            <nav aria-label="Project categories" className="max-h-[min(65vh,450px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
+            <nav aria-label="Project categories" className="max-h-[min(60vh,420px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
               {categories.map((category) => (
                 <button
                   key={category.id}
@@ -250,7 +239,7 @@ export default function Header({
             </nav>
             <nav
               aria-label={`${mobileConfig.label} subcategories`}
-              className="max-h-[min(65vh,450px)] overflow-y-auto px-4 py-3 sm:px-6"
+              className="max-h-[min(60vh,420px)] overflow-y-auto px-4 py-3 sm:px-6"
             >
               <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
                 {mobileConfig.label}
@@ -295,6 +284,7 @@ export default function Header({
               </div>
             </nav>
           </div>
+
         </div>
       )}
     </header>
