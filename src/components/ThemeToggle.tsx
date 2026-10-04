@@ -19,7 +19,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
 
     // Trigger icon micro-rotation animation
     setIsRotating(true);
-    setTimeout(() => setIsRotating(false), 500);
+    setTimeout(() => setIsRotating(false), 900);
 
     // Get the exact center of the button for the bloom origin
     const rect = e.currentTarget.getBoundingClientRect();
@@ -64,7 +64,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
         bloomEl.style.transform = "translate(-50%, -50%) scale(0)";
         bloomEl.style.backgroundColor = nextTheme === "dark" ? "#0e0e0e" : "#ffffff";
         bloomEl.style.transition =
-          "transform 550ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease";
+          "transform 950ms cubic-bezier(0.22, 1, 0.36, 1), opacity 250ms ease";
         document.body.appendChild(bloomEl);
 
         // Force reflow
@@ -80,9 +80,9 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
             setTimeout(() => {
               bloomEl.remove();
               isTransitioningRef.current = false;
-            }, 200);
-          }, 100);
-        }, 450);
+            }, 250);
+          }, 150);
+        }, 800);
         return;
       }
 
@@ -112,7 +112,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
               clipPath: clipPath,
             },
             {
-              duration: 600,
+              duration: 950,
               easing: "cubic-bezier(0.22, 1, 0.36, 1)",
               pseudoElement: "::view-transition-new(root)",
             }
@@ -150,13 +150,13 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       <span className="absolute inset-0 rounded-full scale-0 transition-transform duration-300 group-active:scale-125 bg-black/5 dark:bg-white/10 pointer-events-none" />
       {isDark ? (
         <Sun
-          className={`h-3.5 w-3.5 sm:h-4 sm:w-4 text-neutral-100 transition-transform duration-500 ${
+          className={`h-3.5 w-3.5 sm:h-4 sm:w-4 text-neutral-100 transition-transform duration-700 ${
             isRotating ? "rotate-180 scale-110" : "group-hover:rotate-45"
           }`}
         />
       ) : (
         <Moon
-          className={`h-3.5 w-3.5 sm:h-4 sm:w-4 text-neutral-800 transition-transform duration-500 ${
+          className={`h-3.5 w-3.5 sm:h-4 sm:w-4 text-neutral-800 transition-transform duration-700 ${
             isRotating ? "-rotate-90 scale-110" : "group-hover:-rotate-12"
           }`}
         />
