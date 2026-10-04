@@ -36,6 +36,8 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+import MobileStartProjectCTA from "@/components/MobileStartProjectCTA";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,7 +67,10 @@ export default function RootLayout({
       <body className="bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] min-h-screen selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
         <ThemeProvider>
           <IntroSplash />
-          <SiteContentProvider>{children}</SiteContentProvider>
+          <SiteContentProvider>
+            {children}
+            <MobileStartProjectCTA />
+          </SiteContentProvider>
         </ThemeProvider>
       </body>
     </html>

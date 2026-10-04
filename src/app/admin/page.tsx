@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useMemo, useRef, useState 
 import Link from "next/link";
 import {
   ArrowDown,
+  ArrowRight as ArrowRightIcon,
   ArrowUp,
   ArrowUpRight,
   BookOpen,
@@ -123,7 +124,7 @@ const emptyTestimonial = (): ProjectTestimonial => ({
   createdAt: new Date().toISOString(),
 });
 
-type AdminSection = "overview" | "projects" | "carousel" | "news" | "testimonials" | "categories" | "settings";
+type AdminSection = "overview" | "projects" | "carousel" | "news" | "testimonials" | "categories" | "cta" | "settings";
 type ProjectTreeSelection = { categoryId: string; subcategoryId: string };
 
 const inputClass = "mt-1.5 w-full border border-black/15 bg-white px-3.5 py-2.5 text-sm text-[#171717] outline-none transition placeholder:text-neutral-400 focus:border-black";
@@ -136,6 +137,7 @@ const navItems: { key: AdminSection; label: string; icon: LucideIcon }[] = [
   { key: "news", label: "Journal", icon: BookOpen },
   { key: "testimonials", label: "Testimonials", icon: UsersRound },
   { key: "categories", label: "Categories", icon: ListTree },
+  { key: "cta", label: "Start Project", icon: ArrowRightIcon },
   { key: "settings", label: "Site settings", icon: Settings2 },
 ];
 
@@ -966,6 +968,191 @@ function CollectionRow({
   );
 }
 
+/* ──────── Start Project (CTA) Admin Section ──────── */
+interface CTAStep {
+  number: string;
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+interface CTAFaq {
+  question: string;
+  answer: string;
+}
+
+function StartProjectAdmin() {
+  const [steps, setSteps] = useState<CTAStep[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem("admin_cta_steps");
+      return saved ? JSON.parse(saved) : [
+        { number: "01", title: "Project Scope & Vision", subtitle: "Tell us about your dream", description: "Every great building starts with a conversation." },
+        { number: "02", title: "Budget & Investment", subtitle: "Financial planning from day one", description: "Transparent budgeting is central to our practice." },
+        { number: "03", title: "Timeline & Milestones", subtitle: "When do you want to begin?", description: "Architecture has rhythm — from concept sketches to construction." },
+        { number: "04", title: "Your Details", subtitle: "Let's get in touch", description: "Share your contact details and we will schedule an initial consultation." },
+      ];
+    } catch { return []; }
+  });
+
+  const [faqs, setFaqs] = useState<CTAFaq[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem("admin_cta_faqs");
+      return saved ? JSON.parse(saved) : [
+        { question: "How long does the design phase typically take?", answer: "Design timelines vary by project scale. A residential project typically takes 3-5 months." },
+        { question: "What is included in your architectural fee?", answer: "Our fee covers the complete design journey from concept to construction supervision." },
+        { question: "Do you work outside Dhaka?", answer: "Yes. While our studio is based in Dhaka, we undertake projects across Bangladesh and internationally." },
+        { question: "Can I make changes during the design process?", answer: "Absolutely. Our design process is iterative and collaborative." },
+        { question: "What happens after the design is approved?", answer: "We prepare detailed construction tender documents and provide construction supervision." },
+        { question: "Is the initial consultation free?", answer: "Yes. The first consultation is complimentary." },
+      ];
+    } catch { return []; }
+  });
+
+  const [editingStepIdx, setEditingStepIdx] = useState<number | null>(null);
+  const [editingFaqIdx, setEditingFaqIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    try { localStorage.setItem("admin_cta_steps", JSON.stringify(steps)); } catch {}
+  }, [steps]);
+
+  useEffect(() => {
+    try { localStorage.setItem("admin_cta_faqs", JSON.stringify(faqs)); } catch {}
+  }, [faqs]);
+
+  const updateStep = (idx: number, field: keyof CTAStep, value: string) => {
+    setSteps(prev => prev.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  };
+
+  const addStep = () => {
+    const num = String(steps.length + 1).padStart(2, "0");
+    setSteps([...steps, { number: num, title: "New Step", subtitle: "", description: "" }]);
+    setEditingStepIdx(steps.length);
+  };
+
+  const removeStep = (idx: number) => {
+    setSteps(steps.filter((_, i) => i !== idx).map((s, i) => ({ ...s, number: String(i + 1).padStart(2, "0") })));
+    setEditingStepIdx(null);
+  };
+
+  const updateFaq = (idx: number, field: keyof CTAFaq, value: string) => {
+    setFaqs(prev => prev.map((f, i) => i === idx ? { ...f, [field]: value } : f));
+  };
+
+  const addFaq = () => {
+    setFaqs([...faqs, { question: "New question?", answer: "Answer here." }]);
+    setEditingFaqIdx(faqs.length);
+  };
+
+  const removeFaq = (idx: number) => {
+    setFaqs(faqs.filter((_, i) => i !== idx));
+    setEditingFaqIdx(null);
+  };
+
+  return (
+    <div className="max-w-4xl space-y-7">
+      {/* Header */}
+      <section className="border-b border-black/10 pb-6">
+        <p className={labelClass}>Onboarding flow</p>
+        <h2 className="mt-2 font-display text-3xl sm:text-4xl">Start Project page</h2>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
+          Manage the 4-step client onboarding flow and FAQ items shown on the &ldquo;Start Project&rdquo; page.
+        </p>
+      </section>
+
+      {/* Steps */}
+      <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
+        <div className="border-b border-black/10 px-5 py-4 sm:px-7 flex items-center justify-between">
+          <div>
+            <p className={labelClass}>Project initiation</p>
+            <h3 className="mt-1 font-display text-xl">Onboarding steps</h3>
+          </div>
+          <button type="button" onClick={addStep} className="inline-flex h-8 items-center gap-1.5 bg-[#171717] px-3 text-[10px] font-medium uppercase tracking-[0.13em] text-white transition hover:bg-neutral-700">
+            <Plus className="h-3.5 w-3.5" /> Add step
+          </button>
+        </div>
+        <div className="divide-y divide-black/5">
+          {steps.map((step, idx) => (
+            <div key={idx} className="p-5 sm:px-7">
+              <button
+                type="button"
+                onClick={() => setEditingStepIdx(editingStepIdx === idx ? null : idx)}
+                className="flex w-full items-center justify-between text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-4">
+                  <span className="flex h-8 w-8 items-center justify-center bg-neutral-100 text-xs font-semibold text-neutral-600">{step.number}</span>
+                  <div>
+                    <p className="text-sm font-medium text-[#171717]">{step.title}</p>
+                    <p className="text-xs text-neutral-400">{step.subtitle}</p>
+                  </div>
+                </div>
+                <ChevronDown className={`h-4 w-4 text-neutral-400 transition-transform duration-300 ${editingStepIdx === idx ? "rotate-180" : ""}`} />
+              </button>
+              {editingStepIdx === idx && (
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 animate-[fadeIn_300ms_ease]">
+                  <AdminField label="Title" value={step.title} onChange={(v) => updateStep(idx, "title", v)} />
+                  <AdminField label="Subtitle" value={step.subtitle} onChange={(v) => updateStep(idx, "subtitle", v)} />
+                  <AdminField label="Description" value={step.description} onChange={(v) => updateStep(idx, "description", v)} rows={3} className="sm:col-span-2" />
+                  <div className="sm:col-span-2 flex justify-end">
+                    <button type="button" onClick={() => removeStep(idx)} className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 transition cursor-pointer">
+                      <Trash2 className="h-3.5 w-3.5" /> Remove step
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+          {steps.length === 0 && (
+            <div className="p-8 text-center text-sm text-neutral-400">No steps yet. Click &ldquo;Add step&rdquo; to create one.</div>
+          )}
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section className="overflow-hidden rounded-[8px] border border-black/10 bg-white">
+        <div className="border-b border-black/10 px-5 py-4 sm:px-7 flex items-center justify-between">
+          <div>
+            <p className={labelClass}>Knowledge base</p>
+            <h3 className="mt-1 font-display text-xl">Start Project FAQs</h3>
+          </div>
+          <button type="button" onClick={addFaq} className="inline-flex h-8 items-center gap-1.5 bg-[#171717] px-3 text-[10px] font-medium uppercase tracking-[0.13em] text-white transition hover:bg-neutral-700">
+            <Plus className="h-3.5 w-3.5" /> Add FAQ
+          </button>
+        </div>
+        <div className="divide-y divide-black/5">
+          {faqs.map((faq, idx) => (
+            <div key={idx} className="p-5 sm:px-7">
+              <button
+                type="button"
+                onClick={() => setEditingFaqIdx(editingFaqIdx === idx ? null : idx)}
+                className="flex w-full items-center justify-between text-left cursor-pointer"
+              >
+                <p className="text-sm font-medium text-[#171717] pr-4">{faq.question}</p>
+                <ChevronDown className={`h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-300 ${editingFaqIdx === idx ? "rotate-180" : ""}`} />
+              </button>
+              {editingFaqIdx === idx && (
+                <div className="mt-4 grid gap-4 animate-[fadeIn_300ms_ease]">
+                  <AdminField label="Question" value={faq.question} onChange={(v) => updateFaq(idx, "question", v)} />
+                  <AdminField label="Answer" value={faq.answer} onChange={(v) => updateFaq(idx, "answer", v)} rows={4} />
+                  <div className="flex justify-end">
+                    <button type="button" onClick={() => removeFaq(idx)} className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 transition cursor-pointer">
+                      <Trash2 className="h-3.5 w-3.5" /> Remove FAQ
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+          {faqs.length === 0 && (
+            <div className="p-8 text-center text-sm text-neutral-400">No FAQs yet. Click &ldquo;Add FAQ&rdquo; to create one.</div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const { settings, projects, newsItems, testimonials, refreshSettings } = useSiteContent();
   const [settingsDraft, setSettingsDraft] = useState(settings);
@@ -1644,6 +1831,7 @@ export default function AdminPage() {
     news: "Journal",
     testimonials: "Testimonials",
     categories: "Categories",
+    cta: "Start Project",
     settings: "Site settings",
   };
   const publishedCount = [...projectDrafts, ...newsDrafts, ...testimonialDrafts].filter((item) => item.isPublished).length;
@@ -2751,6 +2939,8 @@ export default function AdminPage() {
                 </div>
               </section>
             </div>}
+
+            {activeSection === "cta" && <StartProjectAdmin />}
           </main>
           </AdminTaxonomyContext.Provider>
 

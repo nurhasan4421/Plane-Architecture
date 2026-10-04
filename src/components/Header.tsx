@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Link from "next/link";
 import PlaneLogo from "./PlaneLogo";
 import NavigationDrawer from "./NavigationDrawer";
 import ThemeToggle from "./ThemeToggle";
@@ -28,6 +29,7 @@ export default function Header({
   }).length;
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [mobileCategory, setMobileCategory] = useState(activeCategory === "all" ? (categories[0]?.id || "architecture") : activeCategory);
   const [isLogoMenuOpen, setIsLogoMenuOpen] = useState(false);
   const [submenuOffset, setSubmenuOffset] = useState(0);
@@ -38,6 +40,16 @@ export default function Header({
   const mobileConfig =
     categories.find((category) => category.id === mobileCategory) || categories[0];
   const mobileSubcategories = mobileConfig?.subcategories || [];
+
+  const handleHamburgerClick = () => {
+    if (isMobileNavOpen) {
+      setIsMobileNavOpen(false);
+    } else {
+      setIsMobileNavOpen(true);
+      setIsMobileFilterOpen(false);
+      setIsLogoMenuOpen(false);
+    }
+  };
 
   return (
     <header
@@ -111,28 +123,35 @@ export default function Header({
           })}
         </nav>
 
-        {/* Right: Theme Toggle (Laptop: right of category | Mobile: beside hamburger) */}
+        {/* Right: Theme Toggle + Start Project CTA (Desktop) + Hamburger (Mobile) */}
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
-          {/* Mobile Filter Button */}
+          {/* Desktop: Start Project CTA */}
+          <Link
+            href="/start-project"
+            className="hidden lg:inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-[0.14em] bg-black dark:bg-white text-white dark:text-black transition-all duration-200 hover:bg-[#294b3d] dark:hover:bg-neutral-200 active:scale-[0.97]"
+          >
+            Start Project
+          </Link>
+
+          {/* Mobile Hamburger */}
           <button
-            onClick={() => {
-              setIsMobileFilterOpen((open) => !open);
-              setIsLogoMenuOpen(false);
-            }}
+            onClick={handleHamburgerClick}
             className="lg:hidden p-2 text-black dark:text-white cursor-pointer focus:outline-none"
-            aria-label="Filter Categories"
+            aria-label="Toggle Navigation"
+            aria-expanded={isMobileNavOpen}
           >
             <div className="flex flex-col items-end gap-1">
-              <div className="w-5 h-[2px] bg-black dark:bg-white transition-colors" />
-              <div className="w-4 h-[2px] bg-black dark:bg-white transition-colors" />
-              <div className="w-3 h-[2px] bg-black dark:bg-white transition-colors" />
+              <div className={`h-[2px] bg-black dark:bg-white transition-all duration-300 ${isMobileNavOpen ? "w-5 rotate-45 translate-y-[6px]" : "w-5"}`} />
+              <div className={`h-[2px] bg-black dark:bg-white transition-all duration-300 ${isMobileNavOpen ? "w-0 opacity-0" : "w-4"}`} />
+              <div className={`h-[2px] bg-black dark:bg-white transition-all duration-300 ${isMobileNavOpen ? "w-5 -rotate-45 -translate-y-[6px]" : "w-3"}`} />
             </div>
           </button>
         </div>
       </div>
 
+      {/* Desktop Subcategory Dropdown */}
       <div
         aria-hidden={!hoveredConfig || isLogoMenuOpen}
         inert={!hoveredConfig || isLogoMenuOpen}
@@ -181,7 +200,46 @@ export default function Header({
         </div>
       </div>
 
-      {isMobileFilterOpen && (
+      {/* Mobile Navigation Bar (horizontal row: News, FAQ, Contact, About) */}
+      <div
+        className={`lg:hidden overflow-hidden border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] transition-all duration-400 ease-out ${
+          isMobileNavOpen
+            ? "max-h-[200px] opacity-100"
+            : "max-h-0 opacity-0 pointer-events-none"
+        }`}
+      >
+        <nav aria-label="Mobile site navigation" className="flex items-center justify-center gap-1 px-4 py-3 sm:gap-2 sm:px-6">
+          {[
+            { label: "News", href: "/news" },
+            { label: "FAQ", href: "/contact#faq" },
+            { label: "Contact", href: "/contact" },
+            { label: "About", href: "/about" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={() => setIsMobileNavOpen(false)}
+              className="flex-1 text-center py-2.5 px-2 text-xs font-medium uppercase tracking-[0.12em] text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 active:bg-neutral-200 dark:active:bg-neutral-700"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile: Start Project mini link */}
+        <div className="flex justify-center pb-3 px-4">
+          <Link
+            href="/start-project"
+            onClick={() => setIsMobileNavOpen(false)}
+            className="inline-flex items-center gap-2 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-[#294b3d] dark:hover:bg-neutral-200"
+          >
+            Start Project →
+          </Link>
+        </div>
+      </div>
+
+      {/* Mobile Category Filter (separate from nav, triggered by tapping logo area) */}
+      {isMobileFilterOpen && !isMobileNavOpen && (
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] shadow-lg lg:hidden">
           <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
             {categories.map((category) => (

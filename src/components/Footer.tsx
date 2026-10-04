@@ -58,6 +58,8 @@ export default function Footer({ onSelectCategory }: FooterProps) {
               <li><Link href="/news" className="transition-colors hover:text-white">News</Link></li>
               <li><Link href="/about" className="transition-colors hover:text-white">About</Link></li>
               <li><Link href="/contact" className="transition-colors hover:text-white">Contact</Link></li>
+              <li><Link href="/contact#faq" className="transition-colors hover:text-white">FAQ</Link></li>
+              <li><Link href="/start-project" className="transition-colors hover:text-white">Start Project</Link></li>
             </ul>
           </nav>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, MapPin, Phone, Plus } from "lucide-react";
+import { Mail, MapPin, Phone, Plus, Minus } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { submitContactInquiry } from "@/lib/supabase";
@@ -241,12 +241,12 @@ export default function ContactPage() {
                       <span className="font-display text-lg sm:text-xl font-normal text-black dark:text-white group-hover:opacity-75 transition-opacity">
                         {faq.question}
                       </span>
-                      <span className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-neutral-300 dark:border-white/20 text-neutral-600 dark:text-neutral-300 group-hover:border-black dark:group-hover:border-white transition-colors">
-                        <Plus
-                          className={`h-4 w-4 transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                            isOpen ? "rotate-45" : "rotate-0"
-                          }`}
-                        />
+                      <span className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center border border-neutral-300 dark:border-white/20 text-neutral-600 dark:text-neutral-300 group-hover:border-black dark:group-hover:border-white transition-colors">
+                        {isOpen ? (
+                          <Minus className="h-3.5 w-3.5 transition-transform duration-300" />
+                        ) : (
+                          <Plus className="h-3.5 w-3.5 transition-transform duration-300" />
+                        )}
                       </span>
                     </button>
 
