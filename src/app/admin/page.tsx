@@ -11,6 +11,7 @@ import {
   ChevronDown,
   ChevronRight,
   Clock,
+  Copy,
   FileImage,
   FolderKanban,
   GitCommit,
@@ -27,6 +28,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Save,
+  Star,
   Trash2,
   Undo2,
   Upload,
@@ -895,29 +897,57 @@ function CollectionRow({
   published,
   selected,
   onClick,
+  image,
 }: {
   title: string;
   subtitle: string;
   published: boolean;
   selected: boolean;
   onClick: () => void;
+  image?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`group flex w-full items-center gap-3 border-b border-black/8 px-4 py-3.5 text-left transition ${selected ? "bg-[#f2f1ed]" : "bg-white hover:bg-[#faf9f6]"}`}
+      className={`group flex w-full items-center gap-3 px-4 py-3 text-left transition ${
+        selected ? "bg-[#f2f1ed]" : "bg-white hover:bg-[#faf9f6]"
+      }`}
     >
-      <span className={`flex h-8 w-8 shrink-0 items-center justify-center border ${selected ? "border-black bg-black text-white" : "border-black/10 bg-[#f8f7f4] text-neutral-500"}`}>
-        <FileImage className="h-4 w-4" />
+      <span
+        className={`flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[3px] border ${
+          selected
+            ? "border-black bg-black text-white"
+            : "border-black/10 bg-[#f8f7f4] text-neutral-500"
+        }`}
+      >
+        {image ? (
+          <img
+            src={formatImageUrl(image)}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <FileImage className="h-4 w-4" />
+        )}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium text-[#171717]">{title || "Untitled"}</span>
-        <span className="mt-1 block truncate text-xs text-neutral-500">{subtitle}</span>
+        <span className="block truncate text-sm font-medium text-[#171717]">
+          {title || "Untitled"}
+        </span>
+        <span className="mt-0.5 block truncate text-[11px] text-neutral-500">
+          {subtitle}
+        </span>
       </span>
-      <span className="hidden sm:block"><PublishStatus published={published} /></span>
-      <ChevronRight className={`h-4 w-4 shrink-0 transition ${selected ? "text-black" : "text-neutral-300 group-hover:text-neutral-600"}`} />
+      <span className="hidden sm:block">
+        <PublishStatus published={published} />
+      </span>
+      <ChevronRight
+        className={`h-4 w-4 shrink-0 transition ${
+          selected ? "text-black" : "text-neutral-300 group-hover:text-neutral-600"
+        }`}
+      />
     </button>
   );
 }
@@ -942,6 +972,7 @@ export default function AdminPage() {
   const [contentLoaded, setContentLoaded] = useState(false);
   const [contentError, setContentError] = useState("");
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const verifiedUserIdRef = useRef<string | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [authSession, setAuthSession] = useState<{ user?: { id?: string } } | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -1040,7 +1071,9 @@ export default function AdminPage() {
 
     const { data: { subscription } } = supabase
       ? supabase.auth.onAuthStateChange((_event, session) => {
-          if (!ignore) setAuthSession(session);
+          if (!ignore) {
+            setAuthSession(session);
+          }
         })
       : { data: { subscription: null } };
 
@@ -1051,27 +1084,55 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
     const verifyAdminAccess = async () => {
-      if (!supabase || !authSession?.user?.id) {
-        setIsAdmin(Boolean(!supabase));
+      if (!supabase) {
+        setIsAdmin(true);
         return;
       }
 
-      setIsAdmin(null);
+      const currentUserId = authSession?.user?.id;
+      if (!currentUserId) {
+        setIsAdmin(false);
+        verifiedUserIdRef.current = null;
+        return;
+      }
+
+      // If this user was already verified as admin, NEVER set isAdmin(null) or reload on tab switches / focus!
+      if (isAdmin === true && verifiedUserIdRef.current === currentUserId) {
+        return;
+      }
+
+      if (isAdmin !== true) {
+        setIsAdmin(null);
+      }
+
       const { data, error } = await supabase
         .from("admin_users")
         .select("user_id")
-        .eq("user_id", authSession.user.id)
+        .eq("user_id", currentUserId)
         .maybeSingle();
 
-      setIsAdmin(!error && Boolean(data));
+      if (cancelled) return;
+
+      const ok = !error && Boolean(data);
+      if (ok) {
+        verifiedUserIdRef.current = currentUserId;
+      }
+      setIsAdmin(ok);
     };
 
     void verifyAdminAccess();
-  }, [authSession]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authSession?.user?.id]);
 
   useEffect(() => {
     if (isAdmin !== true) return;
+    if (contentLoaded && loadAttempt === 0) return;
     let cancelled = false;
 
     void getAdminCmsContent()
@@ -1112,7 +1173,7 @@ export default function AdminPage() {
     return () => {
       cancelled = true;
     };
-  }, [isAdmin, loadAttempt]);
+  }, [isAdmin, loadAttempt, contentLoaded]);
 
   const filteredProjects = useMemo(() => projectDrafts.filter((item) => {
     const matchesSearch = `${item.title} ${item.slug} ${item.category}`.toLowerCase().includes(collectionSearch.toLowerCase());
@@ -1455,6 +1516,18 @@ export default function AdminPage() {
     setTestimonialDrafts((current) => current.filter((item) => item.id !== selectedTestimonial.id));
     setSelectedTestimonialId(testimonialDrafts.find((item) => item.id !== selectedTestimonial.id)?.id ?? "");
   };
+  const duplicateTestimonial = (testimonial: ProjectTestimonial) => {
+    pushToUndoStack();
+    const copy: ProjectTestimonial = {
+      ...testimonial,
+      id: crypto.randomUUID(),
+      author: `${testimonial.author} (Copy)`,
+      createdAt: new Date().toISOString(),
+      sortOrder: testimonialDrafts.length,
+    };
+    setTestimonialDrafts((current) => [...current, copy]);
+    setSelectedTestimonialId(copy.id);
+  };
   const updateProject = (field: keyof Project, value: unknown) => {
     if (!selectedProject) return;
     pushToUndoStack();
@@ -1583,10 +1656,92 @@ export default function AdminPage() {
         </aside>
 
         <div className="min-w-0 flex-1">
-          <header className="sticky top-0 z-20 border-b border-black/10 bg-[#f6f5f1]/95 backdrop-blur">
-            <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 sm:px-7 xl:px-10">
-              <div className="flex min-w-0 items-center gap-3"><div className="lg:hidden"><PlaneLogo imageClassName="h-8 max-w-[122px]" /></div><div className="min-w-0"><p className="hidden text-[9px] uppercase tracking-[0.18em] text-neutral-400 sm:block">Plane Architect / Studio CMS</p><h1 className="mt-1 truncate font-display text-xl sm:text-2xl">{sectionTitle[activeSection]}</h1></div></div>
-              <div className="flex shrink-0 items-center gap-2 sm:gap-3"><span className="hidden items-center gap-1.5 text-[10px] uppercase tracking-[0.12em] text-neutral-500 md:inline-flex"><span className="h-1.5 w-1.5 rounded-full bg-[#668b72]" />Supabase connected</span><Link href="/" className="hidden items-center gap-2 rounded-[4px] border border-black/15 bg-white px-3 py-2 text-[10px] font-medium uppercase tracking-[0.12em] transition hover:border-black sm:inline-flex">View site <ArrowUpRight className="h-3.5 w-3.5" /></Link><button type="button" onClick={handleSave} disabled={!contentLoaded || saveState === "Saving..."} className="inline-flex h-9 items-center gap-2 rounded-[4px] bg-[#171717] px-3.5 text-[10px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-60 sm:px-4"><Save className="h-3.5 w-3.5" /><span className="hidden sm:inline">{saveState === "Saving..." ? "Saving..." : "Save changes"}</span><span className="sm:hidden">Save</span></button><button type="button" onClick={handleLogout} title="Sign out" aria-label="Sign out" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-black/15 bg-white text-neutral-600 transition hover:border-black hover:text-black lg:hidden"><LogOut className="h-4 w-4" /></button></div>
+          <header className="sticky top-0 z-30 border-b border-black/10 bg-[#f6f5f1]/95 backdrop-blur">
+            <div className="flex min-h-[72px] items-center justify-between gap-3 px-4 sm:px-6 xl:px-8">
+              {/* Left: Branding & Section Title */}
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="lg:hidden">
+                  <PlaneLogo imageClassName="h-7 max-w-[110px]" />
+                </div>
+                <div className="min-w-0">
+                  <p className="hidden text-[9px] uppercase tracking-[0.18em] text-neutral-400 sm:block">Plane Architect / Studio CMS</p>
+                  <h1 className="mt-0.5 truncate font-display text-lg sm:text-xl">{sectionTitle[activeSection]}</h1>
+                </div>
+              </div>
+
+              {/* Center / Version Control: Undo (just icon), Redo (just icon), Mini Commit Input, History */}
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <button
+                  type="button"
+                  onClick={handleUndo}
+                  disabled={undoStack.length === 0}
+                  title="Undo (Ctrl+Z / Cmd+Z)"
+                  aria-label="Undo"
+                  className="flex h-8 w-8 items-center justify-center rounded-[3px] border border-black/15 bg-white text-neutral-700 transition hover:border-black hover:text-black disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer shadow-2xs"
+                >
+                  <Undo2 className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRedo}
+                  disabled={redoStack.length === 0}
+                  title="Redo (Ctrl+Y / Cmd+Shift+Z)"
+                  aria-label="Redo"
+                  className="flex h-8 w-8 items-center justify-center rounded-[3px] border border-black/15 bg-white text-neutral-700 transition hover:border-black hover:text-black disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer shadow-2xs"
+                >
+                  <Redo2 className="h-4 w-4" />
+                </button>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={commitMessage}
+                    onChange={(e) => setCommitMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") void handleSave();
+                    }}
+                    placeholder="Commit note..."
+                    className="h-8 w-28 sm:w-44 md:w-56 lg:w-72 rounded-[3px] border border-black/15 bg-white px-2.5 text-xs text-[#171717] outline-none transition placeholder:text-neutral-400 focus:border-black shadow-2xs"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsHistoryOpen(true)}
+                  title="View version history timeline"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-[3px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                >
+                  <History className="h-3.5 w-3.5 text-blue-600" />
+                  <span className="hidden md:inline">History</span>
+                  <span className="rounded-full bg-neutral-100 px-1.5 py-0.5 text-[9px] font-semibold text-neutral-600">{versionHistory.length}</span>
+                </button>
+              </div>
+
+              {/* Right: Site link & Save Button */}
+              <div className="flex shrink-0 items-center gap-2">
+                <Link href="/" className="hidden items-center gap-1.5 rounded-[3px] border border-black/15 bg-white px-2.5 py-1.5 text-[10px] font-medium uppercase tracking-[0.1em] transition hover:border-black sm:inline-flex">
+                  View site <ArrowUpRight className="h-3 w-3" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={!contentLoaded || saveState === "Saving..."}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-[3px] bg-[#171717] px-3.5 text-[10px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer shadow-2xs"
+                >
+                  <Save className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{saveState === "Saving..." ? "Saving..." : "Save changes"}</span>
+                  <span className="sm:hidden">Save</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  title="Sign out"
+                  aria-label="Sign out"
+                  className="flex h-8 w-8 items-center justify-center rounded-[3px] border border-black/15 bg-white text-neutral-600 transition hover:border-black hover:text-black lg:hidden"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
             <nav aria-label="Admin sections" className="flex gap-1 overflow-x-auto border-t border-black/8 px-3 py-2 no-scrollbar lg:hidden">
               {navItems.map(({ key, label, icon: Icon }) => <button key={key} type="button" onClick={() => openSection(key)} aria-current={activeSection === key ? "page" : undefined} className={`inline-flex shrink-0 items-center gap-2 border px-3 py-2 text-xs transition ${activeSection === key ? "border-black bg-black text-white" : "border-transparent text-neutral-500 hover:bg-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}
@@ -1668,7 +1823,61 @@ export default function AdminPage() {
             {(activeSection === "projects" || activeSection === "news" || activeSection === "testimonials") && <div>
               <section className="mb-7 flex flex-col justify-between gap-5 border-b border-black/10 pb-6 sm:flex-row sm:items-end"><div><p className={labelClass}>{activeSection === "projects" ? "Portfolio" : activeSection === "news" ? "Studio journal" : "Client voices"}</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">{activeSection === "projects" ? "Project library" : activeSection === "news" ? "Journal entries" : "Testimonials"}</h2><p className="mt-2 text-sm text-neutral-500">{activeSection === "projects" ? `${projectDrafts.length} projects in your portfolio` : activeSection === "news" ? `${newsDrafts.length} stories in your journal` : `${testimonialDrafts.length} client testimonials`}</p></div><button type="button" onClick={activeSection === "projects" ? addProject : activeSection === "news" ? addNews : addTestimonial} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 bg-[#171717] px-4 text-[10px] font-medium uppercase tracking-[0.13em] text-white transition hover:bg-neutral-700"><Plus className="h-4 w-4" />Create {activeSection === "projects" ? "project" : activeSection === "news" ? "story" : "testimonial"}</button></section>
               <div className="grid min-w-0 gap-7 xl:grid-cols-[320px_minmax(0,1fr)]">
-                <aside className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white"><div className="border-b border-black/10 p-3"><label className="flex h-10 items-center gap-2 border border-black/10 px-3 text-neutral-400"><Search className="h-4 w-4 shrink-0" /><input value={collectionSearch} onChange={(event) => setCollectionSearch(event.target.value)} placeholder={`Search ${activeSection}...`} className="min-w-0 flex-1 bg-transparent text-sm text-black outline-none placeholder:text-neutral-400" aria-label={`Search ${activeSection}`} /></label></div><div className="max-h-[70vh] overflow-y-auto">{activeSection === "projects" && filteredProjects.map((item) => <CollectionRow key={item.id} title={item.title} subtitle={`${item.category} · ${item.year}`} published={item.isPublished ?? true} selected={selectedProject?.id === item.id} onClick={() => setSelectedProjectId(item.id)} />)}{activeSection === "news" && filteredNews.map((item) => <CollectionRow key={item.id} title={item.title} subtitle={`${item.category} · ${item.date}`} published={item.isPublished ?? true} selected={selectedNews?.id === item.id} onClick={() => setSelectedNewsId(item.id)} />)}{activeSection === "testimonials" && filteredTestimonials.map((item) => <CollectionRow key={item.id} title={item.author} subtitle={item.role || "Client testimonial"} published={item.isPublished} selected={selectedTestimonial?.id === item.id} onClick={() => setSelectedTestimonialId(item.id)} />)}{((activeSection === "projects" && filteredProjects.length === 0) || (activeSection === "news" && filteredNews.length === 0) || (activeSection === "testimonials" && filteredTestimonials.length === 0)) && <p className="px-4 py-8 text-center text-sm text-neutral-500">No matching content found.</p>}</div></aside>
+                <aside className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white">
+                  <div className="border-b border-black/10 p-3">
+                    <label className="flex h-10 items-center gap-2 border border-black/10 px-3 text-neutral-400">
+                      <Search className="h-4 w-4 shrink-0" />
+                      <input
+                        value={collectionSearch}
+                        onChange={(event) => setCollectionSearch(event.target.value)}
+                        placeholder={`Search ${activeSection}...`}
+                        className="min-w-0 flex-1 bg-transparent text-sm text-black outline-none placeholder:text-neutral-400"
+                        aria-label={`Search ${activeSection}`}
+                      />
+                    </label>
+                  </div>
+                  <div className="max-h-[70vh] overflow-y-auto">
+                    {activeSection === "projects" && filteredProjects.map((item) => (
+                      <CollectionRow
+                        key={item.id}
+                        title={item.title}
+                        subtitle={`${item.category} · ${item.year}`}
+                        published={item.isPublished ?? true}
+                        selected={selectedProject?.id === item.id}
+                        onClick={() => setSelectedProjectId(item.id)}
+                        image={item.heroImage}
+                      />
+                    ))}
+                    {activeSection === "news" && filteredNews.map((item) => (
+                      <CollectionRow
+                        key={item.id}
+                        title={item.title}
+                        subtitle={`${item.category} · ${item.date}`}
+                        published={item.isPublished ?? true}
+                        selected={selectedNews?.id === item.id}
+                        onClick={() => setSelectedNewsId(item.id)}
+                        image={item.image}
+                      />
+                    ))}
+                    {activeSection === "testimonials" && filteredTestimonials.map((item) => {
+                      const linkedProject = projectDrafts.find((p) => p.slug === item.projectSlug);
+                      return (
+                        <CollectionRow
+                          key={item.id}
+                          title={item.author}
+                          subtitle={item.role ? `${item.role}${linkedProject ? ` · ${linkedProject.title}` : ""}` : (linkedProject ? linkedProject.title : "Client testimonial")}
+                          published={item.isPublished}
+                          selected={selectedTestimonial?.id === item.id}
+                          onClick={() => setSelectedTestimonialId(item.id)}
+                          image={item.image}
+                        />
+                      );
+                    })}
+                    {((activeSection === "projects" && filteredProjects.length === 0) || (activeSection === "news" && filteredNews.length === 0) || (activeSection === "testimonials" && filteredTestimonials.length === 0)) && (
+                      <p className="px-4 py-8 text-center text-sm text-neutral-500">No matching content found.</p>
+                    )}
+                  </div>
+                </aside>
 
                 <section className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white">
                   {activeSection === "projects" && selectedProject && <>
@@ -1893,10 +2102,218 @@ export default function AdminPage() {
                     <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Story title" value={selectedNews.title} onChange={(value) => updateNews("title", value)} className="sm:col-span-2" /><AdminField label="URL slug" value={selectedNews.slug} onChange={(value) => updateNews("slug", value)} /><AdminField label="Publication date" value={selectedNews.date} onChange={(value) => updateNews("date", value)} /><AdminField label="Author" value={selectedNews.author ?? ""} onChange={(value) => updateNews("author", value)} /><AdminField label="Category" value={selectedNews.category} onChange={(value) => updateNews("category", value)} /><AdminField label="Read time" value={selectedNews.readTime} onChange={(value) => updateNews("readTime", value)} /><AdminField label="Sort order" type="number" value={String(selectedNews.sortOrder ?? 0)} onChange={(value) => updateNews("sortOrder", Number(value))} /><AdminField label="Source URL" value={selectedNews.sourceUrl ?? ""} onChange={(value) => updateNews("sourceUrl", value)} className="sm:col-span-2" /></div><div><p className={labelClass}>Cover image</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedNews.image ? <img src={selectedNews.image} alt={`Cover preview for ${selectedNews.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image URL" value={selectedNews.image} onChange={(value) => updateNews("image", value)} /></div><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedNews.isPublished ?? true} onChange={(event) => updateNews("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish story</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this in the journal</span></span></label></div></div><div className="grid gap-4 border-t border-black/10 pt-6"><AdminField label="Short introduction" value={selectedNews.excerpt} onChange={(value) => updateNews("excerpt", value)} rows={3} /><AdminField label="Article body" value={selectedNews.body ?? ""} onChange={(value) => updateNews("body", value)} rows={9} /></div></div>
                   </>}
 
-                  {activeSection === "testimonials" && selectedTestimonial && <>
-                    <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Client voice</p><h3 className="mt-1 truncate font-display text-2xl">{selectedTestimonial.author || "New testimonial"}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedTestimonial.isPublished} /><button type="button" onClick={deleteTestimonial} title="Delete testimonial" aria-label="Delete testimonial" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Client name" value={selectedTestimonial.author} onChange={(value) => updateTestimonial(selectedTestimonial.id, "author", value)} /><AdminField label="Role or organization" value={selectedTestimonial.role} onChange={(value) => updateTestimonial(selectedTestimonial.id, "role", value)} /><AdminField label="Testimonial" value={selectedTestimonial.quote} onChange={(value) => updateTestimonial(selectedTestimonial.id, "quote", value)} rows={6} className="sm:col-span-2" /><AdminField label="Related project slug" value={selectedTestimonial.projectSlug ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "projectSlug", value || null)} placeholder="Optional" /><AdminField label="Rating (1-5)" type="number" value={String(selectedTestimonial.rating)} onChange={(value) => updateTestimonial(selectedTestimonial.id, "rating", Number(value))} /><label className="flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700 sm:col-span-2"><input type="checkbox" checked={selectedTestimonial.isPublished} onChange={(event) => updateTestimonial(selectedTestimonial.id, "isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish testimonial</span><span className="mt-0.5 block text-[10px] text-neutral-500">Display this client voice on the website</span></span></label></div><div><p className={labelClass}>Portrait</p><div className="mt-1.5 flex aspect-[4/3] items-center justify-center overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedTestimonial.image ? <img src={selectedTestimonial.image} alt={`Portrait preview of ${selectedTestimonial.author}`} className="h-full w-full object-cover" /> : <div className="text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image URL" value={selectedTestimonial.image ?? ""} onChange={(value) => updateTestimonial(selectedTestimonial.id, "image", value)} /></div><p className="mt-2 text-[10px] leading-4 text-neutral-500">Choose a local file or paste a direct image URL.</p></div></div>
-                  </>}
+                  {activeSection === "testimonials" && selectedTestimonial && (
+                    <>
+                      <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                        <div className="min-w-0">
+                          <p className={labelClass}>Client voice & testimonial</p>
+                          <h3 className="mt-1 truncate font-display text-2xl">
+                            {selectedTestimonial.author || "New testimonial"}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <PublishStatus published={selectedTestimonial.isPublished} />
+                          <button
+                            type="button"
+                            onClick={() => duplicateTestimonial(selectedTestimonial)}
+                            title="Duplicate testimonial"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Duplicate</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={deleteTestimonial}
+                            title="Delete testimonial"
+                            aria-label="Delete testimonial"
+                            className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50 cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-8 p-5 sm:p-7">
+                        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
+                          {/* Left Column: Form Fields */}
+                          <div className="space-y-5">
+                            <div className="grid content-start gap-4 sm:grid-cols-2">
+                              <AdminField
+                                label="Client name / author"
+                                value={selectedTestimonial.author}
+                                onChange={(value) => updateTestimonial(selectedTestimonial.id, "author", value)}
+                                placeholder="e.g. Dr. Farhana Rahman"
+                                className="sm:col-span-2"
+                              />
+                              <AdminField
+                                label="Role / organization"
+                                value={selectedTestimonial.role}
+                                onChange={(value) => updateTestimonial(selectedTestimonial.id, "role", value)}
+                                placeholder="e.g. Managing Director, Delta Ecological Foundation"
+                                className="sm:col-span-2"
+                              />
+                              <label className={`${labelClass} sm:col-span-2`}>
+                                Associated project
+                                <select
+                                  value={selectedTestimonial.projectSlug ?? ""}
+                                  onChange={(event) => updateTestimonial(selectedTestimonial.id, "projectSlug", event.target.value || null)}
+                                  className={inputClass}
+                                >
+                                  <option value="">General Studio (Not project-specific)</option>
+                                  {projectDrafts.map((project) => (
+                                    <option key={project.id} value={project.slug}>
+                                      {project.title} ({project.category} · {project.year})
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
+
+                              {/* Interactive 5-Star Rating Picker */}
+                              <div className="sm:col-span-1">
+                                <span className={labelClass}>Client rating</span>
+                                <div className="mt-1.5 flex h-[42px] items-center gap-1.5 border border-black/15 bg-white px-3">
+                                  {[1, 2, 3, 4, 5].map((starNum) => (
+                                    <button
+                                      key={starNum}
+                                      type="button"
+                                      onClick={() => updateTestimonial(selectedTestimonial.id, "rating", starNum)}
+                                      className="p-1 transition hover:scale-110 cursor-pointer"
+                                      title={`Rate ${starNum} star${starNum > 1 ? "s" : ""}`}
+                                    >
+                                      <Star
+                                        className={`h-4 w-4 ${
+                                          starNum <= selectedTestimonial.rating
+                                            ? "fill-[#b18342] text-[#b18342]"
+                                            : "text-neutral-300"
+                                        }`}
+                                      />
+                                    </button>
+                                  ))}
+                                  <span className="ml-2 font-mono text-xs font-semibold text-neutral-600">
+                                    {selectedTestimonial.rating} / 5
+                                  </span>
+                                </div>
+                              </div>
+
+                              <AdminField
+                                label="Sort order"
+                                type="number"
+                                value={String(selectedTestimonial.sortOrder ?? 0)}
+                                onChange={(value) => updateTestimonial(selectedTestimonial.id, "sortOrder", Number(value))}
+                              />
+                            </div>
+
+                            <div>
+                              <AdminField
+                                label="Testimonial quote"
+                                value={selectedTestimonial.quote}
+                                onChange={(value) => updateTestimonial(selectedTestimonial.id, "quote", value)}
+                                rows={5}
+                                placeholder="Describe the client experience working with Plane Architect..."
+                              />
+                            </div>
+
+                            <label className="flex cursor-pointer items-center gap-3 rounded-[6px] border border-black/10 bg-[#faf9f6] p-4 text-sm text-neutral-700">
+                              <input
+                                type="checkbox"
+                                checked={selectedTestimonial.isPublished}
+                                onChange={(event) => updateTestimonial(selectedTestimonial.id, "isPublished", event.target.checked)}
+                                className="h-4 w-4 accent-black"
+                              />
+                              <span>
+                                <span className="block text-xs font-medium text-black">Publish testimonial on website</span>
+                                <span className="mt-0.5 block text-[10px] text-neutral-500">
+                                  Display this client voice in the homepage testimonials slider and connected project references.
+                                </span>
+                              </span>
+                            </label>
+                          </div>
+
+                          {/* Right Column: Portrait Photo & Live Website Card Preview */}
+                          <div className="space-y-6">
+                            <div className="rounded-[6px] border border-black/10 bg-white p-4">
+                              <p className={labelClass}>Client portrait photo</p>
+                              <div className="mt-3 flex items-center gap-4">
+                                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-black/15 bg-neutral-100">
+                                  {selectedTestimonial.image ? (
+                                    <img
+                                      src={formatImageUrl(selectedTestimonial.image)}
+                                      alt={selectedTestimonial.author}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="flex h-full w-full items-center justify-center font-display text-xl font-bold uppercase text-neutral-400">
+                                      {selectedTestimonial.author ? selectedTestimonial.author.slice(0, 2) : "CL"}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <SupabaseMediaField
+                                    label="Image URL"
+                                    value={selectedTestimonial.image ?? ""}
+                                    onChange={(value) => updateTestimonial(selectedTestimonial.id, "image", value)}
+                                  />
+                                </div>
+                              </div>
+                              <p className="mt-2 text-[10px] leading-relaxed text-neutral-500">
+                                Supports direct image URLs, Google Drive image links, or Supabase file uploads.
+                              </p>
+                            </div>
+
+                            {/* Live Website Preview Card */}
+                            <div className="rounded-[6px] border border-black/10 bg-[#faf9f6] p-4">
+                              <div className="mb-2 flex items-center justify-between">
+                                <p className={labelClass}>Live website card preview</p>
+                                <span className="text-[10px] text-neutral-400">Homepage slider</span>
+                              </div>
+                              <div className="border border-neutral-200 bg-white p-4 shadow-2xs">
+                                <div className="mb-2 flex gap-0.5">
+                                  {Array.from({ length: 5 }, (_, idx) => (
+                                    <Star
+                                      key={idx}
+                                      className={`h-3 w-3 ${
+                                        idx < (selectedTestimonial.rating || 5)
+                                          ? "fill-current text-[#b18342]"
+                                          : "text-neutral-200"
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                                <blockquote className="font-display text-xs leading-relaxed text-neutral-800 line-clamp-4">
+                                  &ldquo;{selectedTestimonial.quote || "Add client testimonial statement..."}&rdquo;
+                                </blockquote>
+                                <div className="mt-3.5 flex items-center gap-2.5 border-t border-neutral-100 pt-2.5">
+                                  {selectedTestimonial.image ? (
+                                    <img
+                                      src={formatImageUrl(selectedTestimonial.image)}
+                                      alt=""
+                                      className="h-7 w-7 rounded-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-neutral-200 text-[10px] font-semibold text-neutral-600">
+                                      {selectedTestimonial.author ? selectedTestimonial.author.charAt(0) : "C"}
+                                    </div>
+                                  )}
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-xs font-semibold text-black">
+                                      {selectedTestimonial.author || "Client Name"}
+                                    </p>
+                                    <p className="truncate text-[10px] text-neutral-400">
+                                      {selectedTestimonial.role || "Client Role"}
+                                    </p>
+                                    <p className="truncate text-[9px] uppercase tracking-wider text-neutral-400">
+                                      {projectDrafts.find((p) => p.slug === selectedTestimonial.projectSlug)?.title || "Plane Architect"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                   {((activeSection === "projects" && !selectedProject) || (activeSection === "news" && !selectedNews) || (activeSection === "testimonials" && !selectedTestimonial)) && <div className="flex min-h-[320px] flex-col items-center justify-center px-6 text-center"><FileImage className="h-8 w-8 text-neutral-300" /><p className="mt-4 font-display text-xl">Nothing selected</p><p className="mt-2 text-sm text-neutral-500">Create an item or choose one from the collection list.</p></div>}
                 </section>
@@ -2322,93 +2739,6 @@ export default function AdminPage() {
             </div>}
           </main>
           </AdminTaxonomyContext.Provider>
-
-          {/* VS Code Style Mini Commit Bar Docked at Bottom */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-neutral-800 bg-[#181818] text-white shadow-2xl font-body">
-            <div className="mx-auto flex h-12 max-w-[1600px] items-center justify-between px-3 sm:px-6 text-xs">
-              {/* Left: Source control badge & current context */}
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex items-center gap-1.5 font-mono text-[11px] text-neutral-300">
-                  <GitCommit className="h-3.5 w-3.5 text-blue-400 shrink-0" />
-                  <span className="hidden sm:inline font-semibold">main</span>
-                </div>
-                <span className="text-neutral-600 hidden sm:inline">|</span>
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
-                  <span className="truncate text-neutral-200 text-[11px] font-medium max-w-[140px] sm:max-w-[220px]">
-                    {selectedProject ? selectedProject.title : "Studio CMS"}
-                  </span>
-                  <span className="text-[10px] text-neutral-400 hidden lg:inline">
-                    (Auto-saved to localStorage)
-                  </span>
-                </div>
-              </div>
-
-              {/* Center: Commit message input and Save button */}
-              <div className="flex items-center gap-2 max-w-lg flex-1 mx-2 sm:mx-4">
-                <input
-                  type="text"
-                  value={commitMessage}
-                  onChange={(e) => setCommitMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") void handleSave();
-                  }}
-                  placeholder="Commit message (e.g. Update features, collage photos, specs)..."
-                  className="h-8 w-full rounded-[4px] border border-neutral-700 bg-neutral-900 px-3 text-[11px] text-neutral-100 outline-none transition placeholder:text-neutral-500 focus:border-blue-400"
-                />
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  disabled={!contentLoaded || saveState === "Saving..."}
-                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-[4px] bg-blue-600 hover:bg-blue-500 px-3.5 text-[10px] font-semibold uppercase tracking-wider text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-                >
-                  <Save className="h-3 w-3" />
-                  <span>{saveState === "Saving..." ? "Saving..." : "Commit & Save"}</span>
-                </button>
-              </div>
-
-              {/* Right: Quick actions: Undo / Redo / History / Discard */}
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleUndo}
-                  disabled={undoStack.length === 0}
-                  title="Undo (Ctrl+Z / Cmd+Z)"
-                  className="flex h-8 w-8 items-center justify-center rounded-[4px] text-neutral-400 hover:bg-neutral-800 hover:text-white transition disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  <Undo2 className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleRedo}
-                  disabled={redoStack.length === 0}
-                  title="Redo (Ctrl+Y / Cmd+Shift+Z)"
-                  className="flex h-8 w-8 items-center justify-center rounded-[4px] text-neutral-400 hover:bg-neutral-800 hover:text-white transition disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  <Redo2 className="h-3.5 w-3.5" />
-                </button>
-                <div className="h-4 w-[1px] bg-neutral-700 mx-1 hidden sm:block" />
-                <button
-                  type="button"
-                  onClick={() => setIsHistoryOpen(true)}
-                  title="View version history timeline and rollback"
-                  className="inline-flex h-8 items-center gap-1.5 rounded-[4px] border border-neutral-700 bg-neutral-900 px-2.5 text-[10px] font-medium text-neutral-300 hover:border-neutral-500 hover:text-white transition cursor-pointer"
-                >
-                  <History className="h-3.5 w-3.5 text-blue-400" />
-                  <span className="hidden sm:inline">History ({versionHistory.length})</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={discardDraft}
-                  title="Discard local draft and reload original"
-                  className="hidden sm:inline-flex h-8 items-center gap-1 rounded-[4px] px-2 text-[10px] font-medium text-neutral-400 hover:bg-red-950/60 hover:text-red-400 transition cursor-pointer"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                  <span>Discard</span>
-                </button>
-              </div>
-            </div>
-          </div>
 
           {/* Version History Modal */}
           {isHistoryOpen && (

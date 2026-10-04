@@ -18,13 +18,76 @@ export interface CmsDeletedContent {
   testimonials: string[];
 }
 
+export const DEFAULT_TESTIMONIALS: ProjectTestimonial[] = [
+  {
+    id: "testimonial-1",
+    projectSlug: "brahmaputra-ecological-campus",
+    author: "Dr. Farhana Rahman",
+    role: "Managing Director, Delta Ecological Foundation",
+    quote: "Plane Architect designed our ecological campus with profound sensitivity to the river monsoon hydrology. It is not just an architectural icon; it functions as a living ecological sanctuary.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+    rating: 5,
+    isPublished: true,
+    sortOrder: 0,
+    createdAt: "2024-01-15T00:00:00.000Z",
+  },
+  {
+    id: "testimonial-2",
+    projectSlug: "bengal-delta-pavilion",
+    author: "Kazi Anis Ahmed",
+    role: "Trustee & Patron, Bengal Cultural Council",
+    quote: "The spatial clarity and interplay between brick tectonics and natural light created an unforgettable civic atmosphere for our exhibitions and international cultural gatherings.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
+    rating: 5,
+    isPublished: true,
+    sortOrder: 1,
+    createdAt: "2024-02-10T00:00:00.000Z",
+  },
+  {
+    id: "testimonial-3",
+    projectSlug: "meghna-river-residence",
+    author: "Naveed Chowdhury",
+    role: "Private Residence Client",
+    quote: "Living in the Meghna River Residence is a transformative experience. Every morning the mist off the water enters through the shaded verandahs exactly as envisioned.",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
+    rating: 5,
+    isPublished: true,
+    sortOrder: 2,
+    createdAt: "2024-03-05T00:00:00.000Z",
+  },
+  {
+    id: "testimonial-4",
+    projectSlug: "dhaka-jamdani-weaver-village",
+    author: "Tahmina Huq",
+    role: "Director, Artisan Guild Bangladesh",
+    quote: "They worked side-by-side with local weavers to understand the loom ergonomics and natural ventilation needs. The architecture elevates our cultural craft heritage.",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
+    rating: 5,
+    isPublished: true,
+    sortOrder: 3,
+    createdAt: "2024-04-12T00:00:00.000Z",
+  },
+  {
+    id: "testimonial-5",
+    projectSlug: "buriganga-riverfront-revitalization",
+    author: "Mahfuzur Rahman",
+    role: "CEO, Urban Heritage & Development",
+    quote: "A masterful balance between modern urban engineering and timeless delta vernacular. Plane Architect transformed our waterfront promenade into a thriving public realm.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
+    rating: 5,
+    isPublished: true,
+    sortOrder: 4,
+    createdAt: "2024-05-20T00:00:00.000Z",
+  },
+];
+
 export function readLocalCmsState(): CmsContentState {
   if (typeof window === "undefined") {
     return {
       settings: fallbackSettings,
       projects: PROJECTS,
       news: NEWS_ITEMS,
-      testimonials: [],
+      testimonials: DEFAULT_TESTIMONIALS,
     };
   }
 
@@ -35,7 +98,7 @@ export function readLocalCmsState(): CmsContentState {
         settings: fallbackSettings,
         projects: PROJECTS,
         news: NEWS_ITEMS,
-        testimonials: [],
+        testimonials: DEFAULT_TESTIMONIALS,
       };
     }
 
@@ -44,14 +107,14 @@ export function readLocalCmsState(): CmsContentState {
       settings: { ...fallbackSettings, ...(parsed.settings ?? {}) },
       projects: Array.isArray(parsed.projects) && parsed.projects.length ? parsed.projects : PROJECTS,
       news: Array.isArray(parsed.news) && parsed.news.length ? parsed.news : NEWS_ITEMS,
-      testimonials: Array.isArray(parsed.testimonials) ? parsed.testimonials : [],
+      testimonials: Array.isArray(parsed.testimonials) && parsed.testimonials.length ? parsed.testimonials : DEFAULT_TESTIMONIALS,
     };
   } catch {
     return {
       settings: fallbackSettings,
       projects: PROJECTS,
       news: NEWS_ITEMS,
-      testimonials: [],
+      testimonials: DEFAULT_TESTIMONIALS,
     };
   }
 }
@@ -477,6 +540,6 @@ export async function getTestimonials(): Promise<ProjectTestimonial[]> {
     .eq("is_published", true)
     .order("sort_order", { ascending: true }) as QueryResult<Database["public"]["Tables"]["testimonials"]["Row"][]>;
   const { data, error } = response;
-  if (error || !data) return readLocalCmsState().testimonials;
+  if (error || !data || data.length === 0) return readLocalCmsState().testimonials;
   return data.map(mapTestimonial);
 }
