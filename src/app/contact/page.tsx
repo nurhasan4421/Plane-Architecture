@@ -56,7 +56,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <main className="pt-[86px] font-body">

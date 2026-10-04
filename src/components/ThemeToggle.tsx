@@ -62,7 +62,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
         bloomEl.style.width = "4px";
         bloomEl.style.height = "4px";
         bloomEl.style.transform = "translate(-50%, -50%) scale(0)";
-        bloomEl.style.backgroundColor = nextTheme === "dark" ? "#0e0e0e" : "#ffffff";
+        bloomEl.style.backgroundColor = nextTheme === "dark" ? "#303030" : "#ffffff";
         bloomEl.style.transition =
           "transform 950ms cubic-bezier(0.22, 1, 0.36, 1), opacity 250ms ease";
         document.body.appendChild(bloomEl);

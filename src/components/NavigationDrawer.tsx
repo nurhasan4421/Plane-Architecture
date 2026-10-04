@@ -22,7 +22,7 @@ export default function NavigationDrawer({
       aria-hidden={!isOpen}
       inert={!isOpen}
       onMouseLeave={onClose}
-      className={`absolute left-1/2 right-auto top-full z-50 w-screen -translate-x-1/2 overflow-hidden bg-white dark:bg-[#141414] dark:border-b dark:border-white/10 font-body shadow-lg dark:shadow-2xl transition-[max-height,opacity,transform] duration-500 ease-out ${
+      className={`absolute left-1/2 right-auto top-full z-50 w-screen -translate-x-1/2 overflow-hidden bg-white dark:bg-[#282828] dark:border-b dark:border-white/10 font-body shadow-lg dark:shadow-2xl transition-[max-height,opacity,transform] duration-500 ease-out ${
         isOpen
           ? "max-h-[440px] translate-y-0 opacity-100"
           : "pointer-events-none max-h-0 -translate-y-3 opacity-0"

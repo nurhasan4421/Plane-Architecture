@@ -86,7 +86,7 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
             type="button"
             onClick={() => scrollTestimonials(-1)}
             aria-label="Previous testimonials"
-            className="flex h-8 w-8 items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181818] text-black dark:text-white transition-colors hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#383838] text-black dark:text-white transition-colors hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-[#404040] cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -94,7 +94,7 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
             type="button"
             onClick={() => scrollTestimonials(1)}
             aria-label="Next testimonials"
-            className="flex h-8 w-8 items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181818] text-black dark:text-white transition-colors hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#383838] text-black dark:text-white transition-colors hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-[#404040] cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -117,14 +117,14 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
                   &ldquo;{item.quote}&rdquo;
                 </blockquote>
               </div>
-              <div className="mt-3 border-t border-neutral-100 dark:border-neutral-800 pt-2.5">
+              <div className="mt-3 border-t border-neutral-100 dark:border-white/10 pt-2.5">
                 <p className="text-xs font-semibold text-black dark:text-white">{item.author}</p>
                 {item.role && <p className="mt-0.5 text-[10px] text-neutral-400 dark:text-neutral-500 truncate">{item.role}</p>}
                 <p className="mt-0.5 text-[10px] text-neutral-400 dark:text-neutral-500 truncate">{item.projectTitle}</p>
               </div>
             </>
           );
-          const className = "group flex w-[75%] max-w-[280px] shrink-0 snap-start flex-col justify-between border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#151515] p-3.5 sm:p-4 transition-colors hover:border-neutral-500 dark:hover:border-neutral-600 sm:w-[260px] lg:w-[280px]";
+          const className = "group flex w-[75%] max-w-[280px] shrink-0 snap-start flex-col justify-between border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#383838] p-3.5 sm:p-4 transition-colors hover:border-neutral-500 dark:hover:border-neutral-400 sm:w-[260px] lg:w-[280px]";
           return item.projectSlug ? (
             <Link key={item.id} href={`/projects/${item.projectSlug}`} className={className}>{card}</Link>
           ) : (
@@ -210,7 +210,7 @@ export default function ProjectFeed({
             <button
               type="button"
               onClick={() => setIsSortMenuOpen((open) => !open)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-[4px] border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181818] text-neutral-600 dark:text-neutral-300 transition hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white cursor-pointer shadow-xs"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-[4px] border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#383838] text-neutral-600 dark:text-neutral-300 transition hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white cursor-pointer shadow-xs"
               aria-label="Filter projects by order"
               title={`Filter: ${sortOrder === "random" ? "Random" : sortOrder === "latest" ? "Latest" : sortOrder === "oldest" ? "Oldest" : "Default"}`}
               aria-expanded={isSortMenuOpen}
@@ -220,10 +220,10 @@ export default function ProjectFeed({
 
             {isSortMenuOpen && (
               <div
-                className="absolute right-0 top-full z-30 mt-2 w-44 rounded-[6px] border border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-[#181818]/95 p-1 shadow-xl backdrop-blur-md font-body"
+                className="absolute right-0 top-full z-30 mt-2 w-44 rounded-[6px] border border-neutral-200 dark:border-white/10 bg-white/95 dark:bg-[#383838]/95 p-1 shadow-xl backdrop-blur-md font-body"
                 onMouseLeave={() => setIsSortMenuOpen(false)}
               >
-                <div className="px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500 font-medium border-b border-neutral-100 dark:border-neutral-800 mb-1">
+                <div className="px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-400 font-medium border-b border-neutral-100 dark:border-white/10 mb-1">
                   Sort Projects
                 </div>
                 <button

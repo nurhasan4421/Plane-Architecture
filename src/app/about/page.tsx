@@ -20,7 +20,7 @@ export default function AboutPage() {
   const leadership = settings.about?.leadership?.length ? settings.about.leadership : FALLBACK_LEADERSHIP;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] flex flex-col justify-between select-none font-body transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] flex flex-col justify-between select-none font-body transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <div className="pt-28 pb-20 px-6 md:px-16 lg:px-28 max-w-6xl mx-auto w-full">

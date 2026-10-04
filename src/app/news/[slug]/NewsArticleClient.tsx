@@ -36,7 +36,7 @@ export default function NewsArticleClient({ item, relatedItems }: NewsArticleCli
   };
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0e0e0e] dark:text-[#f5f5f5] transition-colors duration-200">
+    <div className="min-h-screen bg-white text-black dark:bg-[#303030] dark:text-[#f5f5f5] transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <main className="px-5 pb-20 pt-[100px] font-body sm:px-8 md:pt-[120px] lg:px-16">

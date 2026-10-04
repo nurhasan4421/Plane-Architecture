@@ -31,7 +31,7 @@ export default function HomePage() {
   const showCarousel = settings.carouselEnabled && activeCategory === "all";
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] flex flex-col justify-between transition-colors duration-200">
+    <main className="min-h-screen bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] flex flex-col justify-between transition-colors duration-200">
       {/* Top Header */}
       <Header
         activeCategory={activeCategory}

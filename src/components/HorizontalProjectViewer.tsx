@@ -120,7 +120,7 @@ export default function HorizontalProjectViewer({
   };
 
   return (
-    <main className="w-full bg-white dark:bg-[#0e0e0e] pt-[50px] font-body text-black dark:text-[#f5f5f5] lg:pt-[60px] transition-colors duration-200">
+    <main className="w-full bg-white dark:bg-[#303030] pt-[50px] font-body text-black dark:text-[#f5f5f5] lg:pt-[60px] transition-colors duration-200">
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-16 px-5 pb-20 pt-6 sm:px-10 lg:gap-24 lg:px-16">
         <section aria-labelledby="project-title">
           <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
@@ -557,7 +557,7 @@ export default function HorizontalProjectViewer({
         {/* Project Owner / Client Testimonial - Compact card without picture */}
         {project.quote && (
           <section aria-labelledby="project-testimonial" className="flex justify-center py-6">
-            <div className="w-full max-w-xl border border-neutral-200 dark:border-neutral-800 bg-[#faf9f6] dark:bg-[#151515] p-6 sm:p-8">
+            <div className="w-full max-w-xl border border-neutral-200 dark:border-white/10 bg-[#faf9f6] dark:bg-[#282828] p-6 sm:p-8">
               <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Project Testimonial</p>
               <blockquote id="project-testimonial" className="font-display text-base italic leading-relaxed text-neutral-800 dark:text-neutral-200 sm:text-lg">
                 &ldquo;{project.quote}&rdquo;

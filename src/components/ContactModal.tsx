@@ -89,7 +89,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
       />
 
       {/* Modal Dialog */}
-      <div className="relative z-10 w-full max-w-4xl bg-white dark:bg-[#141414] text-black dark:text-[#f5f5f5] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col border dark:border-white/10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-4xl bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col border dark:border-white/10 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 dark:border-white/10">
           <div>

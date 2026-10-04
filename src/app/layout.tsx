@@ -62,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] min-h-screen selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+      <body className="bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] min-h-screen selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
         <ThemeProvider>
           <IntroSplash />
           <SiteContentProvider>{children}</SiteContentProvider>

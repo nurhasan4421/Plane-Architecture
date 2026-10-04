@@ -41,7 +41,7 @@ export default function Header({
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-30 select-none border-b border-transparent bg-white/95 dark:bg-[#0e0e0e]/95 dark:border-white/10 font-body backdrop-blur-xs transition-colors duration-200"
+      className="fixed top-0 left-0 right-0 z-30 select-none border-b border-transparent bg-white/95 dark:bg-[#303030]/95 dark:border-white/10 font-body backdrop-blur-xs transition-colors duration-200"
       onMouseLeave={() => {
         setHoveredCategory(null);
         setIsLogoMenuOpen(false);
@@ -136,7 +136,7 @@ export default function Header({
       <div
         aria-hidden={!hoveredConfig || isLogoMenuOpen}
         inert={!hoveredConfig || isLogoMenuOpen}
-        className={`absolute left-1/2 right-auto top-full z-40 w-screen -translate-x-1/2 overflow-hidden bg-white dark:bg-[#141414] dark:border-b dark:border-white/10 shadow-lg dark:shadow-2xl transition-[max-height,opacity,transform] duration-500 ease-out ${
+        className={`absolute left-1/2 right-auto top-full z-40 w-screen -translate-x-1/2 overflow-hidden bg-white dark:bg-[#282828] dark:border-b dark:border-white/10 shadow-lg dark:shadow-2xl transition-[max-height,opacity,transform] duration-500 ease-out ${
           hoveredConfig && !isLogoMenuOpen
             ? "max-h-[520px] translate-y-0 opacity-100"
             : "pointer-events-none max-h-0 -translate-y-3 opacity-0"
@@ -182,7 +182,7 @@ export default function Header({
       </div>
 
       {isMobileFilterOpen && (
-        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#141414] shadow-lg lg:hidden">
+        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] shadow-lg lg:hidden">
           <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
             {categories.map((category) => (
               <button
