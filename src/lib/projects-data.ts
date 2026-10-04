@@ -82,27 +82,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1548248823-ce16a73b6d49?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1618861818935-92632b6b7c4a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1461638189575-2a947ecbf2cb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -190,27 +190,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1696401680571-f6e9986026d0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1531591022136-eb8b0da1e6d0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1483366774565-c783b9f70e2c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1510671413300-d4f969094b15?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1431576901776-e539bd916ba2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -298,27 +298,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1572883454114-1cf0031ede2a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1541513410614-f91348bb4c4f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1435575653489-b0873ec954e2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1525286335722-c30c6b5df541?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1598818384697-62330d600309?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1611842525094-cd40da298560?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -406,27 +406,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1567943183748-3a7542120c90?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1546349851-64285be8e9fa?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1618353776413-57c0782c9c87?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1548566862-2c9b1fed780a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1608303588026-884930af2559?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -514,27 +514,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1531077386034-d12285794b5c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1560419450-a53fe3b90211?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1523274158540-2aa98c15ec26?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1566402723915-d1c42a054f43?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1516730670158-8c52cb740fcf?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1574848296471-28f79a036f79?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -622,27 +622,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1696401680571-f6e9986026d0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1546414701-81cc6963c67f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1576731753569-3e93a228048c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1615406020658-6c4b805f1f30?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1461638189575-2a947ecbf2cb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1615406020658-6c4b805f1f30?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -730,27 +730,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1569227997603-33b9f12af927?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1510671413300-d4f969094b15?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1489058535093-8f530d789c3b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1496564203457-11bb12075d90?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1598368195835-91e67f80c9d7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1541513410614-f91348bb4c4f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -838,27 +838,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1597738755960-aeab75744b5e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1497465689543-5940d3cede89?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1611842525094-cd40da298560?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1467154243382-ebe2c7d14fef?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1618385455730-2571c38966b7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1497334251732-c0eb68e26827?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -946,27 +946,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1560131653-63257db002c8?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1560840067-ddcaeb7831d2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1562575228-c8e99d410017?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1566402723915-d1c42a054f43?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1460647927807-8e664765c97c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1617772668534-f5bff987a768?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1054,27 +1054,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1525095240410-9645dea911e4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1530088018703-11b253bae577?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1601074231509-dce351c05199?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1554435493-93422e8220c8?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1495603491717-3d3374928dc6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1595980542930-9eea66620834?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1162,27 +1162,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1453904061941-02ada96e1f4a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1504802318913-d3f9a487448c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1519335664-9434143e2067?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1453586857165-eb78d44460ca?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1550605006-5b1c506b79f9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1270,27 +1270,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1600540984005-c7f3a641fbe5?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1637340139454-35be65edf2bb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1523477593243-78bbf626fd3b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1600540984005-c7f3a641fbe5?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1637340139454-35be65edf2bb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1543071293-d91175a68672?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1378,27 +1378,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1613484259733-383234e8e8af?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1550567844-b7cd4e881301?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1556983852-43bf21186b2a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1555941798-707909172695?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1701031977495-0351a1c8d889?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1499428665502-503f6c608263?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1486,27 +1486,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1622976479615-38700d470a1c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1533832100063-f52ef5c25992?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1430417934865-589b63ad5c00?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1599420186985-5c3d1a038e84?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1712076335886-2fccef5d3fee?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1452696193712-6cabf5103b63?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1594,27 +1594,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1594845222818-9097c52dabb5?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1730189282988-945844b1ac4e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1549310786-a634d453e653?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1463130456064-77fda7f96d6b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1536154010-6ab8a1d741d2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1702,27 +1702,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1492660372153-266c604c29c9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1610650394144-a778795cf585?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1663608511698-901dbd5622db?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1546629313-ea9c287a8b9f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1567193379153-5235c7f2c1b6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1810,27 +1810,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1523358959537-cc0e4103d0b7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1520699894975-334692f3a636?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1464082354059-27db6ce50048?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1613275300153-173113b871d6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1479293581560-aee98bb24f7f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -1918,27 +1918,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1628012209120-d9db7abf7eab?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1519480424400-ee051f46d6d9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1589360810891-0935e508429a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1541447271487-09612b3f49f7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1512048988843-7a307d5275dc?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1659769233728-1290ab09a772?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2026,27 +2026,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1576831356777-59f382e176b4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1656507746159-4a18a9f5efcb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1518005076933-9ef6bec005cb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1601993957728-1e56ab70c5a8?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1490351267196-b7a67e26e41b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1683321483581-bbc5f1ec63ce?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2134,27 +2134,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1524126675694-1efa3488b7c0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1518436127045-3367819540bf?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1509018877337-3af7dd307ea9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1580145035805-66b9b1669835?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1578266848416-c291bc0b2940?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1542438814-524d0640ecdd?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2242,27 +2242,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1542438814-524d0640ecdd?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1649673225564-456b7105336d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1523165945512-d8b058e40514?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1496851473196-e26508c21494?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1579419964575-8c5d90b6522b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1446771326090-d910bfaf00f6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2350,27 +2350,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1710423490033-76d3c6cb9bc2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1573090951046-c49b94d5621c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1551711974-faf378be34b2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1502101872923-d48509bff386?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1684034158767-4b61152e780b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1551983914-4ab58d6b1018?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2458,27 +2458,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1543301571-b94000185b26?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1564152387608-e856fd750840?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1642966385422-9e90cb3ee4c1?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1566041994317-19af5bfd3ade?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1698846296220-e44d9d4b9100?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1583925509694-ddd9e7878e9b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2566,27 +2566,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1566041994317-19af5bfd3ade?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1698846296220-e44d9d4b9100?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1602577581415-cda0bec4562b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1635506232643-6c526f97e519?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1614595737476-42487331b8a1?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1603294278610-b5bd0506303e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2674,27 +2674,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1721244653652-268631ec049a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1556982042-3237ae05e22b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1492091501265-be9af13d99fc?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1574747749703-ca0fc0505cc5?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1461695008884-244cb4543d74?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1551489424-28aacc79dbc4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2782,27 +2782,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1713417338589-19857ee4f99a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1494554883842-008adae6a9bf?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1602634630420-30a51ffa9326?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1593767118803-c23a8d60eb5c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1661332632427-83e4f7cd5d31?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1602634630420-30a51ffa9326?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2890,27 +2890,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1680874261352-ed1ee3d1cf01?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1614595737766-4d7e1fd1406f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1460647847717-b1b1fa4f1092?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1616418534243-ab757ff8ce3a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1543748984-8ffa30d42668?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -2998,27 +2998,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1553448539-a13a5595a494?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1560963018-4d9bd4c4b72a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1721244654210-a505a99661e9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1482996207824-b0f01de61751?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1589021111330-953704d34989?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1554793000-245d3a3c2a51?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3106,27 +3106,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1549791084-5f78368b208b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1721815693498-cc28507c0ba2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1479292889369-1a48f234247e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1543330161-9639ecc037db?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1466837838619-c8f5b8f0c166?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1736593317957-ada5940936d2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3214,27 +3214,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1591811762855-614688ee3fef?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1515155075601-23009d0cb6d4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1528810289438-283f885c31ef?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1559458049-9d62fceeb52b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1495512013490-788f7d7f4dbb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1502473379243-ba6449c3b6c4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3322,27 +3322,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1547206704-8de50bc5ea83?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1580541908405-eb3c663baa23?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1708184292435-3bc2e2706659?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1649688066826-947419c66e5c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1587913560680-7f8187bf9634?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1761753274318-969ef806b7f4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3430,27 +3430,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1721737850310-32e0d8f16cac?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1657805052690-7ddc57695d90?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1564471925181-982d3a6c1a3f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1708184292435-3bc2e2706659?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1649688066826-947419c66e5c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1587913560680-7f8187bf9634?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3538,27 +3538,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1619442483119-7d84bd743f69?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1721737850310-32e0d8f16cac?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1505444226624-239b421655ab?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1584257354372-b9953a476d0c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1657805052690-7ddc57695d90?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1623051786552-e46ef84e6c07?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3646,27 +3646,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1691425700573-5e2e6e4f6157?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1624066969616-69b0b0301d4d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1672832361712-a04ef36e3254?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1506185037657-7999ac5a0e52?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1457585407930-4d18bbddbf9e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3754,27 +3754,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1549564228-a52a15dcf797?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1489655994982-2866b553a86c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1549564228-a52a15dcf797?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1494506281370-d80348b928fa?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1632667680404-572c57873c21?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1762344682332-16c3f7b2bcec?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3862,27 +3862,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1525367922492-f15fe7b709cb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1562065540-efa93744ed71?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1537202108838-e7072bad1927?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1634307449380-3137f7902d30?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1565124687789-6df9600368d7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1565964450734-c6b267945d7a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -3970,27 +3970,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1546623260-d9f5243d82d0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1568567492302-a4e69fa3848c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1721244654392-9c912a6eb236?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1696445073848-5f45f8c2e1ae?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1568878801942-6fc477a748db?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1590912550141-1448da2bd5da?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4078,27 +4078,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1642459440218-28ffe4e92fc0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1557053819-aa6046add523?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1538534658409-30f2502cb010?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1463995439889-6cc080aaf7dd?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1515940946701-731c68c86501?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1756877564659-6c59c5af2098?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4186,27 +4186,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1472148083604-64f1084980b9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1631334709265-83dcee08ba9d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1739125714645-96ecb3274ad6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1448276815787-473e583c215a?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1538233538873-d4f592624f59?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1552546083-943f3c6bd95f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4294,27 +4294,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1524213035991-cf1d6343a2ff?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1583421660936-fc5ce0762df1?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1613061538705-01190bb0e3b8?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1576831371356-d6e9411ae501?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4402,27 +4402,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1721244653757-b76cc4679dfb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1649688066810-59a394fc0fef?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1597182414480-4f92a6ee1092?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1573652636601-d6fdcfc59640?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1655668135850-5eef0ba21f24?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4510,27 +4510,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1664711942326-2c3351e215e6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1758801305205-3974771d2a0c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1517816630506-a8c5ccf61bf0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1713257109019-86be5de4c8f7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1631794588768-475c568679bb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4618,27 +4618,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1531827951676-4c3cd78ed20b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1758801304977-fbb605f3858f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1652167698692-62e86205598c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1479839930473-f4083569cd67?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4726,27 +4726,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1758801304977-fbb605f3858f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1652167698692-62e86205598c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1564078516393-cf04bd966897?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1479839930473-f4083569cd67?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1534356770196-b69fc0ac293b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1642709141153-7836b4382e3f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4834,27 +4834,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1603901622056-0a5bee231395?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1604630739932-d7537e7f0dbd?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1590976897969-ff50fdbd00a4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1535117399959-7df1714b4202?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1518005108369-12a8b1c429a0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -4942,27 +4942,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1708184292492-775595195ff7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1490096429152-340aafafc2d4?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1614068630200-44bc6a9a898e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1667312939978-64cf31718a6e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1614068630200-44bc6a9a898e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5050,27 +5050,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1483959651481-dc75b89291f1?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1512586175314-701bd44f8440?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1558472306-75b150ac26eb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1486149266845-b44cb2835667?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5158,27 +5158,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1583338850703-bc602b103674?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1635403868664-179c789560a7?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1476888836370-f58a63db75ad?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1656905101808-fa2bd8e45deb?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5266,27 +5266,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1578548052647-c9985883f37d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1445754574409-bcd715e18017?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1490122417551-6ee9691429d0?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1729086046027-09979ade13fd?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1521803178164-71af50860d35?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1503916066807-f13ceba21b0b?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5374,27 +5374,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1485797532868-c4401a435f08?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1520073220816-469094c16514?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1556922340-19e175199d3d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1501525776-246410718e63?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5482,27 +5482,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1563952565009-c5afd2643dd6?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1691036562132-56a310d4b789?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1527241572641-9318a0fad34f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1636122452947-615359a27c64?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1563775506308-5812e69b313e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1599696848652-f0ff23bc911f?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5590,27 +5590,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1669131196184-a567e41f7236?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1487603097198-fe76cd44579d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1563775506308-5812e69b313e?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1709147660265-60869622ff48?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1669131196184-a567e41f7236?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5698,27 +5698,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1487603097198-fe76cd44579d?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1617664837373-f107dd7be738?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1618219740975-d40978bb7378?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1508248732730-e31e6031e566?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1524634036752-81ec41a4f1ea?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1664819766323-78308c6c434c?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,
@@ -5806,27 +5806,27 @@ export const PROJECTS: Project[] = [
     "gallery": [
       {
         "url": "https://images.unsplash.com/photo-1619857121838-997e82345250?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD"
+        "caption": "CONTEXTUAL MASSING & URBAN THRESHOLD"
       },
       {
         "url": "https://images.unsplash.com/photo-1758801304964-417e328be877?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE"
+        "caption": "MATERIAL TECTONICS & SURFACE TEXTURE"
       },
       {
         "url": "https://images.unsplash.com/photo-1518720457-a22f2c45d5b9?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS"
+        "caption": "INTERIOR SPATIAL CANOPY & LIGHT WELLS"
       },
       {
         "url": "https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY"
+        "caption": "CIRCULATION FLOWS & COURTYARD CONTINUITY"
       },
       {
         "url": "https://images.unsplash.com/photo-1568394824200-457c8c3cb6dc?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING"
+        "caption": "ELEVATED SKYLINE PROFILE & SUN SHADING"
       },
       {
         "url": "https://images.unsplash.com/photo-1603119761708-9252f043c139?auto=format&fit=crop&w=1200&q=85",
-        "caption": "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE"
+        "caption": "OCULUS & INTEGRATED NATURAL LANDSCAPE"
       }
     ],
     "isPublished": true,

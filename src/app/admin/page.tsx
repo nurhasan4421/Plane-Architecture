@@ -42,15 +42,15 @@ import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { getAdminCmsContent, saveAdminCmsContent } from "@/lib/site-content";
 import type { CmsDeletedContent, SiteCategory } from "@/lib/site-content";
 import { NewsItem, Project, ProjectTestimonial } from "@/types/project";
-import { formatImageUrl } from "@/lib/image-utils";
+import { formatImageUrl, formatImageCaption } from "@/lib/image-utils";
 
 const DEFAULT_COLLAGE_CAPTIONS = [
-  "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD",
-  "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE",
-  "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS",
-  "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY",
-  "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING",
-  "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE",
+  "Contextual massing & urban threshold",
+  "Material tectonics & surface texture",
+  "Interior spatial canopy & light wells",
+  "Circulation flows & courtyard continuity",
+  "Elevated skyline profile & sun shading",
+  "Oculus & integrated natural landscape",
 ];
 
 const emptyProject = (): Project => ({
@@ -394,13 +394,15 @@ function ProjectCollageAdminSlot({
         )}
 
         {/* Live caption badge matching the website overlay */}
-        <span
-          className={`absolute ${
-            badgePosition === "top" ? "top-2 left-2" : "bottom-2 left-2"
-          } max-w-[90%] truncate bg-black/85 px-2 py-0.5 text-[8px] sm:text-[9px] font-medium uppercase tracking-wider text-white shadow-sm`}
-        >
-          {item.caption || `VIEW ${slotNumber}`}
-        </span>
+        {formatImageCaption(item.caption) && (
+          <span
+            className={`absolute ${
+              badgePosition === "top" ? "top-2 left-2" : "bottom-2 left-2"
+            } max-w-[90%] truncate bg-black/85 px-2 py-0.5 text-[8px] sm:text-[9px] font-medium uppercase tracking-wider text-white shadow-sm`}
+          >
+            {formatImageCaption(item.caption)}
+          </span>
+        )}
       </div>
 
       {/* URL & Upload button */}
@@ -436,7 +438,7 @@ function ProjectCollageAdminSlot({
           type="text"
           value={item.caption || ""}
           onChange={(e) => onChange({ ...item, caption: e.target.value })}
-          placeholder="Overlay Caption (e.g. VIEW 1 CONSTRUCTED...)"
+          placeholder="Caption (e.g. Contextual massing & urban threshold)..."
           className="h-7 w-full rounded-[3px] border border-black/10 bg-white px-2 text-[10px] uppercase tracking-wide text-neutral-700 outline-none focus:border-black placeholder:text-neutral-400"
         />
       </div>
@@ -457,7 +459,7 @@ function AdminCollageGrid({
     const list = [...(gallery || [])];
     while (list.length < 6) {
       const idx = list.length;
-      list.push({ url: "", caption: DEFAULT_COLLAGE_CAPTIONS[idx] || `VIEW ${idx + 1}` });
+      list.push({ url: "", caption: DEFAULT_COLLAGE_CAPTIONS[idx] || "" });
     }
     return list.slice(0, 6);
   }, [gallery]);
@@ -495,36 +497,48 @@ function AdminCollageGrid({
           {/* Col 1 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.38] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[0].url ? <img src={formatImageUrl(slots[0].url)} alt={slots[0].caption || "Slot 1"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 1</div>}
-              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[0].caption || "VIEW 1"}</span>
+              {slots[0].url ? <img src={formatImageUrl(slots[0].url)} alt={formatImageCaption(slots[0].caption) || "Slot 1"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 1</div>}
+              {formatImageCaption(slots[0].caption) && (
+                <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[0].caption)}</span>
+              )}
             </div>
             <div className="relative w-full flex-[0.62] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[1].url ? <img src={formatImageUrl(slots[1].url)} alt={slots[1].caption || "Slot 2"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 2</div>}
-              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[1].caption || "VIEW 2"}</span>
+              {slots[1].url ? <img src={formatImageUrl(slots[1].url)} alt={formatImageCaption(slots[1].caption) || "Slot 2"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 2</div>}
+              {formatImageCaption(slots[1].caption) && (
+                <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[1].caption)}</span>
+              )}
             </div>
           </div>
 
           {/* Col 2 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.45] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[2].url ? <img src={formatImageUrl(slots[2].url)} alt={slots[2].caption || "Slot 3"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 3</div>}
-              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[2].caption || "VIEW 3"}</span>
+              {slots[2].url ? <img src={formatImageUrl(slots[2].url)} alt={formatImageCaption(slots[2].caption) || "Slot 3"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 3</div>}
+              {formatImageCaption(slots[2].caption) && (
+                <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[2].caption)}</span>
+              )}
             </div>
             <div className="relative w-full flex-[0.55] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[3].url ? <img src={formatImageUrl(slots[3].url)} alt={slots[3].caption || "Slot 4"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 4</div>}
-              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[3].caption || "VIEW 4"}</span>
+              {slots[3].url ? <img src={formatImageUrl(slots[3].url)} alt={formatImageCaption(slots[3].caption) || "Slot 4"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 4</div>}
+              {formatImageCaption(slots[3].caption) && (
+                <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[3].caption)}</span>
+              )}
             </div>
           </div>
 
           {/* Col 3 */}
           <div className="flex flex-col gap-2 h-full min-h-0">
             <div className="relative w-full flex-[0.65] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[4].url ? <img src={formatImageUrl(slots[4].url)} alt={slots[4].caption || "Slot 5"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 5</div>}
-              <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[4].caption || "VIEW 5"}</span>
+              {slots[4].url ? <img src={formatImageUrl(slots[4].url)} alt={formatImageCaption(slots[4].caption) || "Slot 5"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 5</div>}
+              {formatImageCaption(slots[4].caption) && (
+                <span className="absolute left-1.5 top-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[4].caption)}</span>
+              )}
             </div>
             <div className="relative w-full flex-[0.35] min-h-0 overflow-hidden rounded-[2px] bg-neutral-800">
-              {slots[5].url ? <img src={formatImageUrl(slots[5].url)} alt={slots[5].caption || "Slot 6"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 6</div>}
-              <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{slots[5].caption || "VIEW 6"}</span>
+              {slots[5].url ? <img src={formatImageUrl(slots[5].url)} alt={formatImageCaption(slots[5].caption) || "Slot 6"} className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[9px] text-neutral-500">Slot 6</div>}
+              {formatImageCaption(slots[5].caption) && (
+                <span className="absolute bottom-1.5 left-1.5 max-w-[85%] truncate bg-black/85 px-1.5 py-0.5 text-[7px] uppercase tracking-wider text-white">{formatImageCaption(slots[5].caption)}</span>
+              )}
             </div>
           </div>
         </div>
@@ -624,7 +638,7 @@ function AdminExtendedGallery({
     while (full.length < 6) full.push({ url: "", caption: "" });
     full.push({
       url: "",
-      caption: `View ${full.length + 1} - Additional Context & Detail`,
+      caption: "",
     });
     onChange(full);
   };
@@ -706,7 +720,7 @@ function AdminExtendedGallery({
             onClick={addImage}
             className="mt-3 inline-flex items-center gap-1 rounded-[3px] border border-black/15 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-black hover:border-black cursor-pointer shadow-2xs"
           >
-            <Plus className="h-3 w-3" /> Add View 7
+            <Plus className="h-3 w-3" /> Add Image
           </button>
         </div>
       ) : (
@@ -714,7 +728,7 @@ function AdminExtendedGallery({
           {additionalImages.map((img, idx) => (
             <div key={idx} className="flex flex-col gap-2 rounded-[6px] border border-black/10 bg-white p-3 shadow-2xs">
               <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-neutral-500 font-semibold">
-                <span>View {idx + 7}</span>
+                <span>Image {idx + 7}</span>
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
@@ -747,7 +761,7 @@ function AdminExtendedGallery({
 
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[3px] bg-neutral-100 border border-black/10">
                 {img.url ? (
-                  <img src={formatImageUrl(img.url)} alt={img.caption || `View ${idx + 7}`} className="h-full w-full object-cover" />
+                  <img src={formatImageUrl(img.url)} alt={formatImageCaption(img.caption) || `Image ${idx + 7}`} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center p-2 text-neutral-400">
                     <FileImage className="h-5 w-5 mb-1 text-neutral-300" />
@@ -784,7 +798,7 @@ function AdminExtendedGallery({
                 type="text"
                 value={img.caption || ""}
                 onChange={(e) => updateAdditionalImage(idx, { ...img, caption: e.target.value })}
-                placeholder={`Caption for View ${idx + 7}...`}
+                placeholder="Caption (e.g. Courtyard details, spatial study)..."
                 className="h-7 w-full rounded-[3px] border border-black/10 bg-white px-2 text-[10px] uppercase tracking-wide text-neutral-700 outline-none focus:border-black placeholder:text-neutral-400"
               />
             </div>

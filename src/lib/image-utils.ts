@@ -26,3 +26,16 @@ export function formatImageUrl(url?: string | null): string {
 
   return trimmed;
 }
+
+/**
+ * Strips view number prefixes like "VIEW 1 - ", "VIEW 2:", "View 03 - ", etc.
+ * so that only the clean, descriptive caption is displayed.
+ */
+export function formatImageCaption(caption?: string | null): string {
+  if (!caption) return "";
+  const cleaned = caption.replace(/^view\s*\d+\s*[-:–—]?\s*/i, "").trim();
+  if (/^view\s*\d+$/i.test(cleaned)) {
+    return "";
+  }
+  return cleaned;
+}

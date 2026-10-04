@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Project } from "@/types/project";
 import { ChevronLeft, ChevronRight, LayoutGrid, Rows3, Mail, Share2, X } from "lucide-react";
+import { formatImageCaption } from "@/lib/image-utils";
 
 interface HorizontalProjectViewerProps {
   project: Project;
@@ -23,18 +24,18 @@ export default function HorizontalProjectViewer({
   const collageImages = useMemo(() => {
     const list = [...(project.gallery || [])];
     const defaultCaptions = [
-      "VIEW 1 - CONTEXTUAL MASSING & URBAN THRESHOLD",
-      "VIEW 2 - MATERIAL TECTONICS & SURFACE TEXTURE",
-      "VIEW 3 - INTERIOR SPATIAL CANOPY & LIGHT WELLS",
-      "VIEW 4 - CIRCULATION FLOWS & COURTYARD CONTINUITY",
-      "VIEW 5 - ELEVATED SKYLINE PROFILE & SUN SHADING",
-      "VIEW 6 - OCULUS & INTEGRATED NATURAL LANDSCAPE",
+      "CONTEXTUAL MASSING & URBAN THRESHOLD",
+      "MATERIAL TECTONICS & SURFACE TEXTURE",
+      "INTERIOR SPATIAL CANOPY & LIGHT WELLS",
+      "CIRCULATION FLOWS & COURTYARD CONTINUITY",
+      "ELEVATED SKYLINE PROFILE & SUN SHADING",
+      "OCULUS & INTEGRATED NATURAL LANDSCAPE",
     ];
     while (list.length < 6) {
       const idx = list.length;
       list.push({
         url: project.heroImage,
-        caption: defaultCaptions[idx] || `View ${idx + 1}`,
+        caption: defaultCaptions[idx] || "",
       });
     }
     return list.slice(0, 6);
@@ -44,19 +45,19 @@ export default function HorizontalProjectViewer({
   const allImages = useMemo(() => {
     const items: { url: string; caption?: string }[] = [];
     if (project.heroImage) {
-      items.push({ url: project.heroImage, caption: `${project.title} - Main View` });
+      items.push({ url: project.heroImage, caption: project.title });
     }
-    collageImages.forEach((img, idx) => {
+    collageImages.forEach((img) => {
       items.push({
         url: img.url,
-        caption: img.caption || `View 0${idx + 1}`,
+        caption: formatImageCaption(img.caption),
       });
     });
     if (project.gallery && project.gallery.length > 6) {
-      project.gallery.slice(6).forEach((img, idx) => {
+      project.gallery.slice(6).forEach((img) => {
         items.push({
           url: img.url,
-          caption: img.caption || `Additional View 0${idx + 7}`,
+          caption: formatImageCaption(img.caption),
         });
       });
     }
@@ -251,47 +252,51 @@ export default function HorizontalProjectViewer({
                 <LayoutGrid className="h-5 w-5" />
               </button>
             </div>
-          </div>
-
-          {/* MOBILE VIEW OPTION 1: One-by-One Stack (Same size as head image: aspect-[16/10]) */}
+          </div>          {/* MOBILE VIEW OPTION 1: One-by-One Stack (Same size as head image: aspect-[16/10]) */}
           {mobileLayout === "stack" && (
-            <div className="flex md:hidden flex-col gap-4 w-full">
-              {collageImages.map((image, index) => (
-                <button
-                  key={`mobile-stack-${index}`}
-                  type="button"
-                  onClick={() => openImageByIndex(1 + index)}
-                  aria-label={`Open photo: ${image.caption || `View ${index + 1}`}`}
-                  className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden bg-neutral-100"
-                >
-                  <img
-                    src={image.url}
-                    alt={image.caption || `Collage view ${index + 1}`}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                  />
-                </button>
-              ))}
+            <div className="flex md:hidden flex-col gap-3 w-full">
+              {collageImages.map((image, index) => {
+                const cleanCaption = formatImageCaption(image.caption);
+                return (
+                  <button
+                    key={`mobile-stack-${index}`}
+                    type="button"
+                    onClick={() => openImageByIndex(1 + index)}
+                    aria-label={`Open photo: ${cleanCaption || `${project.title} photo ${index + 1}`}`}
+                    className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden bg-neutral-100"
+                  >
+                    <img
+                      src={image.url}
+                      alt={cleanCaption || `${project.title} photo ${index + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
+                    />
+                  </button>
+                );
+              })}
             </div>
           )}
 
           {/* MOBILE VIEW OPTION 2: 2 Pictures in a Row Grid (Matching Picture 2) */}
           {mobileLayout === "grid" && (
             <div className="grid md:hidden grid-cols-2 gap-2.5 sm:gap-3 w-full">
-              {collageImages.map((image, index) => (
-                <button
-                  key={`mobile-grid-${index}`}
-                  type="button"
-                  onClick={() => openImageByIndex(1 + index)}
-                  aria-label={`Open photo: ${image.caption || `View ${index + 1}`}`}
-                  className="group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-neutral-100"
-                >
-                  <img
-                    src={image.url}
-                    alt={image.caption || `Collage view ${index + 1}`}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                </button>
-              ))}
+              {collageImages.map((image, index) => {
+                const cleanCaption = formatImageCaption(image.caption);
+                return (
+                  <button
+                    key={`mobile-grid-${index}`}
+                    type="button"
+                    onClick={() => openImageByIndex(1 + index)}
+                    aria-label={`Open photo: ${cleanCaption || `${project.title} photo ${index + 1}`}`}
+                    className="group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-neutral-100"
+                  >
+                    <img
+                      src={image.url}
+                      alt={cleanCaption || `${project.title} photo ${index + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  </button>
+                );
+              })}
             </div>
           )}
 
@@ -303,34 +308,38 @@ export default function HorizontalProjectViewer({
               <button
                 type="button"
                 onClick={() => openImageByIndex(1)}
-                aria-label={`Open photo: ${collageImages[0].caption || "View 1"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[0].caption) || "Photo 1"}`}
                 className="group relative block w-full flex-[0.38] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[0].url}
-                  alt={collageImages[0].caption || "Collage view 1"}
+                  alt={formatImageCaption(collageImages[0].caption) || `${project.title} photo 1`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[0].caption || "VIEW 1 CONSTRUCTED PRIMARILY FROM BOARD-FORMED"}
-                </span>
+                {formatImageCaption(collageImages[0].caption) && (
+                  <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[0].caption)}
+                  </span>
+                )}
               </button>
 
               {/* Photo 2: Tall vertical - expanded height to flush-align with middle bottom */}
               <button
                 type="button"
                 onClick={() => openImageByIndex(2)}
-                aria-label={`Open photo: ${collageImages[1].caption || "View 2"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[1].caption) || "Photo 2"}`}
                 className="group relative block w-full flex-[0.62] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[1].url}
-                  alt={collageImages[1].caption || "Collage view 2"}
+                  alt={formatImageCaption(collageImages[1].caption) || `${project.title} photo 2`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[1].caption || "VIEW 2 MATERIAL & FORM ARCHITECTURE"}
-                </span>
+                {formatImageCaption(collageImages[1].caption) && (
+                  <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[1].caption)}
+                  </span>
+                )}
               </button>
             </div>
 
@@ -340,34 +349,38 @@ export default function HorizontalProjectViewer({
               <button
                 type="button"
                 onClick={() => openImageByIndex(3)}
-                aria-label={`Open photo: ${collageImages[2].caption || "View 3"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[2].caption) || "Photo 3"}`}
                 className="group relative block w-full flex-[0.45] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[2].url}
-                  alt={collageImages[2].caption || "Collage view 3"}
+                  alt={formatImageCaption(collageImages[2].caption) || `${project.title} photo 3`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[2].caption || "VIEW 3 SCULPTURAL SOLID MASS AND CEILING CANOPY"}
-                </span>
+                {formatImageCaption(collageImages[2].caption) && (
+                  <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[2].caption)}
+                  </span>
+                )}
               </button>
 
               {/* Photo 4: Vertical - anchor height */}
               <button
                 type="button"
                 onClick={() => openImageByIndex(4)}
-                aria-label={`Open photo: ${collageImages[3].caption || "View 4"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[3].caption) || "Photo 4"}`}
                 className="group relative block w-full flex-[0.55] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[3].url}
-                  alt={collageImages[3].caption || "Collage view 4"}
+                  alt={formatImageCaption(collageImages[3].caption) || `${project.title} photo 4`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[3].caption || "VIEW 4 FLOWS AND CLEAN INTEGRATION"}
-                </span>
+                {formatImageCaption(collageImages[3].caption) && (
+                  <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[3].caption)}
+                  </span>
+                )}
               </button>
             </div>
 
@@ -377,34 +390,38 @@ export default function HorizontalProjectViewer({
               <button
                 type="button"
                 onClick={() => openImageByIndex(5)}
-                aria-label={`Open photo: ${collageImages[4].caption || "View 5"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[4].caption) || "Photo 5"}`}
                 className="group relative block w-full flex-[0.65] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[4].url}
-                  alt={collageImages[4].caption || "Collage view 5"}
+                  alt={formatImageCaption(collageImages[4].caption) || `${project.title} photo 5`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[4].caption || "VIEW 5 ELEVATED SKYLINE SPIRE & SHADING"}
-                </span>
+                {formatImageCaption(collageImages[4].caption) && (
+                  <span className="absolute left-2.5 top-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[4].caption)}
+                  </span>
+                )}
               </button>
 
               {/* Photo 6: Landscape - expanded height to flush-align with middle bottom */}
               <button
                 type="button"
                 onClick={() => openImageByIndex(6)}
-                aria-label={`Open photo: ${collageImages[5].caption || "View 6"}`}
+                aria-label={`Open photo: ${formatImageCaption(collageImages[5].caption) || "Photo 6"}`}
                 className="group relative block w-full flex-[0.35] min-h-0 cursor-zoom-in overflow-hidden bg-neutral-100"
               >
                 <img
                   src={collageImages[5].url}
-                  alt={collageImages[5].caption || "Collage view 6"}
+                  alt={formatImageCaption(collageImages[5].caption) || `${project.title} photo 6`}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
-                  {collageImages[5].caption || "VIEW 6 PRIVATE COURTYARDS & OCULUS DETAIL"}
-                </span>
+                {formatImageCaption(collageImages[5].caption) && (
+                  <span className="absolute bottom-2.5 left-2.5 max-w-[88%] truncate bg-black/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-white shadow-sm sm:text-[10px]">
+                    {formatImageCaption(collageImages[5].caption)}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -481,7 +498,8 @@ export default function HorizontalProjectViewer({
             </div>
             <div className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:gap-4">
               {project.gallery.slice(6).map((image, index) => {
-                const alt = image.caption || `${project.title} - View ${index + 7}`;
+                const cleanCaption = formatImageCaption(image.caption);
+                const alt = cleanCaption || `${project.title} photo ${index + 7}`;
                 return (
                   <button
                     key={`${image.url}-${index}`}
@@ -496,9 +514,9 @@ export default function HorizontalProjectViewer({
                       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/25" />
-                    {image.caption && (
+                    {cleanCaption && (
                       <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-3 pt-8 text-left text-xs leading-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        {image.caption}
+                        {cleanCaption}
                       </span>
                     )}
                   </button>
