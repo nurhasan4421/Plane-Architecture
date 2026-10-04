@@ -62,6 +62,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Ignore localStorage errors
     }
+    if (!isAdmin && typeof document !== "undefined") {
+      if (newTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
   };
 
   const toggleTheme = () => {
