@@ -28,7 +28,6 @@ export default function Header({
       project.typology.toLowerCase().includes(subcategoryId.toLowerCase());
   }).length;
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [mobileCategory, setMobileCategory] = useState(activeCategory === "all" ? (categories[0]?.id || "architecture") : activeCategory);
   const [isLogoMenuOpen, setIsLogoMenuOpen] = useState(false);
@@ -42,13 +41,8 @@ export default function Header({
   const mobileSubcategories = mobileConfig?.subcategories || [];
 
   const handleHamburgerClick = () => {
-    if (isMobileNavOpen) {
-      setIsMobileNavOpen(false);
-    } else {
-      setIsMobileNavOpen(true);
-      setIsMobileFilterOpen(false);
-      setIsLogoMenuOpen(false);
-    }
+    setIsMobileNavOpen((prev) => !prev);
+    setIsLogoMenuOpen(false);
   };
 
   return (
@@ -200,104 +194,107 @@ export default function Header({
         </div>
       </div>
 
-      {/* Mobile Navigation Bar (horizontal row: News, FAQ, Contact, About) */}
-      <div
-        className={`lg:hidden overflow-hidden border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] transition-all duration-400 ease-out ${
-          isMobileNavOpen
-            ? "max-h-[200px] opacity-100"
-            : "max-h-0 opacity-0 pointer-events-none"
-        }`}
-      >
-        <nav aria-label="Mobile site navigation" className="flex items-center justify-center gap-1 px-4 py-3 sm:gap-2 sm:px-6">
-          {[
-            { label: "News", href: "/news" },
-            { label: "FAQ", href: "/contact#faq" },
-            { label: "Contact", href: "/contact" },
-            { label: "About", href: "/about" },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={() => setIsMobileNavOpen(false)}
-              className="flex-1 text-center py-2.5 px-2 text-xs font-medium uppercase tracking-[0.12em] text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 active:bg-neutral-200 dark:active:bg-neutral-700"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Mobile: Start Project mini link */}
-        <div className="flex justify-center pb-3 px-4">
-          <Link
-            href="/start-project"
-            onClick={() => setIsMobileNavOpen(false)}
-            className="inline-flex items-center gap-2 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-[#294b3d] dark:hover:bg-neutral-200"
-          >
-            Start Project →
-          </Link>
-        </div>
-      </div>
-
-      {/* Mobile Category Filter (separate from nav, triggered by tapping logo area) */}
-      {isMobileFilterOpen && !isMobileNavOpen && (
-        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] shadow-lg lg:hidden">
-          <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                type="button"
-                aria-pressed={mobileCategory === category.id}
-                onClick={() => setMobileCategory(category.id)}
-                className={`block w-full px-4 py-3 text-left text-xs font-medium uppercase tracking-wide transition-colors sm:px-6 sm:text-sm ${
-                  mobileCategory === category.id
-                    ? "bg-black dark:bg-white text-white dark:text-black"
-                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white"
-                }`}
-              >
-                {category.label}
-              </button>
-            ))}
-          </nav>
-          <nav
-            aria-label={`${mobileConfig.label} subcategories`}
-            className="max-h-[min(70vh,480px)] overflow-y-auto px-4 py-3 sm:px-6"
-          >
-            <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
-              {mobileConfig.label}
-            </p>
-            <div className="flex flex-col">
-              {mobileSubcategories.map((subcategory) => {
-                const isActive = activeCategory === mobileCategory && (
-                  subcategory.id === "all"
-                    ? !activeSubcategory
-                    : activeSubcategory === subcategory.id
-                );
-                const isHighlighted = isActive || hoveredSubcategory === subcategory.id;
-
-                return (
-                <button
-                  key={subcategory.id}
-                  type="button"
-                  aria-pressed={isActive}
-                  onMouseEnter={() => setHoveredSubcategory(subcategory.id)}
-                  onMouseLeave={() => setHoveredSubcategory(null)}
-                  onFocus={() => setHoveredSubcategory(subcategory.id)}
-                  onClick={() => {
-                    onSelectCategory?.(
-                      mobileCategory,
-                      subcategory.id === "all" ? undefined : subcategory.id,
-                    );
-                    setIsMobileFilterOpen(false);
-                  }}
-                  className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors sm:text-sm ${isHighlighted ? "font-semibold text-black dark:text-white" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"}`}
+      {/* Mobile Menu (Hamburger open: Horizontal panel first, then Category/Subcategory menus below) */}
+      {isMobileNavOpen && (
+        <div className="lg:hidden border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#282828] shadow-2xl animate-in fade-in slide-in-from-top-1 duration-200">
+          {/* 1. Horizontal Panel: News, FAQ, Contact, About */}
+          <div className="border-b border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-900/30">
+            <nav aria-label="Mobile site navigation" className="flex items-center justify-center gap-1 px-3 py-2.5 sm:gap-2 sm:px-6">
+              {[
+                { label: "News", href: "/news" },
+                { label: "FAQ", href: "/contact#faq" },
+                { label: "Contact", href: "/contact" },
+                { label: "About", href: "/about" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="flex-1 text-center py-2 px-1 text-xs font-medium uppercase tracking-[0.12em] text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800 active:bg-neutral-300 dark:active:bg-neutral-700"
                 >
-                  <span>{subcategory.label}</span>
-                  <span className="ml-4 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">{getProjectCount(mobileCategory, subcategory.id)}</span>
-                </button>
-                );
-              })}
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Mobile: Start Project Quick CTA */}
+            <div className="flex justify-center pb-2.5 px-3">
+              <Link
+                href="/start-project"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="inline-flex items-center gap-2 px-5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-[#294b3d] dark:hover:bg-neutral-200"
+              >
+                Start Project →
+              </Link>
             </div>
-          </nav>
+          </div>
+
+          {/* 2. Below that: Navbar Menus & Submenu (Same UI as before) */}
+          <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <nav aria-label="Project categories" className="max-h-[min(65vh,450px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  aria-pressed={mobileCategory === category.id}
+                  onClick={() => setMobileCategory(category.id)}
+                  className={`block w-full px-4 py-3 text-left text-xs font-medium uppercase tracking-wide transition-colors sm:px-6 sm:text-sm ${
+                    mobileCategory === category.id
+                      ? "bg-black dark:bg-white text-white dark:text-black"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white"
+                  }`}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </nav>
+            <nav
+              aria-label={`${mobileConfig.label} subcategories`}
+              className="max-h-[min(65vh,450px)] overflow-y-auto px-4 py-3 sm:px-6"
+            >
+              <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
+                {mobileConfig.label}
+              </p>
+              <div className="flex flex-col">
+                {mobileSubcategories.map((subcategory) => {
+                  const isActive = activeCategory === mobileCategory && (
+                    subcategory.id === "all"
+                      ? !activeSubcategory
+                      : activeSubcategory === subcategory.id
+                  );
+                  const isHighlighted = isActive || hoveredSubcategory === subcategory.id;
+
+                  return (
+                    <button
+                      key={subcategory.id}
+                      type="button"
+                      aria-pressed={isActive}
+                      onMouseEnter={() => setHoveredSubcategory(subcategory.id)}
+                      onMouseLeave={() => setHoveredSubcategory(null)}
+                      onFocus={() => setHoveredSubcategory(subcategory.id)}
+                      onClick={() => {
+                        onSelectCategory?.(
+                          mobileCategory,
+                          subcategory.id === "all" ? undefined : subcategory.id,
+                        );
+                        setIsMobileNavOpen(false);
+                      }}
+                      className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors sm:text-sm ${
+                        isHighlighted
+                          ? "font-semibold text-black dark:text-white"
+                          : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
+                      }`}
+                    >
+                      <span>{subcategory.label}</span>
+                      <span className="ml-4 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">
+                        {getProjectCount(mobileCategory, subcategory.id)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
+          </div>
         </div>
       )}
     </header>
