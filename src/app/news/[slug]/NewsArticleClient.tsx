@@ -36,42 +36,42 @@ export default function NewsArticleClient({ item, relatedItems }: NewsArticleCli
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white text-black dark:bg-[#0e0e0e] dark:text-[#f5f5f5] transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <main className="px-5 pb-20 pt-[100px] font-body sm:px-8 md:pt-[120px] lg:px-16">
         <article className="mx-auto max-w-[1320px]">
-          <Link href="/news" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-500 transition-colors hover:text-black">
+          <Link href="/news" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             All dispatches
           </Link>
 
           <header className="mb-8 max-w-4xl">
-            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs uppercase tracking-wider text-neutral-500">
+            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
               <span>{item.category}</span>
               <span aria-hidden="true">/</span>
               <span>{item.readTime}</span>
             </div>
-            <h1 className="font-display text-3xl font-normal leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="font-display text-3xl font-normal leading-tight text-black dark:text-white sm:text-4xl md:text-5xl lg:text-6xl">
               {item.title}
             </h1>
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-neutral-600">
-              <span><span className="text-neutral-400">Published</span> {item.date}</span>
-              <span><span className="text-neutral-400">By</span> {item.author || "Plane Architect"}</span>
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+              <span><span className="text-neutral-400 dark:text-neutral-500">Published</span> {item.date}</span>
+              <span><span className="text-neutral-400 dark:text-neutral-500">By</span> {item.author || "Plane Architect"}</span>
             </div>
           </header>
 
-          <div className="relative aspect-[16/9] max-h-[72vh] overflow-hidden bg-neutral-100">
+          <div className="relative aspect-[16/9] max-h-[72vh] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
             <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
           </div>
 
-          <section className="grid gap-8 border-b border-neutral-200 py-8 md:grid-cols-[minmax(180px,0.45fr)_1fr] md:gap-16 md:py-10">
+          <section className="grid gap-8 border-b border-neutral-200 dark:border-white/10 py-8 md:grid-cols-[minmax(180px,0.45fr)_1fr] md:gap-16 md:py-10">
             <div className="flex items-start gap-3">
               <button
                 type="button"
                 onClick={handleShare}
                 aria-label="Share this article"
-                className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+                className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 dark:border-white/20 text-black dark:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 title="Share article"
               >
                 {shareFeedback === "Shared" || shareFeedback === "Link copied" ? (
@@ -87,14 +87,14 @@ export default function NewsArticleClient({ item, relatedItems }: NewsArticleCli
                   rel="noreferrer"
                   aria-label="Open original publication"
                   title="Open original publication"
-                  className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 dark:border-white/20 text-black dark:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 >
                   <ExternalLink className="h-5 w-5" />
                 </a>
               )}
-              {shareFeedback && <span role="status" className="self-center text-xs text-neutral-500">{shareFeedback}</span>}
+              {shareFeedback && <span role="status" className="self-center text-xs text-neutral-500 dark:text-neutral-400">{shareFeedback}</span>}
             </div>
-            <p className="max-w-3xl font-display text-xl leading-relaxed text-neutral-800 sm:text-2xl md:text-3xl">
+            <p className="max-w-3xl font-display text-xl leading-relaxed text-neutral-800 dark:text-neutral-200 sm:text-2xl md:text-3xl">
               {item.excerpt}
             </p>
           </section>
@@ -102,23 +102,23 @@ export default function NewsArticleClient({ item, relatedItems }: NewsArticleCli
 
         {relatedItems.length > 0 && (
           <section aria-labelledby="more-dispatches" className="mx-auto mt-16 max-w-[1320px]">
-            <div className="mb-6 flex items-end justify-between border-b border-neutral-200 pb-4">
+            <div className="mb-6 flex items-end justify-between border-b border-neutral-200 dark:border-white/10 pb-4">
               <div>
-                <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-500">Continue reading</p>
-                <h2 id="more-dispatches" className="font-display text-2xl font-normal sm:text-3xl">More dispatches</h2>
+                <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Continue reading</p>
+                <h2 id="more-dispatches" className="font-display text-2xl font-normal text-black dark:text-white sm:text-3xl">More dispatches</h2>
               </div>
-              <Link href="/news" aria-label="View all news" className="flex h-10 w-10 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100">
+              <Link href="/news" aria-label="View all news" className="flex h-10 w-10 items-center justify-center border border-neutral-300 dark:border-white/20 text-black dark:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </div>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {relatedItems.map((relatedItem) => (
                 <Link key={relatedItem.id} href={`/news/${relatedItem.slug}`} className="group">
-                  <div className="mb-4 aspect-[16/10] overflow-hidden bg-neutral-100">
+                  <div className="mb-4 aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                     <img src={relatedItem.image} alt={relatedItem.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
                   </div>
-                  <p className="mb-2 text-[10px] uppercase tracking-wider text-neutral-500">{relatedItem.date} / {relatedItem.category}</p>
-                  <h3 className="font-display text-lg leading-snug group-hover:opacity-70">{relatedItem.title}</h3>
+                  <p className="mb-2 text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400">{relatedItem.date} / {relatedItem.category}</p>
+                  <h3 className="font-display text-lg leading-snug text-black dark:text-white group-hover:opacity-70">{relatedItem.title}</h3>
                 </Link>
               ))}
             </div>

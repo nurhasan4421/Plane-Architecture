@@ -56,22 +56,22 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <main className="pt-[86px] font-body">
         <section className="mx-auto grid max-w-[1440px] gap-12 px-5 pb-14 pt-10 sm:px-8 md:gap-16 md:pb-20 md:pt-16 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:px-16">
           <div>
-            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-neutral-500">{settings.siteName} / Dhaka</p>
-            <h1 className="max-w-3xl font-display text-4xl font-normal leading-tight sm:text-5xl lg:text-6xl">
+            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">{settings.siteName} / Dhaka</p>
+            <h1 className="max-w-3xl font-display text-4xl font-normal leading-tight sm:text-5xl lg:text-6xl text-black dark:text-white">
               {settings.contact?.heading || "LET'S MAKE ROOM FOR WHAT'S NEXT."}
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
+            <p className="mt-6 max-w-xl text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg sm:leading-8">
               {settings.contact?.intro || "Tell us about the place, the people, and the possibility. Our Dhaka studio will be in touch."}
             </p>
           </div>
 
-          <div className="relative min-h-[260px] overflow-hidden bg-[#eef2ec] sm:min-h-[340px] lg:min-h-[390px]" aria-hidden="true">
+          <div className="relative min-h-[260px] overflow-hidden bg-[#eef2ec] dark:bg-[#18201a] sm:min-h-[340px] lg:min-h-[390px]" aria-hidden="true">
             <svg viewBox="0 0 620 430" fill="none" className="absolute inset-0 h-full w-full" role="img">
               <path d="M0 360H620M0 390H620M56 0V430M96 0V430M136 0V430M176 0V430M216 0V430M256 0V430M296 0V430M336 0V430M376 0V430M416 0V430M456 0V430M496 0V430M536 0V430M576 0V430" stroke="#d7dfd5" strokeWidth="1" />
               <path d="M86 360V213L179 151V360M179 360V91L310 151V360M310 360V184L430 115V360M430 360V220L535 175V360" stroke="#294b3d" strokeWidth="3" />
@@ -82,26 +82,26 @@ export default function ContactPage() {
               <circle cx="310" cy="61" r="11" fill="#d15d43" />
               <path d="M310 42V20M298 61H276M322 61H344" stroke="#d15d43" strokeWidth="2" />
             </svg>
-            <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-[0.18em] text-[#45604f]">A studio shaped by place</span>
+            <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-[0.18em] text-[#45604f] dark:text-[#7fa58d]">A studio shaped by place</span>
           </div>
         </section>
 
-        <section className="border-y border-neutral-200 bg-[#f7f8f5]">
+        <section className="border-y border-neutral-200 dark:border-neutral-800 bg-[#f7f8f5] dark:bg-[#121212]">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-12 sm:px-8 md:grid-cols-[0.85fr_1.15fr] md:gap-16 md:py-16 lg:px-16">
             <div>
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500">One studio, open to the world</p>
-              <h2 className="font-display text-3xl font-normal sm:text-4xl">Visit or get in touch</h2>
-              <div className="mt-8 space-y-5 text-base leading-7 text-neutral-700">
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`} target="_blank" rel="noreferrer" className="flex items-start gap-4 hover:text-black">
-                  <MapPin className="mt-1 h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
+              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">One studio, open to the world</p>
+              <h2 className="font-display text-3xl font-normal sm:text-4xl text-black dark:text-white">Visit or get in touch</h2>
+              <div className="mt-8 space-y-5 text-base leading-7 text-neutral-700 dark:text-neutral-300">
+                <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`} target="_blank" rel="noreferrer" className="flex items-start gap-4 hover:text-black dark:hover:text-white transition-colors">
+                  <MapPin className="mt-1 h-5 w-5 shrink-0 text-[#476653] dark:text-[#6fa380]" aria-hidden="true" />
                   <span>{address}</span>
                 </a>
-                <a href={`tel:${phone}`} className="flex items-center gap-4 hover:text-black">
-                  <Phone className="h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
+                <a href={`tel:${phone}`} className="flex items-center gap-4 hover:text-black dark:hover:text-white transition-colors">
+                  <Phone className="h-5 w-5 shrink-0 text-[#476653] dark:text-[#6fa380]" aria-hidden="true" />
                   <span>{phone}</span>
                 </a>
-                <a href={`mailto:${email}`} className="flex items-center gap-4 hover:text-black">
-                  <Mail className="h-5 w-5 shrink-0 text-[#476653]" aria-hidden="true" />
+                <a href={`mailto:${email}`} className="flex items-center gap-4 hover:text-black dark:hover:text-white transition-colors">
+                  <Mail className="h-5 w-5 shrink-0 text-[#476653] dark:text-[#6fa380]" aria-hidden="true" />
                   <span>{email}</span>
                 </a>
               </div>
@@ -109,7 +109,7 @@ export default function ContactPage() {
                 {socialLinks.map(({ label, url }) => {
                   const isInstagram = label.toLowerCase().includes("instagram");
                   return (
-                    <a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label} title={label} className="flex h-11 w-11 items-center justify-center border border-neutral-300 text-neutral-700 transition-colors hover:border-black hover:bg-black hover:text-white">
+                    <a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label} title={label} className="flex h-11 w-11 items-center justify-center border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 transition-colors hover:border-black dark:hover:border-white hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black">
                       {isInstagram ? (
                         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
                           <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
@@ -127,47 +127,47 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="border-t border-neutral-200 pt-8 md:border-l md:border-t-0 md:pl-12 md:pt-0">
-              <p className="mb-6 text-xs uppercase tracking-[0.2em] text-neutral-500">Project inquiries</p>
+            <div className="border-t border-neutral-200 dark:border-neutral-800 pt-8 md:border-l md:border-t-0 md:pl-12 md:pt-0">
+              <p className="mb-6 text-xs uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Project inquiries</p>
               {submitted ? (
-                <div className="border-l-2 border-[#476653] bg-white p-6 sm:p-8">
-                  <h3 className="font-display text-2xl">Thank you, {formData.name}.</h3>
-                  <p className="mt-3 text-base leading-7 text-neutral-600">Your inquiry has been sent. Our Dhaka studio will follow up at {formData.email}.</p>
-                  <button type="button" onClick={() => { setSubmitted(false); setFormData({ name: "", email: "", type: "New Project", budget: "", message: "" }); }} className="mt-6 text-sm underline underline-offset-4">Send another inquiry</button>
+                <div className="border-l-2 border-[#476653] dark:border-[#6fa380] bg-white dark:bg-[#181818] p-6 sm:p-8">
+                  <h3 className="font-display text-2xl text-black dark:text-white">Thank you, {formData.name}.</h3>
+                  <p className="mt-3 text-base leading-7 text-neutral-600 dark:text-neutral-300">Your inquiry has been sent. Our Dhaka studio will follow up at {formData.email}.</p>
+                  <button type="button" onClick={() => { setSubmitted(false); setFormData({ name: "", email: "", type: "New Project", budget: "", message: "" }); }} className="mt-6 text-sm underline underline-offset-4 text-black dark:text-white">Send another inquiry</button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
-                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
+                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
                     Your name *
-                    <input required autoComplete="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black" placeholder="Name" />
+                    <input required autoComplete="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} className="min-h-12 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#181818] px-4 text-base normal-case tracking-normal text-black dark:text-white outline-none focus:border-black dark:focus:border-white" placeholder="Name" />
                   </label>
-                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
+                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
                     Email address *
-                    <input required type="email" autoComplete="email" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black" placeholder="you@example.com" />
+                    <input required type="email" autoComplete="email" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} className="min-h-12 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#181818] px-4 text-base normal-case tracking-normal text-black dark:text-white outline-none focus:border-black dark:focus:border-white" placeholder="you@example.com" />
                   </label>
-                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
+                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
                     Inquiry type
-                    <select value={formData.type} onChange={(event) => setFormData({ ...formData, type: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black">
+                    <select value={formData.type} onChange={(event) => setFormData({ ...formData, type: event.target.value })} className="min-h-12 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#181818] px-4 text-base normal-case tracking-normal text-black dark:text-white outline-none focus:border-black dark:focus:border-white">
                       {(settings.contact?.inquiryTypes?.length ? settings.contact.inquiryTypes : ["New Project", "Masterplanning", "Press & Media", "Careers", "General"]).map((type) => (
                         <option key={type} value={type}>{type}</option>
                       ))}
                     </select>
                   </label>
-                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600">
+                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
                     Estimated budget
-                    <select value={formData.budget} onChange={(event) => setFormData({ ...formData, budget: event.target.value })} className="min-h-12 border border-neutral-300 bg-white px-4 text-base normal-case tracking-normal text-black outline-none focus:border-black">
+                    <select value={formData.budget} onChange={(event) => setFormData({ ...formData, budget: event.target.value })} className="min-h-12 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#181818] px-4 text-base normal-case tracking-normal text-black dark:text-white outline-none focus:border-black dark:focus:border-white">
                       <option value="">Select a range</option>
                       {(settings.contact?.budgetOptions?.length ? settings.contact.budgetOptions : ["Under BDT 10 lakh", "BDT 10-50 lakh", "BDT 50 lakh-2 crore", "Above BDT 2 crore", "Not sure yet"]).map((budget) => (
                         <option key={budget} value={budget}>{budget}</option>
                       ))}
                     </select>
                   </label>
-                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 sm:col-span-2">
+                  <label className="grid gap-2 text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 sm:col-span-2">
                     Tell us about your project *
-                    <textarea required rows={5} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} className="resize-y border border-neutral-300 bg-white px-4 py-3 text-base normal-case tracking-normal text-black outline-none focus:border-black" placeholder="Location, project type, timing, or anything else we should know" />
+                    <textarea required rows={5} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} className="resize-y border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#181818] px-4 py-3 text-base normal-case tracking-normal text-black dark:text-white outline-none focus:border-black dark:focus:border-white" placeholder="Location, project type, timing, or anything else we should know" />
                   </label>
-                  {errorMessage && <p role="alert" className="text-sm text-red-700 sm:col-span-2">{errorMessage}</p>}
-                  <button type="submit" disabled={submitting} className="min-h-12 bg-black px-6 text-sm uppercase tracking-widest text-white transition-colors hover:bg-[#294b3d] disabled:opacity-60 sm:col-span-2">
+                  {errorMessage && <p role="alert" className="text-sm text-red-700 dark:text-red-400 sm:col-span-2">{errorMessage}</p>}
+                  <button type="submit" disabled={submitting} className="min-h-12 bg-black dark:bg-white px-6 text-sm uppercase tracking-widest text-white dark:text-black transition-colors hover:bg-[#294b3d] dark:hover:bg-neutral-200 disabled:opacity-60 sm:col-span-2 cursor-pointer font-medium">
                     {submitting ? "Sending inquiry..." : "Send inquiry"}
                   </button>
                 </form>

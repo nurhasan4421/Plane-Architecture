@@ -34,16 +34,39 @@ export const metadata: Metadata = {
   },
 };
 
+import { ThemeProvider } from "@/components/ThemeProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-white text-black min-h-screen selection:bg-black selection:text-white">
-        <IntroSplash />
-        <SiteContentProvider>{children}</SiteContentProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  if (window.location.pathname.startsWith('/admin')) return;
+                  var t = localStorage.getItem('plane_theme');
+                  if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] min-h-screen selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+        <ThemeProvider>
+          <IntroSplash />
+          <SiteContentProvider>{children}</SiteContentProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

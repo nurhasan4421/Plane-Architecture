@@ -42,10 +42,10 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
     >
       <Link
         href={`/projects/${project.slug}`}
-        className="relative block aspect-[4/5] w-full overflow-hidden bg-neutral-100"
+        className="relative block aspect-[4/5] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900"
       >
         <div
-          className={`absolute inset-0 bg-neutral-200 transition-opacity duration-700 ${
+          className={`absolute inset-0 bg-neutral-200 dark:bg-neutral-800 transition-opacity duration-700 ${
             isLoaded ? "opacity-0" : "opacity-100 animate-pulse"
           }`}
         />
@@ -59,15 +59,15 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       </Link>
 
       <div className="pt-4">
-        <Link href={`/projects/${project.slug}`} className="text-black hover:opacity-70">
+        <Link href={`/projects/${project.slug}`} className="text-black dark:text-white hover:opacity-70 transition-opacity">
           <h2 className="font-display text-lg font-normal leading-snug sm:text-xl">
             {project.title}
           </h2>
         </Link>
-        <p className="mt-1 text-[11px] uppercase tracking-wider text-neutral-600">
+        <p className="mt-1 text-[11px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
           {project.typology} / {project.category} / {project.year}
         </p>
-        <p className="mt-2 text-xs text-neutral-500">{project.location}</p>
+        <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-500">{project.location}</p>
       </div>
     </article>
   );

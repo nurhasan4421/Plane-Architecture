@@ -120,14 +120,14 @@ export default function HorizontalProjectViewer({
   };
 
   return (
-    <main className="w-full bg-white pt-[50px] font-body text-black lg:pt-[60px]">
+    <main className="w-full bg-white dark:bg-[#0e0e0e] pt-[50px] font-body text-black dark:text-[#f5f5f5] lg:pt-[60px] transition-colors duration-200">
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-16 px-5 pb-20 pt-6 sm:px-10 lg:gap-24 lg:px-16">
         <section aria-labelledby="project-title">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-neutral-500">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
             {project.category} / {project.year}
           </p>
           <div className="mb-6 flex items-center justify-between gap-4">
-            <h1 id="project-title" className="font-display text-3xl font-normal leading-tight sm:text-4xl lg:text-5xl">
+            <h1 id="project-title" className="font-display text-3xl font-normal leading-tight sm:text-4xl lg:text-5xl text-black dark:text-white">
               {project.title}
             </h1>
             {nextProject && (
@@ -135,7 +135,7 @@ export default function HorizontalProjectViewer({
                 href={`/projects/${nextProject.slug}`}
                 aria-label={`Next ${project.category} project: ${nextProject.title}`}
                 title={`Next project: ${nextProject.title}`}
-                className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 transition-colors hover:bg-neutral-100"
+                className="flex h-11 w-11 shrink-0 items-center justify-center border border-neutral-300 dark:border-neutral-700 text-black dark:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
               >
                 <ChevronRight className="h-5 w-5" />
               </Link>
@@ -145,7 +145,7 @@ export default function HorizontalProjectViewer({
             type="button"
             onClick={() => openImageByIndex(0)}
             aria-label={`Open image: ${project.title}`}
-            className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden bg-neutral-100"
+            className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden bg-neutral-100 dark:bg-neutral-900"
           >
             <img
               src={project.heroImage}
@@ -161,19 +161,19 @@ export default function HorizontalProjectViewer({
         {/* Project Overview without divider lines */}
         <section aria-labelledby="project-overview" className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:gap-16">
           <div>
-            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400">Project Overview</p>
-            <h2 id="project-overview" className="mb-5 max-w-3xl font-display text-3xl font-normal leading-tight sm:text-4xl lg:text-5xl">
+            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Project Overview</p>
+            <h2 id="project-overview" className="mb-5 max-w-3xl font-display text-3xl font-normal leading-tight sm:text-4xl lg:text-5xl text-black dark:text-white">
               {project.title}
             </h2>
-            <p className="max-w-3xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8 lg:text-xl lg:leading-9">
+            <p className="max-w-3xl text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg sm:leading-8 lg:text-xl lg:leading-9">
               {project.description}
             </p>
 
             <div className="mt-8 flex items-center gap-3">
-              <span className="mr-1 text-[10px] uppercase tracking-widest text-neutral-400">Share project</span>
+              <span className="mr-1 text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500">Share project</span>
               <button
                 onClick={handleCopyLink}
-                className="flex h-9 w-9 items-center justify-center bg-black text-white transition-colors hover:bg-neutral-700"
+                className="flex h-9 w-9 items-center justify-center bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-neutral-700 dark:hover:bg-neutral-200 cursor-pointer"
                 title="Copy project link"
                 aria-label="Copy project link"
               >
@@ -181,18 +181,18 @@ export default function HorizontalProjectViewer({
               </button>
               <a
                 href={`mailto:hello@planearchitect.com?subject=${encodeURIComponent(project.title)}&body=${encodeURIComponent(`Check out ${project.title} by Plane Architect: `)}`}
-                className="flex h-9 w-9 items-center justify-center bg-black text-white transition-colors hover:bg-neutral-700"
+                className="flex h-9 w-9 items-center justify-center bg-black dark:bg-white text-white dark:text-black transition-colors hover:bg-neutral-700 dark:hover:bg-neutral-200 cursor-pointer"
                 title="Share via email"
                 aria-label="Share via email"
               >
                 <Mail className="h-4 w-4" />
               </a>
-              {isCopied && <span className="text-xs text-emerald-700">Copied</span>}
+              {isCopied && <span className="text-xs text-emerald-700 dark:text-emerald-400">Copied</span>}
             </div>
           </div>
 
           <div>
-            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-neutral-400">Specifications & Data</p>
+            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Specifications & Data</p>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3 lg:grid-cols-2">
               {[
                 ["Location", project.location],
@@ -209,8 +209,8 @@ export default function HorizontalProjectViewer({
                 ["Structural System", project.structuralSystem || "Cast-in-place reinforced concrete & post-tensioned slabs"],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <dt className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 lg:text-[11px]">{label}</dt>
-                  <dd className="text-xs leading-5 text-neutral-800 lg:text-sm lg:leading-6 font-medium">{value}</dd>
+                  <dt className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500 lg:text-[11px]">{label}</dt>
+                  <dd className="text-xs leading-5 text-neutral-800 dark:text-neutral-200 lg:text-sm lg:leading-6 font-medium">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -220,10 +220,10 @@ export default function HorizontalProjectViewer({
         {/* Feature Images Section with Google Drive-style Layout Toggle for Mobile */}
         <section aria-labelledby="featured-collage" className="w-full space-y-4">
           {/* Mobile View Toggle Bar (Google Drive Pill Style) */}
-          <div className="flex md:hidden items-center justify-between border-b border-black/10 pb-3 pt-1">
+          <div className="flex md:hidden items-center justify-between border-b border-black/10 dark:border-white/10 pb-3 pt-1">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-medium">Feature Views</p>
-              <p className="text-xs text-neutral-600 font-medium">{collageImages.length} Photographs</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500 font-medium">Feature Views</p>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">{collageImages.length} Photographs</p>
             </div>
 
             {/* Clean minimalist icons: Stack and Dashboard (Grid) */}
@@ -234,7 +234,7 @@ export default function HorizontalProjectViewer({
                 aria-label="Stack view"
                 title="Stack view (one by one)"
                 className={`p-1.5 transition-colors cursor-pointer ${
-                  mobileLayout === "stack" ? "text-black" : "text-neutral-300 hover:text-neutral-600"
+                  mobileLayout === "stack" ? "text-black dark:text-white" : "text-neutral-300 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-300"
                 }`}
               >
                 <Rows3 className="h-5 w-5" />
@@ -246,7 +246,7 @@ export default function HorizontalProjectViewer({
                 aria-label="Dashboard grid view"
                 title="Dashboard view (2 in a row)"
                 className={`p-1.5 transition-colors cursor-pointer ${
-                  mobileLayout === "grid" ? "text-black" : "text-neutral-300 hover:text-neutral-600"
+                  mobileLayout === "grid" ? "text-black dark:text-white" : "text-neutral-300 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-300"
                 }`}
               >
                 <LayoutGrid className="h-5 w-5" />
@@ -430,8 +430,8 @@ export default function HorizontalProjectViewer({
         {/* Architectural Narrative, History & Design Concept */}
         <section aria-labelledby="project-narrative" className="space-y-10 pt-4">
           <div className="max-w-3xl">
-            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400">Design Biography & Narrative</p>
-            <h2 id="project-narrative" className="font-display text-3xl font-normal sm:text-4xl text-black">
+            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Design Biography & Narrative</p>
+            <h2 id="project-narrative" className="font-display text-3xl font-normal sm:text-4xl text-black dark:text-white">
               Architecture, Planning & Concept
             </h2>
           </div>
@@ -439,11 +439,11 @@ export default function HorizontalProjectViewer({
           <div className="grid gap-10 md:grid-cols-2 lg:gap-14">
             {/* Story 1: Site Context & History */}
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-black" />
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-white" />
                 Site Context & History
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 font-light">
+              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 font-light">
                 {project.historyContext ||
                   "The project emerges from deep analysis of the historical Bengal delta topography, negotiating shifting waterfront boundaries, seasonal flood thresholds, and the vibrant civic fabric of the surrounding urban community."}
               </p>
@@ -451,11 +451,11 @@ export default function HorizontalProjectViewer({
 
             {/* Story 2: Architectural & Spatial Concept */}
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-black" />
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-white" />
                 Spatial Concept & Form
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 font-light">
+              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 font-light">
                 {project.designConcept ||
                   "Sculpted as an interlocking composition of solid mass and porous voids, the architecture frames indirect northern light while creating deep shaded thresholds that invite spontaneous gathering, quiet contemplation, and natural ventilation."}
               </p>
@@ -463,11 +463,11 @@ export default function HorizontalProjectViewer({
 
             {/* Story 3: Planning, Craft & Materiality */}
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-black" />
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-white" />
                 Planning, Craft & Construction
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 font-light">
+              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 font-light">
                 {project.planningStory ||
                   "Constructed through close collaboration between structural engineers and regional artisan bricklayers, the envelope celebrates board-formed textures, hand-fired terracotta jali screens, and precision post-tensioned spans engineered for generations of permanence."}
               </p>
@@ -475,11 +475,11 @@ export default function HorizontalProjectViewer({
 
             {/* Story 4: Ecological Adaptation & Climate Strategy */}
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-black" />
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-white" />
                 Climate Strategy & Ecology
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 font-light">
+              <p className="text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 font-light">
                 {project.sustainabilityStory ||
                   "Harnessing seasonal breeze vectors, evaporative courtyard reflection basins, and full-volume rainwater collection, the project functions as a living ecological organism that minimizes operational carbon while maintaining exceptional thermal comfort."}
               </p>
@@ -492,9 +492,9 @@ export default function HorizontalProjectViewer({
           <section aria-labelledby="project-gallery">
             <div className="mb-6 flex items-end justify-between pb-3">
               <div>
-                <h2 id="project-gallery" className="font-display text-2xl font-normal sm:text-3xl">Additional Views</h2>
+                <h2 id="project-gallery" className="font-display text-2xl font-normal sm:text-3xl text-black dark:text-white">Additional Views</h2>
               </div>
-              <span className="text-xs text-neutral-400">{project.gallery.length - 6} more images</span>
+              <span className="text-xs text-neutral-400 dark:text-neutral-500">{project.gallery.length - 6} more images</span>
             </div>
             <div className="grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:gap-4">
               {project.gallery.slice(6).map((image, index) => {
@@ -506,7 +506,7 @@ export default function HorizontalProjectViewer({
                     type="button"
                     onClick={() => openImageByIndex(1 + 6 + index)}
                     aria-label={`Open image: ${alt}`}
-                    className="group relative block w-full cursor-zoom-in overflow-hidden bg-neutral-100 text-left lg:col-span-4 aspect-[4/3]"
+                    className="group relative block w-full cursor-zoom-in overflow-hidden bg-neutral-100 dark:bg-neutral-900 text-left lg:col-span-4 aspect-[4/3]"
                   >
                     <img
                       src={image.url}
@@ -529,26 +529,26 @@ export default function HorizontalProjectViewer({
         {/* Project Credits & Engineering Partners */}
         <section aria-labelledby="project-credits" className="grid gap-6 sm:grid-cols-[minmax(160px,0.4fr)_1fr] pt-4">
           <div>
-            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400">People & partners</p>
-            <h2 id="project-credits" className="font-display text-2xl font-normal sm:text-3xl">Project Credits</h2>
+            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">People & partners</p>
+            <h2 id="project-credits" className="font-display text-2xl font-normal sm:text-3xl text-black dark:text-white">Project Credits</h2>
           </div>
           <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
             {project.credits?.map((credit, index) => (
               <div key={`${credit.role}-${index}`}>
-                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 lg:text-xs">{credit.role}</h3>
-                <p className="text-sm leading-6 lg:text-base lg:leading-7">{credit.people.join(", ")}</p>
+                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500 lg:text-xs">{credit.role}</h3>
+                <p className="text-sm leading-6 lg:text-base lg:leading-7 text-neutral-800 dark:text-neutral-200">{credit.people.join(", ")}</p>
               </div>
             ))}
             {project.collaborators && project.collaborators.length > 0 && (
               <div>
-                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 lg:text-xs">Engineers & Collaborators</h3>
-                <p className="text-sm leading-6 lg:text-base lg:leading-7">{project.collaborators.join(", ")}</p>
+                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500 lg:text-xs">Engineers & Collaborators</h3>
+                <p className="text-sm leading-6 lg:text-base lg:leading-7 text-neutral-800 dark:text-neutral-200">{project.collaborators.join(", ")}</p>
               </div>
             )}
             {project.awards && project.awards.length > 0 && (
               <div>
-                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 lg:text-xs">Awards & Recognition</h3>
-                <p className="text-sm leading-6 lg:text-base lg:leading-7">{project.awards.join(" / ")}</p>
+                <h3 className="mb-1 text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500 lg:text-xs">Awards & Recognition</h3>
+                <p className="text-sm leading-6 lg:text-base lg:leading-7 text-neutral-800 dark:text-neutral-200">{project.awards.join(" / ")}</p>
               </div>
             )}
           </div>
@@ -557,15 +557,15 @@ export default function HorizontalProjectViewer({
         {/* Project Owner / Client Testimonial - Compact card without picture */}
         {project.quote && (
           <section aria-labelledby="project-testimonial" className="flex justify-center py-6">
-            <div className="w-full max-w-xl border border-neutral-200 bg-[#faf9f6] p-6 sm:p-8">
-              <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400">Project Testimonial</p>
-              <blockquote id="project-testimonial" className="font-display text-base italic leading-relaxed text-neutral-800 sm:text-lg">
+            <div className="w-full max-w-xl border border-neutral-200 dark:border-neutral-800 bg-[#faf9f6] dark:bg-[#151515] p-6 sm:p-8">
+              <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Project Testimonial</p>
+              <blockquote id="project-testimonial" className="font-display text-base italic leading-relaxed text-neutral-800 dark:text-neutral-200 sm:text-lg">
                 &ldquo;{project.quote}&rdquo;
               </blockquote>
-              <div className="mt-4 border-t border-neutral-200/60 pt-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-black">{project.quoteAuthor || "Plane Architect"}</p>
+              <div className="mt-4 border-t border-neutral-200/60 dark:border-neutral-800 pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-black dark:text-white">{project.quoteAuthor || "Plane Architect"}</p>
                 {project.quoteAuthorRole && (
-                  <p className="mt-0.5 text-[11px] text-neutral-500">{project.quoteAuthorRole}</p>
+                  <p className="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">{project.quoteAuthorRole}</p>
                 )}
               </div>
             </div>

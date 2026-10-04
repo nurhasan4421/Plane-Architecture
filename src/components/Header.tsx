@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import PlaneLogo from "./PlaneLogo";
 import NavigationDrawer from "./NavigationDrawer";
+import ThemeToggle from "./ThemeToggle";
 import { CATEGORIES_CONFIG } from "@/lib/projects-data";
 import { useSiteContent } from "./SiteContentProvider";
 
@@ -40,7 +41,7 @@ export default function Header({
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-30 select-none border-b border-transparent bg-white/95 font-body backdrop-blur-xs"
+      className="fixed top-0 left-0 right-0 z-30 select-none border-b border-transparent bg-white/95 dark:bg-[#0e0e0e]/95 dark:border-white/10 font-body backdrop-blur-xs transition-colors duration-200"
       onMouseLeave={() => {
         setHoveredCategory(null);
         setIsLogoMenuOpen(false);
@@ -79,7 +80,7 @@ export default function Header({
 
         {/* Center: Desktop Categories */}
         <nav
-          className={`hidden lg:flex lg:flex-1 items-center ${categories.length <= 2 ? "justify-end" : "justify-center"} gap-7 xl:gap-10 text-sm xl:text-base tracking-[0.12em] uppercase font-medium text-[#6b6b6b]`}
+          className={`hidden lg:flex lg:flex-1 items-center ${categories.length <= 2 ? "justify-end" : "justify-center"} gap-7 xl:gap-10 text-sm xl:text-base tracking-[0.12em] uppercase font-medium text-[#6b6b6b] dark:text-[#a0a0a0]`}
         >
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
@@ -100,8 +101,8 @@ export default function Header({
                 onClick={() => onSelectCategory?.(cat.id)}
                 className={`py-2 px-1 uppercase transition-colors duration-150 cursor-pointer ${
                   isActive || hoveredCategory === cat.id
-                    ? "text-black font-semibold"
-                    : "hover:text-black"
+                    ? "text-black dark:text-white font-semibold"
+                    : "hover:text-black dark:hover:text-white"
                 }`}
               >
                 {cat.label}
@@ -110,21 +111,23 @@ export default function Header({
           })}
         </nav>
 
-        {/* Right: Mobile Filter trigger */}
-        <div className="flex items-center gap-4">
+        {/* Right: Theme Toggle (Laptop: right of category | Mobile: beside hamburger) */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
+
           {/* Mobile Filter Button */}
           <button
             onClick={() => {
               setIsMobileFilterOpen((open) => !open);
               setIsLogoMenuOpen(false);
             }}
-            className="lg:hidden p-2 text-black cursor-pointer focus:outline-none"
+            className="lg:hidden p-2 text-black dark:text-white cursor-pointer focus:outline-none"
             aria-label="Filter Categories"
           >
             <div className="flex flex-col items-end gap-1">
-              <div className="w-5 h-[2px] bg-black" />
-              <div className="w-4 h-[2px] bg-black" />
-              <div className="w-3 h-[2px] bg-black" />
+              <div className="w-5 h-[2px] bg-black dark:bg-white transition-colors" />
+              <div className="w-4 h-[2px] bg-black dark:bg-white transition-colors" />
+              <div className="w-3 h-[2px] bg-black dark:bg-white transition-colors" />
             </div>
           </button>
         </div>
@@ -133,7 +136,7 @@ export default function Header({
       <div
         aria-hidden={!hoveredConfig || isLogoMenuOpen}
         inert={!hoveredConfig || isLogoMenuOpen}
-        className={`absolute left-1/2 right-auto top-full z-40 w-screen -translate-x-1/2 overflow-hidden bg-white shadow-lg transition-[max-height,opacity,transform] duration-500 ease-out ${
+        className={`absolute left-1/2 right-auto top-full z-40 w-screen -translate-x-1/2 overflow-hidden bg-white dark:bg-[#141414] dark:border-b dark:border-white/10 shadow-lg dark:shadow-2xl transition-[max-height,opacity,transform] duration-500 ease-out ${
           hoveredConfig && !isLogoMenuOpen
             ? "max-h-[520px] translate-y-0 opacity-100"
             : "pointer-events-none max-h-0 -translate-y-3 opacity-0"
@@ -142,7 +145,7 @@ export default function Header({
         <div className="mx-auto w-full max-w-[1600px] px-5 sm:px-8 lg:px-16">
           <nav
             aria-label={`${hoveredConfig?.label || "Project"} subcategories`}
-            className="flex w-full flex-col items-start justify-center gap-3 py-7 text-base uppercase tracking-wider text-neutral-600 xl:text-lg"
+            className="flex w-full flex-col items-start justify-center gap-3 py-7 text-base uppercase tracking-wider text-neutral-600 dark:text-neutral-400 xl:text-lg"
             style={{ paddingLeft: `${submenuOffset}px` }}
           >
             {hoveredConfig?.subcategories.map((subcategory) => {
@@ -167,10 +170,10 @@ export default function Header({
                     subcategory.id === "all" ? undefined : subcategory.id,
                   )
                 }
-                className={`flex w-full items-center justify-between py-1 pr-5 uppercase transition-colors duration-150 ${isHighlighted ? "font-semibold text-black" : "text-neutral-600"}`}
+                className={`flex w-full items-center justify-between py-1 pr-5 uppercase transition-colors duration-150 ${isHighlighted ? "font-semibold text-black dark:text-white" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"}`}
               >
                 <span>{subcategory.label}</span>
-                <span className="ml-8 text-xs tabular-nums text-neutral-400">{getProjectCount(hoveredConfig.id, subcategory.id)}</span>
+                <span className="ml-8 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">{getProjectCount(hoveredConfig.id, subcategory.id)}</span>
               </button>
               );
             })}
@@ -179,8 +182,8 @@ export default function Header({
       </div>
 
       {isMobileFilterOpen && (
-        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 bg-white shadow-lg lg:hidden">
-          <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 py-2">
+        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] border-t border-neutral-200 dark:border-white/10 bg-white dark:bg-[#141414] shadow-lg lg:hidden">
+          <nav aria-label="Project categories" className="max-h-[min(70vh,480px)] overflow-y-auto border-r border-neutral-200 dark:border-white/10 py-2">
             {categories.map((category) => (
               <button
                 key={category.id}
@@ -189,8 +192,8 @@ export default function Header({
                 onClick={() => setMobileCategory(category.id)}
                 className={`block w-full px-4 py-3 text-left text-xs font-medium uppercase tracking-wide transition-colors sm:px-6 sm:text-sm ${
                   mobileCategory === category.id
-                    ? "bg-black text-white"
-                    : "text-neutral-600 hover:bg-neutral-100 hover:text-black"
+                    ? "bg-black dark:bg-white text-white dark:text-black"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white"
                 }`}
               >
                 {category.label}
@@ -201,7 +204,7 @@ export default function Header({
             aria-label={`${mobileConfig.label} subcategories`}
             className="max-h-[min(70vh,480px)] overflow-y-auto px-4 py-3 sm:px-6"
           >
-            <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400">
+            <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
               {mobileConfig.label}
             </p>
             <div className="flex flex-col">
@@ -228,10 +231,10 @@ export default function Header({
                     );
                     setIsMobileFilterOpen(false);
                   }}
-                  className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors sm:text-sm ${isHighlighted ? "font-semibold text-black" : "text-neutral-600"}`}
+                  className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors sm:text-sm ${isHighlighted ? "font-semibold text-black dark:text-white" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"}`}
                 >
                   <span>{subcategory.label}</span>
-                  <span className="ml-4 text-xs tabular-nums text-neutral-400">{getProjectCount(mobileCategory, subcategory.id)}</span>
+                  <span className="ml-4 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">{getProjectCount(mobileCategory, subcategory.id)}</span>
                 </button>
                 );
               })}

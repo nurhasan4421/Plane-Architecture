@@ -1560,7 +1560,7 @@ export default function AdminPage() {
 
   if (!authReady || (authSession?.user && isAdmin === null)) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f6f5f1] text-[#171717]">
+      <div className="admin-container flex min-h-screen items-center justify-center bg-[#f6f5f1] text-[#171717]">
         <p className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-neutral-500">
           <span className="h-4 w-4 animate-spin border border-black/20 border-t-black" />
           {authReady ? "Verifying administrator access" : "Loading admin access"}
@@ -1571,7 +1571,7 @@ export default function AdminPage() {
 
   if (!isSupabaseConfigured || !supabase) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f6f5f1] px-6 text-[#171717]">
+      <div className="admin-container flex min-h-screen items-center justify-center bg-[#f6f5f1] px-6 text-[#171717]">
         <div className="w-full max-w-lg border border-black/10 bg-white p-8">
           <p className={labelClass}>Supabase setup required</p>
           <h1 className="mt-3 font-display text-3xl">Connect the live project</h1>
@@ -1583,7 +1583,7 @@ export default function AdminPage() {
 
   if (!authSession?.user || isAdmin !== true) {
     return (
-      <div className="grid min-h-screen bg-[#f6f5f1] text-[#171717] lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.82fr)]">
+      <div className="admin-container grid min-h-screen bg-[#f6f5f1] text-[#171717] lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.82fr)]">
         <div className="relative hidden min-h-screen overflow-hidden bg-[#171717] p-12 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
           <div className="relative inline-flex w-fit items-center bg-white px-2 py-1"><PlaneLogo imageClassName="h-9 max-w-[170px]" /></div>
@@ -1612,7 +1612,7 @@ export default function AdminPage() {
 
   if (!contentLoaded && !contentError) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f6f5f1] text-[#171717]">
+      <div className="admin-container flex min-h-screen items-center justify-center bg-[#f6f5f1] text-[#171717]">
         <p className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-neutral-500">
           <span className="h-4 w-4 animate-spin border border-black/20 border-t-black" />
           Loading studio content
@@ -1623,7 +1623,7 @@ export default function AdminPage() {
 
   if (contentError) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f6f5f1] px-5 text-[#171717]">
+      <div className="admin-container flex min-h-screen items-center justify-center bg-[#f6f5f1] px-5 text-[#171717]">
         <div className="w-full max-w-lg rounded-[8px] border border-black/10 bg-white p-7 sm:p-9">
           <p className={labelClass}>Content could not be loaded</p>
           <h1 className="mt-2 font-display text-3xl">Check your Supabase setup</h1>
@@ -1649,7 +1649,7 @@ export default function AdminPage() {
   const publishedCount = [...projectDrafts, ...newsDrafts, ...testimonialDrafts].filter((item) => item.isPublished).length;
 
   return (
-    <div className="min-h-screen bg-[#f6f5f1] text-[#171717]">
+    <div className="admin-container min-h-screen bg-[#f6f5f1] text-[#171717]">
       <div className="mx-auto flex min-h-screen max-w-[1680px]">
         <aside className="hidden w-[250px] shrink-0 flex-col border-r border-black/10 bg-white lg:flex">
           <div className="flex h-[76px] items-center border-b border-black/10 px-5"><PlaneLogo imageClassName="h-9 max-w-[170px]" /></div>

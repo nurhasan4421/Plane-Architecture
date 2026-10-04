@@ -20,20 +20,20 @@ export default function AboutPage() {
   const leadership = settings.about?.leadership?.length ? settings.about.leadership : FALLBACK_LEADERSHIP;
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col justify-between select-none font-body">
+    <div className="min-h-screen bg-white dark:bg-[#0e0e0e] text-black dark:text-[#f5f5f5] flex flex-col justify-between select-none font-body transition-colors duration-200">
       <Header activeCategory="architecture" />
 
       <div className="pt-28 pb-20 px-6 md:px-16 lg:px-28 max-w-6xl mx-auto w-full">
         {/* Intro Manifesto */}
         <section className="mb-20">
-          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-3">
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] dark:text-neutral-400 block mb-3">
             {settings.about?.eyebrow || `About ${settings.siteName} • ${settings.tagline}`}
           </span>
-          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-normal leading-tight tracking-tight text-black max-w-4xl mb-10">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-normal leading-tight tracking-tight text-black dark:text-white max-w-4xl mb-10">
             {settings.about?.headline || `${settings.siteName} is an architectural and spatial laboratory based in Dhaka, Bangladesh, investigating how geometric planes mediate climate, water, and human community.`}
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-neutral-700 font-body">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300 font-body">
             <p>
               Founded in Dhaka, Bangladesh, Plane Architect operates at the nexus of deltaic
               geography, tropical climate resilience, and rigorous architectural geometry. Our work
@@ -49,14 +49,14 @@ export default function AboutPage() {
         </section>
 
         {/* Delta Ecology & Sustainability */}
-        <section id="sustainability" className="mb-20 border-t border-neutral-200 pt-16">
-          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-2">
+        <section id="sustainability" className="mb-20 border-t border-neutral-200 dark:border-neutral-800 pt-16">
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] dark:text-neutral-400 block mb-2">
             Design Philosophy
           </span>
-          <h2 className="font-display text-xl sm:text-2xl font-normal text-black mb-6">
+          <h2 className="font-display text-xl sm:text-2xl font-normal text-black dark:text-white mb-6">
             Contextual Materiality & Delta Ecology
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm leading-relaxed text-neutral-700 font-body">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300 font-body">
             <p>
               In Bangladesh, the landscape is in continuous motion with river cycles and seasonal
               monsoons. We view architecture not as a static barrier against nature, but as an
@@ -72,21 +72,21 @@ export default function AboutPage() {
         </section>
 
         {/* Leadership */}
-        <section id="people" className="mb-20 border-t border-neutral-200 pt-16">
-          <span className="font-body text-xs uppercase tracking-widest text-[#797979] block mb-2">
+        <section id="people" className="mb-20 border-t border-neutral-200 dark:border-neutral-800 pt-16">
+          <span className="font-body text-xs uppercase tracking-widest text-[#797979] dark:text-neutral-400 block mb-2">
             Leadership
           </span>
-          <h2 className="font-display text-xl sm:text-2xl font-normal text-black mb-8">
+          <h2 className="font-display text-xl sm:text-2xl font-normal text-black dark:text-white mb-8">
             Studio Partners & Directors
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 font-body">
             {leadership.map((leader, idx) => (
-              <div key={idx} className="border-b border-neutral-100 pb-4">
-                <h3 className="font-display text-sm font-semibold uppercase text-black">
+              <div key={idx} className="border-b border-neutral-100 dark:border-neutral-800 pb-4">
+                <h3 className="font-display text-sm font-semibold uppercase text-black dark:text-white">
                   {leader.name}
                 </h3>
-                <p className="text-xs text-[#797979] mt-0.5">{leader.role}</p>
-                <p className="text-[10px] text-neutral-400 uppercase tracking-widest mt-1">
+                <p className="text-xs text-[#797979] dark:text-neutral-400 mt-0.5">{leader.role}</p>
+                <p className="text-[10px] text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mt-1">
                   {leader.studio} Studio
                 </p>
               </div>
@@ -95,18 +95,18 @@ export default function AboutPage() {
         </section>
 
         {/* Studio Info & Inquiries */}
-        <section id="careers" className="border-t border-neutral-200 pt-16 text-center font-body">
-          <h2 className="font-display text-xl font-normal text-black mb-2">Connect With {settings.siteName}</h2>
-          <p className="text-xs text-[#797979] uppercase tracking-wider max-w-lg mx-auto mb-2">
+        <section id="careers" className="border-t border-neutral-200 dark:border-neutral-800 pt-16 text-center font-body">
+          <h2 className="font-display text-xl font-normal text-black dark:text-white mb-2">Connect With {settings.siteName}</h2>
+          <p className="text-xs text-[#797979] dark:text-neutral-400 uppercase tracking-wider max-w-lg mx-auto mb-2">
             {settings.tagline || "Dhaka, Bangladesh"} • {settings.phone} • {settings.email}
           </p>
-          <p className="text-xs text-neutral-500 max-w-md mx-auto mb-6">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto mb-6">
             We welcome commissions, collaborative competitions, academic partnerships, and career
             inquiries.
           </p>
           <Link
             href="/contact"
-            className="inline-flex px-6 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors"
+            className="inline-flex px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black text-xs uppercase tracking-widest hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
           >
             Contact {settings.siteName}
           </Link>

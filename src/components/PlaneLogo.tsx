@@ -12,6 +12,8 @@ interface PlaneLogoProps {
 export default function PlaneLogo({ className = "", imageClassName = "", onClick }: PlaneLogoProps) {
   const { settings } = useSiteContent();
 
+  const shouldInvert = !imageClassName.includes("invert");
+
   return (
     // Full document navigation guarantees the logo always returns to the homepage.
     // eslint-disable-next-line @next/next/no-html-link-for-pages
@@ -25,7 +27,7 @@ export default function PlaneLogo({ className = "", imageClassName = "", onClick
       <img
         src={settings.logoUrl || "/logo.png"}
         alt={settings.siteName}
-        className={`${imageClassName || "h-[28px] md:h-[34px] lg:h-[38px]"} w-auto object-contain transition-opacity duration-200 group-hover:opacity-75`}
+        className={`${imageClassName || "h-[28px] md:h-[34px] lg:h-[38px]"} ${shouldInvert ? "dark:invert" : ""} w-auto object-contain transition-all duration-200 group-hover:opacity-75`}
       />
     </a>
   );
