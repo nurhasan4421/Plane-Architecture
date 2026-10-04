@@ -1,12 +1,45 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Plus } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { submitContactInquiry } from "@/lib/supabase";
 
 import { useSiteContent } from "@/components/SiteContentProvider";
+
+const CLIENT_FAQS = [
+  {
+    question: "How do we initiate a new architectural commission or project?",
+    answer:
+      "Starting begins with an initial briefing consultation — either at our studio in Dhaka or virtually. You share your site parameters, aspirational goals, functional requirements, and target timeline. From there, we formulate an initial spatial brief, site feasibility appraisal, and a structured roadmap before commencing concept design.",
+  },
+  {
+    question: "How are architectural design fees and project budgets structured?",
+    answer:
+      "We prioritize financial transparency and cost predictability from day one. Design fees are typically structured as milestone-based phases (Concept Design, Schematic Design, Design Development, Permitting & Construction Documentation, and Site Supervision) or as an agreed percentage of construction valuation depending on project scale and typology. We establish cost benchmarks early to guide spatial choices responsibly.",
+  },
+  {
+    question: "What does the contractual framework and onboarding process look like?",
+    answer:
+      "We execute standard professional architectural service agreements aligned with recognized industry standards (such as IAB - Institute of Architects Bangladesh and international practice norms). The contract clearly defines the scope of works, deliverables, project timeline, intellectual property rights, and phased payment schedules so you have complete legal clarity and peace of mind before design commences.",
+  },
+  {
+    question: "How involved will the client be throughout the design journey?",
+    answer:
+      "Our design process is deeply collaborative and communicative. We conduct structured review sessions at each design milestone — presenting physical study models, 3D spatial walkthroughs, microclimate/sunlight simulations, and material palettes. Key decision gates ensure the architecture continuously reflects your vision, practical needs, and lifestyle.",
+  },
+  {
+    question: "Do you handle municipal approvals, permits, and engineering disciplines?",
+    answer:
+      "Yes. We lead and coordinate municipal building submissions (including RAJUK, CDA, RDA, or regional development authorities) for statutory clearances. Furthermore, our studio integrates and oversees all specialized consulting disciplines — structural computation, MEP (mechanical, electrical, plumbing), landscape ecology, acoustic design, and lighting engineering — as a cohesive project team.",
+  },
+  {
+    question: "Does Plane Architect supervise construction on site and assist contractor tendering?",
+    answer:
+      "Yes. A great design relies on rigorous execution. We compile detailed tender documentation, assist you in evaluating contractor bids, and conduct regular on-site inspections. Our site architects monitor material quality, construction tolerances, and craftsmanship fidelity to guarantee the realized building matches the approved architectural drawings and specifications.",
+  },
+];
 
 export default function ContactPage() {
   const { settings } = useSiteContent();
@@ -18,6 +51,7 @@ export default function ContactPage() {
     { label: "LinkedIn", url: "https://www.linkedin.com/company/plane-architect/" },
   ];
 
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -172,6 +206,66 @@ export default function ContactPage() {
                   </button>
                 </form>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Client FAQs Section */}
+        <section id="faq" className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#303030] py-16 sm:py-24 transition-colors duration-200">
+          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-16">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
+              <div>
+                <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+                  Client Guide & Project Onboarding
+                </p>
+                <h2 className="font-display text-3xl font-normal sm:text-4xl lg:text-5xl text-black dark:text-white">
+                  Frequently Asked Questions
+                </h2>
+              </div>
+              <p className="max-w-md text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
+                Everything you need to know about initiating a project, fee structures, contractual transparency, and our collaborative delivery process.
+              </p>
+            </div>
+
+            <div className="divide-y divide-neutral-200 dark:divide-white/10 border-y border-neutral-200 dark:border-white/10">
+              {CLIENT_FAQS.map((faq, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div key={idx} className="py-6 sm:py-7">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      aria-expanded={isOpen}
+                      className="flex w-full items-start justify-between gap-6 text-left group cursor-pointer focus:outline-none"
+                    >
+                      <span className="font-display text-lg sm:text-xl font-normal text-black dark:text-white group-hover:opacity-75 transition-opacity">
+                        {faq.question}
+                      </span>
+                      <span className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-neutral-300 dark:border-white/20 text-neutral-600 dark:text-neutral-300 group-hover:border-black dark:group-hover:border-white transition-colors">
+                        <Plus
+                          className={`h-4 w-4 transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            isOpen ? "rotate-45" : "rotate-0"
+                          }`}
+                        />
+                      </span>
+                    </button>
+
+                    <div
+                      className={`grid transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isOpen
+                          ? "grid-rows-[1fr] opacity-100 mt-4"
+                          : "grid-rows-[0fr] opacity-0 mt-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden min-h-0">
+                        <div className="max-w-4xl text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 font-body pb-2">
+                          {faq.answer}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
