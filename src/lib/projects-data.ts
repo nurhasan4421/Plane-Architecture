@@ -6686,7 +6686,6 @@ export const CATEGORIES_CONFIG = [
     id: "architecture",
     label: "Architecture",
     subcategories: [
-      { id: "all", label: "View all", slug: "/projects" },
       { id: "culture", label: "Culture", slug: "/projects?type=culture" },
       { id: "education", label: "Education", slug: "/projects?type=education" },
       { id: "work", label: "Work", slug: "/projects?type=work" },
@@ -6699,7 +6698,6 @@ export const CATEGORIES_CONFIG = [
     id: "interiors",
     label: "Interiors",
     subcategories: [
-      { id: "all", label: "View all", slug: "/projects?cat=interiors" },
       { id: "workplace", label: "Workplace", slug: "/projects?cat=interiors&type=workplace" },
       { id: "hospitality", label: "Hospitality", slug: "/projects?cat=interiors&type=hospitality" },
       { id: "exhibition", label: "Exhibition", slug: "/projects?cat=interiors&type=exhibition" },
@@ -6709,7 +6707,6 @@ export const CATEGORIES_CONFIG = [
     id: "landscape",
     label: "Landscape",
     subcategories: [
-      { id: "all", label: "View all", slug: "/projects?cat=landscape" },
       { id: "parks", label: "Parks", slug: "/projects?cat=landscape&type=parks" },
       { id: "civic-spaces", label: "Civic Spaces", slug: "/projects?cat=landscape&type=civic-spaces" },
       { id: "gardens", label: "Gardens", slug: "/projects?cat=landscape&type=gardens" },
@@ -6719,7 +6716,6 @@ export const CATEGORIES_CONFIG = [
     id: "planning",
     label: "Planning",
     subcategories: [
-      { id: "all", label: "View all", slug: "/projects?cat=planning" },
       { id: "campus", label: "Campus", slug: "/projects?cat=planning&type=campus" },
       { id: "city", label: "City", slug: "/projects?cat=planning&type=city" },
       { id: "delta", label: "Delta Masterplans", slug: "/projects?cat=planning&type=delta" },
@@ -6729,7 +6725,6 @@ export const CATEGORIES_CONFIG = [
     id: "products",
     label: "Products",
     subcategories: [
-      { id: "all", label: "View all", slug: "/projects?cat=products" },
       { id: "lighting", label: "Lighting", slug: "/projects?cat=products&type=lighting" },
       { id: "furniture", label: "Furniture", slug: "/projects?cat=products&type=furniture" },
       { id: "installations", label: "Installations", slug: "/projects?cat=products&type=installations" },

@@ -164,6 +164,24 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
   );
 }
 
+function seededShuffle<T>(array: T[], seed: number): T[] {
+  const result = [...array];
+  let s = seed;
+  const nextRandom = () => {
+    s |= 0;
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(nextRandom() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export default function ProjectFeed({
   projects,
   testimonials,
@@ -175,7 +193,14 @@ export default function ProjectFeed({
   const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_BATCH);
   const [sortOrder, setSortOrder] = useState<"default" | "random" | "latest" | "oldest">(initialSort);
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-  const [randomSeed, setRandomSeed] = useState(1);
+  const [randomSeed, setRandomSeed] = useState(() => Math.floor(Math.random() * 1000000) + 1);
+
+  useEffect(() => {
+    setSortOrder(initialSort);
+    if (initialSort === "random") {
+      setRandomSeed(Math.floor(Math.random() * 1000000) + 1);
+    }
+  }, [initialSort, activeCategory, activeSubcategory]);
 
   const baseProjects = useMemo(() => {
     return projects.filter((project) => {
@@ -197,13 +222,7 @@ export default function ProjectFeed({
   const filteredProjects = useMemo(() => {
     const list = [...baseProjects];
     if (sortOrder === "random") {
-      // Deterministic shuffle with seed so it doesn't flicker on every render
-      for (let i = list.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.sin(i * 9999 + randomSeed) * 10000) % (i + 1);
-        const index = Math.abs(j);
-        [list[i], list[index]] = [list[index], list[i]];
-      }
-      return list;
+      return seededShuffle(list, randomSeed);
     }
     if (sortOrder === "latest") {
       return list.sort((a, b) => {

@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PlaneLogo from "./PlaneLogo";
 import NavigationDrawer from "./NavigationDrawer";
 import ThemeToggle from "./ThemeToggle";
@@ -14,11 +15,18 @@ interface HeaderProps {
   onSelectCategory?: (category: string, subcategory?: string) => void;
 }
 
+const filterSubcategories = (subs: Array<{ id: string; label: string; slug?: string }>) => {
+  return (subs || []).filter(
+    (sub) => sub.id.toLowerCase() !== "all" && sub.label.toLowerCase() !== "view all"
+  );
+};
+
 export default function Header({
   activeCategory = "architecture",
   activeSubcategory,
   onSelectCategory,
 }: HeaderProps) {
+  const router = useRouter();
   const { settings, projects } = useSiteContent();
   const categories = settings.categories.length ? settings.categories : CATEGORIES_CONFIG;
   const getProjectCount = (categoryId: string, subcategoryId: string) => projects.filter((project) => {
@@ -27,6 +35,7 @@ export default function Header({
     return project.subcategory.toLowerCase().includes(subcategoryId.toLowerCase()) ||
       project.typology.toLowerCase().includes(subcategoryId.toLowerCase());
   }).length;
+
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [mobileCategory, setMobileCategory] = useState(activeCategory === "all" ? (categories[0]?.id || "architecture") : activeCategory);
@@ -36,13 +45,39 @@ export default function Header({
   const desktopBarRef = useRef<HTMLDivElement>(null);
 
   const hoveredConfig = categories.find((category) => category.id === hoveredCategory);
+  const hoveredSubcategories = hoveredConfig ? filterSubcategories(hoveredConfig.subcategories) : [];
+
   const mobileConfig =
     categories.find((category) => category.id === mobileCategory) || categories[0];
-  const mobileSubcategories = mobileConfig?.subcategories || [];
+  const mobileSubcategories = mobileConfig ? filterSubcategories(mobileConfig.subcategories) : [];
 
   const handleHamburgerClick = () => {
     setIsMobileNavOpen((prev) => !prev);
     setIsLogoMenuOpen(false);
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    setHoveredCategory(null);
+    setHoveredSubcategory(null);
+    setIsMobileNavOpen(false);
+
+    if (onSelectCategory) {
+      onSelectCategory(categoryId, undefined);
+    } else {
+      router.push(`/?category=${encodeURIComponent(categoryId)}`);
+    }
+  };
+
+  const handleSubcategoryClick = (categoryId: string, subcategoryId: string) => {
+    setHoveredCategory(null);
+    setHoveredSubcategory(null);
+    setIsMobileNavOpen(false);
+
+    if (onSelectCategory) {
+      onSelectCategory(categoryId, subcategoryId);
+    } else {
+      router.push(`/?category=${encodeURIComponent(categoryId)}&type=${encodeURIComponent(subcategoryId)}`);
+    }
   };
 
   return (
@@ -93,6 +128,7 @@ export default function Header({
             return (
               <button
                 key={cat.id}
+                type="button"
                 onMouseEnter={(event) => {
                   setHoveredCategory(cat.id);
                   setIsLogoMenuOpen(false);
@@ -104,7 +140,7 @@ export default function Header({
                   }
                 }}
                 onFocus={() => setIsLogoMenuOpen(false)}
-                onClick={() => onSelectCategory?.(cat.id)}
+                onClick={() => handleCategoryClick(cat.id)}
                 className={`py-2 px-1 uppercase transition-colors duration-150 cursor-pointer ${
                   isActive || hoveredCategory === cat.id
                     ? "text-black dark:text-white font-semibold"
@@ -161,33 +197,24 @@ export default function Header({
             className="flex w-full flex-col items-start justify-center gap-3 py-7 text-base uppercase tracking-wider text-neutral-600 dark:text-neutral-400 xl:text-lg"
             style={{ paddingLeft: `${submenuOffset}px` }}
           >
-            {hoveredConfig?.subcategories.map((subcategory) => {
-              const isActive = activeCategory === hoveredConfig.id && (
-                subcategory.id === "all"
-                  ? !activeSubcategory
-                  : activeSubcategory === subcategory.id
-              );
+            {hoveredSubcategories.map((subcategory) => {
+              const isActive = activeCategory === hoveredConfig?.id && activeSubcategory === subcategory.id;
               const isHighlighted = isActive || hoveredSubcategory === subcategory.id;
 
               return (
-              <button
-                key={subcategory.id}
-                type="button"
-                aria-pressed={isActive}
-                onMouseEnter={() => setHoveredSubcategory(subcategory.id)}
-                onMouseLeave={() => setHoveredSubcategory(null)}
-                onFocus={() => setHoveredSubcategory(subcategory.id)}
-                onClick={() =>
-                  onSelectCategory?.(
-                    hoveredConfig.id,
-                    subcategory.id === "all" ? undefined : subcategory.id,
-                  )
-                }
-                className={`flex w-full items-center justify-between py-1 pr-5 uppercase transition-colors duration-150 ${isHighlighted ? "font-semibold text-black dark:text-white" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"}`}
-              >
-                <span>{subcategory.label}</span>
-                <span className="ml-8 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">{getProjectCount(hoveredConfig.id, subcategory.id)}</span>
-              </button>
+                <button
+                  key={subcategory.id}
+                  type="button"
+                  aria-pressed={isActive}
+                  onMouseEnter={() => setHoveredSubcategory(subcategory.id)}
+                  onMouseLeave={() => setHoveredSubcategory(null)}
+                  onFocus={() => setHoveredSubcategory(subcategory.id)}
+                  onClick={() => handleSubcategoryClick(hoveredConfig!.id, subcategory.id)}
+                  className={`flex w-full items-center justify-between py-1 pr-5 uppercase transition-colors duration-150 cursor-pointer ${isHighlighted ? "font-semibold text-black dark:text-white" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"}`}
+                >
+                  <span>{subcategory.label}</span>
+                  <span className="ml-8 text-xs tabular-nums text-neutral-400 dark:text-neutral-500">{getProjectCount(hoveredConfig!.id, subcategory.id)}</span>
+                </button>
               );
             })}
           </nav>
@@ -242,16 +269,21 @@ export default function Header({
               aria-label={`${mobileConfig.label} subcategories`}
               className="max-h-[min(60vh,420px)] overflow-y-auto px-4 py-3 sm:px-6"
             >
-              <p className="mb-2 text-[10px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
-                {mobileConfig.label}
-              </p>
+              <div className="mb-2 flex items-center justify-between border-b border-neutral-100 dark:border-white/10 pb-2">
+                <button
+                  type="button"
+                  onClick={() => handleCategoryClick(mobileCategory)}
+                  className="text-left text-xs font-semibold uppercase tracking-[0.14em] text-black dark:text-white hover:underline cursor-pointer"
+                >
+                  All {mobileConfig.label} →
+                </button>
+                <span className="text-xs tabular-nums text-neutral-400 dark:text-neutral-500">
+                  {getProjectCount(mobileCategory, "all")}
+                </span>
+              </div>
               <div className="flex flex-col">
                 {mobileSubcategories.map((subcategory) => {
-                  const isActive = activeCategory === mobileCategory && (
-                    subcategory.id === "all"
-                      ? !activeSubcategory
-                      : activeSubcategory === subcategory.id
-                  );
+                  const isActive = activeCategory === mobileCategory && activeSubcategory === subcategory.id;
                   const isHighlighted = isActive || hoveredSubcategory === subcategory.id;
 
                   return (
@@ -262,14 +294,8 @@ export default function Header({
                       onMouseEnter={() => setHoveredSubcategory(subcategory.id)}
                       onMouseLeave={() => setHoveredSubcategory(null)}
                       onFocus={() => setHoveredSubcategory(subcategory.id)}
-                      onClick={() => {
-                        onSelectCategory?.(
-                          mobileCategory,
-                          subcategory.id === "all" ? undefined : subcategory.id,
-                        );
-                        setIsMobileNavOpen(false);
-                      }}
-                      className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors sm:text-sm ${
+                      onClick={() => handleSubcategoryClick(mobileCategory, subcategory.id)}
+                      className={`flex items-center justify-between py-3 text-left text-xs uppercase tracking-wide transition-colors cursor-pointer sm:text-sm ${
                         isHighlighted
                           ? "font-semibold text-black dark:text-white"
                           : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"

@@ -11,14 +11,26 @@ export default function HomePage() {
   const { settings, projects, testimonials } = useSiteContent();
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeSubcategory, setActiveSubcategory] = useState<string | undefined>(undefined);
+  const [shuffleKey, setShuffleKey] = useState(0);
 
   useEffect(() => {
-    const category = new URLSearchParams(window.location.search).get("category");
-    if (!category || !settings.categories.some((item) => item.id === category)) return;
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category");
+    const subcategory = params.get("type") || params.get("subcategory") || undefined;
+    if (!category) return;
+
+    const validCategory =
+      category === "all" ||
+      settings.categories.some((item) => item.id === category) ||
+      ["architecture", "interiors", "landscape", "planning", "products"].includes(category);
+    if (!validCategory) return;
 
     const timeout = window.setTimeout(() => {
       setActiveCategory(category);
-      setActiveSubcategory(undefined);
+      setActiveSubcategory(subcategory);
+      if (!subcategory) {
+        setShuffleKey((prev) => prev + 1);
+      }
     }, 0);
     return () => window.clearTimeout(timeout);
   }, [settings.categories]);
@@ -26,6 +38,22 @@ export default function HomePage() {
   const handleSelectCategory = (category: string, subcategory?: string) => {
     setActiveCategory(category);
     setActiveSubcategory(subcategory);
+    if (!subcategory) {
+      setShuffleKey((prev) => prev + 1);
+    }
+    const url = new URL(window.location.href);
+    if (category === "all") {
+      url.searchParams.delete("category");
+    } else {
+      url.searchParams.set("category", category);
+    }
+    if (subcategory) {
+      url.searchParams.set("type", subcategory);
+    } else {
+      url.searchParams.delete("type");
+      url.searchParams.delete("subcategory");
+    }
+    window.history.pushState({}, "", url.pathname + url.search);
   };
 
   const showCarousel = settings.carouselEnabled && activeCategory === "all";
@@ -50,13 +78,13 @@ export default function HomePage() {
       {/* Main Project Feed */}
       <div className={showCarousel ? "" : "pt-[68px] sm:pt-[78px] lg:pt-[90px]"}>
         <ProjectFeed
-          key={`${activeCategory}:${activeSubcategory ?? "all"}:${settings.carouselEnabled ? "carousel" : "direct"}`}
+          key={`${activeCategory}:${activeSubcategory ?? "all"}:${shuffleKey}:${settings.carouselEnabled ? "carousel" : "direct"}`}
           projects={projects}
           activeCategory={activeCategory}
           activeSubcategory={activeSubcategory}
           testimonials={testimonials}
-          initialSort={!settings.carouselEnabled && activeCategory === "all" ? "random" : "default"}
-          showSortFilter={!settings.carouselEnabled && activeCategory === "all"}
+          initialSort={!activeSubcategory ? "random" : "default"}
+          showSortFilter={true}
         />
       </div>
 
