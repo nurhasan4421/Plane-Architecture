@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/components/ThemeProvider";
-
 import MobileStartProjectCTA from "@/components/MobileStartProjectCTA";
+import NavigationProgressBar from "@/components/NavigationProgressBar";
 
 export default function RootLayout({
   children,
@@ -66,6 +66,7 @@ export default function RootLayout({
       </head>
       <body className="bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] min-h-screen selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
         <ThemeProvider>
+          <NavigationProgressBar />
           <IntroSplash />
           <SiteContentProvider>
             {children}

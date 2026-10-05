@@ -17,7 +17,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     background-color: #ffffff;
     color: #000000;
   }
@@ -172,4 +171,48 @@
 html.dark ::selection {
   background-color: #ffffff;
   color: #000000;
+}
+
+/* Modern Luxury Scroll Reveal & Loading Motion */
+@keyframes scrollFloatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes progressSlide {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(0.7);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmerEffect 1.8s infinite;
+}
+
+.animate-progress-fast {
+  animation: progressSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

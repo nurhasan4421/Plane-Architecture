@@ -19,7 +19,25 @@ const PROJECTS_PER_BATCH = 30;
 
 function ClientTestimonials({ projects, managedTestimonials }: { projects: Project[]; managedTestimonials: ProjectTestimonial[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const [hasEntered, setHasEntered] = useState(false);
   const [randomProjects, setRandomProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasEntered(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const projectsWithQuotes = useMemo(
     () => projects.filter((project) => project.quote),
@@ -73,7 +91,17 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
   if (testimonials.length === 0) return null;
 
   return (
-    <section aria-labelledby="client-testimonials" className="border-t border-neutral-200 dark:border-neutral-800 pt-6 sm:pt-8">
+    <section
+      ref={containerRef}
+      aria-labelledby="client-testimonials"
+      style={{
+        transitionDuration: "1000ms",
+        transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+      className={`border-t border-neutral-200 dark:border-neutral-800 pt-6 sm:pt-8 will-change-[transform,opacity] transition-[opacity,transform] ${
+        hasEntered ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+      }`}
+    >
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-[9px] uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Testimonials</p>
@@ -126,7 +154,7 @@ function ClientTestimonials({ projects, managedTestimonials }: { projects: Proje
           );
           const className = "group flex w-[75%] max-w-[280px] shrink-0 snap-start flex-col justify-between border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#383838] p-3.5 sm:p-4 transition-colors hover:border-neutral-500 dark:hover:border-neutral-400 sm:w-[260px] lg:w-[280px]";
           return item.projectSlug ? (
-            <Link key={item.id} href={`/projects/${item.projectSlug}`} className={className}>{card}</Link>
+            <Link key={item.id} href={`/projects/${item.projectSlug}`} scroll={false} className={className}>{card}</Link>
           ) : (
             <article key={item.id} className={className}>{card}</article>
           );

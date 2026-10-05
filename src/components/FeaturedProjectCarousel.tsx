@@ -84,6 +84,7 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
             <Link
               key={project.id}
               href={`/projects/${project.slug}`}
+              scroll={false}
               aria-label={`View featured project: ${project.title}`}
               aria-hidden={!isActive}
               tabIndex={isActive ? 0 : -1}
@@ -122,7 +123,11 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
             <span className="sm:hidden">{activeProject.category} / {activeProject.location}</span>
             <span className="hidden sm:inline">{activeProject.category} / {activeProject.typology} / {activeProject.year} / {activeProject.location}</span>
           </p>
-          <Link href={`/projects/${activeProject.slug}`} className="pointer-events-auto group/title inline-block">
+          <Link
+            href={`/projects/${activeProject.slug}`}
+            scroll={false}
+            className="pointer-events-auto group/title inline-block"
+          >
             <h1 className="font-display text-3xl font-normal leading-[0.98] text-white drop-shadow-lg transition-opacity group-hover/title:opacity-75 sm:text-4xl md:text-5xl lg:text-7xl xl:text-[96px]">
               {activeProject.title}
             </h1>

@@ -17,12 +17,16 @@ export default function ProjectDetailClientWrapper({
 }: ProjectDetailClientWrapperProps) {
   const router = useRouter();
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [project.slug]);
+
   const handleSelectCategory = (category: string) => {
     router.push(`/?category=${category}`);
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white dark:bg-[#303030] text-black dark:text-[#f5f5f5] transition-colors duration-200 animate-in fade-in duration-500">
       {/* Top Header */}
       <Header
         activeCategory={project.category}
@@ -31,7 +35,6 @@ export default function ProjectDetailClientWrapper({
 
       {/* Horizontal Storytelling Viewer */}
       <HorizontalProjectViewer project={project} nextProject={nextProject} />
-
     </div>
   );
 }
