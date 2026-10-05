@@ -11,7 +11,7 @@ export default function MobileStartProjectCTA() {
 
   // Hide on start-project and admin pages
   const shouldHide =
-    pathname === "/start-project" || pathname.startsWith("/admin");
+    Boolean(pathname?.startsWith("/start-project") || pathname?.startsWith("/admin"));
 
   useEffect(() => {
     if (shouldHide) {
