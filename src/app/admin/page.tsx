@@ -98,16 +98,16 @@ const emptyProject = (): Project => ({
 
 const emptyNews = (): NewsItem => ({
   id: crypto.randomUUID(),
-  slug: "new-news-story",
-  title: "New Journal Story",
+  slug: `news-${Date.now().toString(36)}`,
+  title: "New Article Title",
   date: new Date().toLocaleDateString("en", { month: "short", year: "numeric" }).toUpperCase(),
-  author: "Plane Architect",
+  author: "Plane Architect Studio",
   category: "Architecture",
-  excerpt: "Add a short introduction.",
-  image: "",
+  excerpt: "Brief summary or lead paragraph for this news item.",
+  image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
   readTime: "4 min read",
-  body: "",
-  isPublished: false,
+  body: "Detailed article body content goes here. Use empty lines between paragraphs to format the article.",
+  isPublished: true,
   sortOrder: 0,
 });
 
@@ -134,7 +134,7 @@ const navItems: { key: AdminSection; label: string; icon: LucideIcon }[] = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
   { key: "projects", label: "Projects", icon: FolderKanban },
   { key: "carousel", label: "Carousel", icon: SlidersHorizontal },
-  { key: "news", label: "Journal", icon: BookOpen },
+  { key: "news", label: "News & Journal", icon: BookOpen },
   { key: "testimonials", label: "Testimonials", icon: UsersRound },
   { key: "categories", label: "Categories", icon: ListTree },
   { key: "cta", label: "Start Project", icon: ArrowRightIcon },
@@ -1635,9 +1635,24 @@ export default function AdminPage() {
     setSelectedProjectId(item.id);
   };
   const addNews = () => {
+    pushToUndoStack();
     const item = emptyNews();
-    setNewsDrafts((current) => [...current, item]);
+    setNewsDrafts((current) => [item, ...current]);
     setSelectedNewsId(item.id);
+  };
+  const duplicateNews = (news: NewsItem) => {
+    pushToUndoStack();
+    const copy: NewsItem = {
+      ...news,
+      id: crypto.randomUUID(),
+      slug: `${news.slug}-copy`,
+      title: `${news.title} (Copy)`,
+      date: new Date().toLocaleDateString("en", { month: "short", year: "numeric" }).toUpperCase(),
+      sortOrder: newsDrafts.length,
+      isPublished: false,
+    };
+    setNewsDrafts((current) => [copy, ...current]);
+    setSelectedNewsId(copy.id);
   };
   const addTestimonial = () => {
     const item = emptyTestimonial();
@@ -2299,10 +2314,188 @@ export default function AdminPage() {
                     </div>
                   </>}
 
-                  {activeSection === "news" && selectedNews && <>
-                    <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7"><div className="min-w-0"><p className={labelClass}>Journal entry</p><h3 className="mt-1 truncate font-display text-2xl">{selectedNews.title}</h3></div><div className="flex items-center gap-4"><PublishStatus published={selectedNews.isPublished ?? true} /><button type="button" onClick={deleteNews} title="Delete story" aria-label="Delete story" className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50"><Trash2 className="h-4 w-4" /></button></div></div>
-                    <div className="space-y-7 p-5 sm:p-7"><div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"><div className="grid content-start gap-4 sm:grid-cols-2"><AdminField label="Story title" value={selectedNews.title} onChange={(value) => updateNews("title", value)} className="sm:col-span-2" /><AdminField label="URL slug" value={selectedNews.slug} onChange={(value) => updateNews("slug", value)} /><AdminField label="Publication date" value={selectedNews.date} onChange={(value) => updateNews("date", value)} /><AdminField label="Author" value={selectedNews.author ?? ""} onChange={(value) => updateNews("author", value)} /><AdminField label="Category" value={selectedNews.category} onChange={(value) => updateNews("category", value)} /><AdminField label="Read time" value={selectedNews.readTime} onChange={(value) => updateNews("readTime", value)} /><AdminField label="Sort order" type="number" value={String(selectedNews.sortOrder ?? 0)} onChange={(value) => updateNews("sortOrder", Number(value))} /><AdminField label="Source URL" value={selectedNews.sourceUrl ?? ""} onChange={(value) => updateNews("sourceUrl", value)} className="sm:col-span-2" /></div><div><p className={labelClass}>Cover image</p><div className="mt-1.5 aspect-[4/3] overflow-hidden border border-black/10 bg-[#f5f4f1]">{selectedNews.image ? <img src={selectedNews.image} alt={`Cover preview for ${selectedNews.title}`} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-neutral-400"><FileImage className="h-6 w-6" /></div>}</div><div className="mt-4"><SupabaseMediaField label="Image URL" value={selectedNews.image} onChange={(value) => updateNews("image", value)} /></div><label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-black/10 pt-4 text-sm text-neutral-700"><input type="checkbox" checked={selectedNews.isPublished ?? true} onChange={(event) => updateNews("isPublished", event.target.checked)} className="h-4 w-4 accent-black" /><span><span className="block text-xs font-medium">Publish story</span><span className="mt-0.5 block text-[10px] text-neutral-500">Show this in the journal</span></span></label></div></div><div className="grid gap-4 border-t border-black/10 pt-6"><AdminField label="Short introduction" value={selectedNews.excerpt} onChange={(value) => updateNews("excerpt", value)} rows={3} /><AdminField label="Article body" value={selectedNews.body ?? ""} onChange={(value) => updateNews("body", value)} rows={9} /></div></div>
-                  </>}
+                  {activeSection === "news" && selectedNews && (
+                    <>
+                      <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                        <div className="min-w-0">
+                          <p className={labelClass}>News article & journal dispatch</p>
+                          <h3 className="mt-1 truncate font-display text-2xl">{selectedNews.title}</h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <PublishStatus published={selectedNews.isPublished ?? true} />
+                          <Link
+                            href={`/news/${selectedNews.slug}`}
+                            target="_blank"
+                            title="View article on live site"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                          >
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Preview</span>
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => duplicateNews(selectedNews)}
+                            title="Duplicate story"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Duplicate</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={deleteNews}
+                            title="Delete story"
+                            aria-label="Delete story"
+                            className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50 cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-7 p-5 sm:p-7">
+                        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+                          <div className="grid content-start gap-4 sm:grid-cols-2">
+                            <AdminField
+                              label="Article headline / title"
+                              value={selectedNews.title}
+                              onChange={(value) => {
+                                updateNews("title", value);
+                              }}
+                              className="sm:col-span-2"
+                              placeholder="e.g. Dhaka Contemporary Art Center Celebrates Grand Opening"
+                            />
+                            <AdminField
+                              label="URL slug"
+                              value={selectedNews.slug}
+                              onChange={(value) => updateNews("slug", value)}
+                              placeholder="e.g. dhaka-art-center-opening"
+                            />
+                            <AdminField
+                              label="Publication date"
+                              value={selectedNews.date}
+                              onChange={(value) => updateNews("date", value)}
+                              placeholder="e.g. MARCH 2026"
+                            />
+                            <AdminField
+                              label="Author / Byline"
+                              value={selectedNews.author ?? ""}
+                              onChange={(value) => updateNews("author", value)}
+                              placeholder="e.g. Plane Architect Studio"
+                            />
+                            <div>
+                              <AdminField
+                                label="Category"
+                                value={selectedNews.category}
+                                onChange={(value) => updateNews("category", value)}
+                                placeholder="e.g. Architecture, Exhibitions, Awards..."
+                              />
+                              <div className="mt-1.5 flex flex-wrap gap-1 text-[10px] text-neutral-500">
+                                <span>Quick tags:</span>
+                                {["Architecture", "Education", "Awards", "Publications", "Exhibitions", "Milestones", "Lectures"].map((cat) => (
+                                  <button
+                                    key={cat}
+                                    type="button"
+                                    onClick={() => updateNews("category", cat)}
+                                    className={`px-1.5 py-0.5 rounded text-[10px] border transition cursor-pointer ${
+                                      selectedNews.category === cat
+                                        ? "bg-black text-white border-black"
+                                        : "bg-white text-neutral-600 border-neutral-200 hover:border-black"
+                                    }`}
+                                  >
+                                    {cat}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <AdminField
+                              label="Read time"
+                              value={selectedNews.readTime}
+                              onChange={(value) => updateNews("readTime", value)}
+                              placeholder="e.g. 4 min read"
+                            />
+                            <AdminField
+                              label="Display sort order"
+                              type="number"
+                              value={String(selectedNews.sortOrder ?? 0)}
+                              onChange={(value) => updateNews("sortOrder", Number(value))}
+                            />
+                            <AdminField
+                              label="Source / External publication URL"
+                              value={selectedNews.sourceUrl ?? ""}
+                              onChange={(value) => updateNews("sourceUrl", value)}
+                              className="sm:col-span-2"
+                              placeholder="https://... (optional external press link)"
+                            />
+                          </div>
+
+                          <div className="space-y-4">
+                            <div>
+                              <p className={labelClass}>Cover image</p>
+                              <div className="mt-1.5 aspect-[16/10] overflow-hidden border border-black/10 bg-[#f5f4f1]">
+                                {selectedNews.image ? (
+                                  <img
+                                    src={selectedNews.image}
+                                    alt={`Cover preview for ${selectedNews.title}`}
+                                    className="h-full w-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="flex h-full items-center justify-center text-neutral-400">
+                                    <FileImage className="h-6 w-6" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="mt-3">
+                                <SupabaseMediaField
+                                  label="Cover image URL or Upload"
+                                  value={selectedNews.image}
+                                  onChange={(value) => updateNews("image", value)}
+                                />
+                              </div>
+                            </div>
+
+                            <label className="flex cursor-pointer items-center gap-3 rounded-[4px] border border-black/10 bg-[#faf9f6] p-3.5 text-sm text-neutral-700">
+                              <input
+                                type="checkbox"
+                                checked={selectedNews.isPublished ?? true}
+                                onChange={(event) => updateNews("isPublished", event.target.checked)}
+                                className="h-4 w-4 accent-black cursor-pointer"
+                              />
+                              <span>
+                                <span className="block text-xs font-medium">Publish story</span>
+                                <span className="mt-0.5 block text-[10px] text-neutral-500">
+                                  Visible on /news and dispatches
+                                </span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div className="grid gap-6 border-t border-black/10 pt-6">
+                          <AdminField
+                            label="Lead introduction / Excerpt"
+                            value={selectedNews.excerpt}
+                            onChange={(value) => updateNews("excerpt", value)}
+                            rows={3}
+                            placeholder="A concise synopsis displayed on the news cards and article intro..."
+                          />
+
+                          <div>
+                            <AdminField
+                              label="Full article body"
+                              value={selectedNews.body ?? ""}
+                              onChange={(value) => updateNews("body", value)}
+                              rows={12}
+                              placeholder="Write the full story here. Separate paragraphs with an empty line (two returns) for clean editorial spacing..."
+                            />
+                            <p className="mt-1.5 text-[11px] text-neutral-500">
+                              Tip: Separate paragraphs with an empty line (two Enters). Each block will format as an editorial paragraph on the article page.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                   {activeSection === "testimonials" && selectedTestimonial && (
                     <>

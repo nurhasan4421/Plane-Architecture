@@ -103,10 +103,28 @@ export function readLocalCmsState(): CmsContentState {
     }
 
     const parsed = JSON.parse(raw) as Partial<CmsContentState>;
+    const rawLocalNews = Array.isArray(parsed.news) && parsed.news.length ? parsed.news : NEWS_ITEMS;
+    const localBySlug = new Map(rawLocalNews.map((n) => [n.slug, n]));
+    const mergedNews = NEWS_ITEMS.map((item) => {
+      const existing = localBySlug.get(item.slug);
+      if (!existing) return item;
+      return {
+        ...item,
+        ...existing,
+        // Upgrade legacy non-uuid ids to valid UUIDs
+        id: existing.id && existing.id.length > 10 ? existing.id : item.id,
+        body: existing.body || item.body,
+        isPublished: existing.isPublished ?? item.isPublished ?? true,
+      };
+    });
+    const defaultSlugs = new Set(NEWS_ITEMS.map((n) => n.slug));
+    const userCreatedNews = rawLocalNews.filter((n) => !defaultSlugs.has(n.slug));
+    const finalLocalNews = [...mergedNews, ...userCreatedNews];
+
     return {
       settings: { ...fallbackSettings, ...(parsed.settings ?? {}) },
       projects: Array.isArray(parsed.projects) && parsed.projects.length ? parsed.projects : PROJECTS,
-      news: Array.isArray(parsed.news) && parsed.news.length ? parsed.news : NEWS_ITEMS,
+      news: finalLocalNews,
       testimonials: Array.isArray(parsed.testimonials) && parsed.testimonials.length ? parsed.testimonials : DEFAULT_TESTIMONIALS,
     };
   } catch {
@@ -352,10 +370,19 @@ export async function getAdminCmsContent(): Promise<CmsContentState> {
   const mergedProjects = localProjects.map((p) => supabaseBySlug.get(p.slug) ?? p);
   const extraProjects = supabaseProjects.filter((p) => !localSlugs.has(p.slug));
 
+  const localNews = readLocalCmsState().news;
+  const supabaseNews = (newsResult.data ?? []).map(mapNews);
+  const supabaseNewsBySlug = new Map(supabaseNews.map((n) => [n.slug, n]));
+  const localNewsSlugs = new Set(localNews.map((n) => n.slug));
+
+  const mergedNews = localNews.map((n) => supabaseNewsBySlug.get(n.slug) ?? n);
+  const extraNews = supabaseNews.filter((n) => !localNewsSlugs.has(n.slug));
+  const finalNews: NewsItem[] = (mergedNews.length > 0 || extraNews.length > 0) ? [...mergedNews, ...extraNews] : NEWS_ITEMS;
+
   return {
     settings: mapSiteSettings(settingsResult.data?.settings),
     projects: [...mergedProjects, ...extraProjects],
-    news: (newsResult.data && newsResult.data.length > 0) ? newsResult.data.map(mapNews) : NEWS_ITEMS,
+    news: finalNews,
     testimonials: (testimonialsResult.data && testimonialsResult.data.length > 0) ? testimonialsResult.data.map(mapTestimonial) : readLocalCmsState().testimonials,
   };
 }
@@ -503,7 +530,8 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 }
 
 export async function getNewsItems(): Promise<NewsItem[]> {
-  if (!isSupabaseConfigured || !supabase) return readLocalCmsState().news;
+  const localNews = readLocalCmsState().news.filter((item) => item.isPublished !== false);
+  if (!isSupabaseConfigured || !supabase) return localNews.length > 0 ? localNews : NEWS_ITEMS;
   const client = supabase as NonNullable<typeof supabase>;
   const response = await client
     .from("news")
@@ -511,8 +539,16 @@ export async function getNewsItems(): Promise<NewsItem[]> {
     .eq("is_published", true)
     .order("sort_order", { ascending: true }) as QueryResult<Database["public"]["Tables"]["news"]["Row"][]>;
   const { data, error } = response;
-  if (error) return readLocalCmsState().news;
-  return (data ?? []).map(mapNews);
+  if (error || !data || data.length === 0) return localNews.length > 0 ? localNews : NEWS_ITEMS;
+
+  const supabaseNews = data.map(mapNews);
+  const supabaseBySlug = new Map(supabaseNews.map((n) => [n.slug, n]));
+  const localSlugs = new Set(localNews.map((n) => n.slug));
+
+  const merged = localNews.map((n) => supabaseBySlug.get(n.slug) ?? n);
+  const extraNews = supabaseNews.filter((n) => !localSlugs.has(n.slug));
+
+  return [...merged, ...extraNews];
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
@@ -526,9 +562,12 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
       .maybeSingle() as QueryResult<Database["public"]["Tables"]["news"]["Row"]>;
     const { data, error } = response;
     if (!error && data) return mapNews(data);
-    if (!error) return null;
   }
-  return readLocalCmsState().news.find((item) => item.slug === slug) ?? null;
+  return (
+    readLocalCmsState().news.find((item) => item.slug === slug) ??
+    NEWS_ITEMS.find((item) => item.slug === slug) ??
+    null
+  );
 }
 
 export async function getTestimonials(): Promise<ProjectTestimonial[]> {

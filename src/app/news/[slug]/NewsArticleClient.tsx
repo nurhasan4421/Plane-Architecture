@@ -94,9 +94,19 @@ export default function NewsArticleClient({ item, relatedItems }: NewsArticleCli
               )}
               {shareFeedback && <span role="status" className="self-center text-xs text-neutral-500 dark:text-neutral-400">{shareFeedback}</span>}
             </div>
-            <p className="max-w-3xl font-display text-xl leading-relaxed text-neutral-800 dark:text-neutral-200 sm:text-2xl md:text-3xl">
-              {item.excerpt}
-            </p>
+            <div className="max-w-3xl space-y-6">
+              <p className="font-display text-xl leading-relaxed text-neutral-900 dark:text-neutral-100 sm:text-2xl md:text-3xl font-light">
+                {item.excerpt}
+              </p>
+
+              {item.body && (
+                <div className="mt-8 space-y-6 pt-6 border-t border-neutral-100 dark:border-white/10 font-body text-base md:text-lg leading-relaxed font-light text-neutral-700 dark:text-neutral-300">
+                  {item.body.split("\n\n").map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+              )}
+            </div>
           </section>
         </article>
 
