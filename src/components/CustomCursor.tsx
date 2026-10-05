@@ -1,8 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function CustomCursor() {
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin");
+
   const dotRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
@@ -17,6 +21,13 @@ export default function CustomCursor() {
   const isClickingRef = useRef(false);
 
   useEffect(() => {
+    // Strictly disable custom cursor on admin panel
+    if (isAdmin) {
+      document.body.classList.remove("has-custom-cursor");
+      setIsFinePointer(false);
+      return;
+    }
+
     // Only enable custom cursor on fine-pointer devices (desktop mice/trackpads, not touch)
     const mediaQuery = window.matchMedia("(pointer: fine)");
     if (!mediaQuery.matches) return;
@@ -114,9 +125,9 @@ export default function CustomCursor() {
       document.removeEventListener("mouseenter", onMouseEnter);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isVisible]);
+  }, [isVisible, isAdmin]);
 
-  if (!isFinePointer) return null;
+  if (isAdmin || !isFinePointer) return null;
 
   return (
     <div

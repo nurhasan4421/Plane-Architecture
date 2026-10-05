@@ -217,10 +217,10 @@ html.dark ::selection {
   animation: progressSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Custom Cursor styling for fine pointer devices */
+/* Custom Cursor styling for fine pointer devices (public site only) */
 @media (pointer: fine) {
-  body.has-custom-cursor,
-  body.has-custom-cursor *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
+  body.has-custom-cursor:not(:has(.admin-container)),
+  body.has-custom-cursor:not(:has(.admin-container)) *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
     cursor: none !important;
   }
 
@@ -233,6 +233,29 @@ html.dark ::selection {
   body.has-custom-cursor textarea,
   body.has-custom-cursor select,
   body.has-custom-cursor [contenteditable="true"] {
+    cursor: text !important;
+  }
+
+  /* Admin panel isolation: strictly regular normal system cursor */
+  html:has(.admin-container),
+  body:has(.admin-container),
+  body:has(.admin-container) * {
+    cursor: auto !important;
+  }
+
+  body:has(.admin-container) a,
+  body:has(.admin-container) button,
+  body:has(.admin-container) [role="button"],
+  body:has(.admin-container) summary,
+  body:has(.admin-container) select,
+  body:has(.admin-container) input[type="checkbox"],
+  body:has(.admin-container) input[type="radio"] {
+    cursor: pointer !important;
+  }
+
+  body:has(.admin-container) input:not([type="checkbox"]):not([type="radio"]),
+  body:has(.admin-container) textarea,
+  body:has(.admin-container) [contenteditable="true"] {
     cursor: text !important;
   }
 }
