@@ -113,3 +113,19 @@ export interface ProjectTestimonial {
   sortOrder: number;
   createdAt: string;
 }
+
+export interface AwardItem {
+  id: string;
+  title: string;
+  year: string;
+  category: string;
+  organization: string;
+  project: string;
+  projectSlug?: string | null;
+  rank?: string | null;
+  description: string;
+  image?: string;
+  sortOrder?: number;
+  isPublished?: boolean;
+  createdAt?: string;
+}

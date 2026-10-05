@@ -1,7 +1,7 @@
-import { CATEGORIES_CONFIG, NEWS_ITEMS, PROJECTS } from "@/lib/projects-data";
+import { CATEGORIES_CONFIG, NEWS_ITEMS, PROJECTS, DEFAULT_AWARDS } from "@/lib/projects-data";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { Database, Json } from "@/types/database.types";
-import { NewsItem, Project, ProjectTestimonial } from "@/types/project";
+import { NewsItem, Project, ProjectTestimonial, AwardItem } from "@/types/project";
 
 const CMS_STORAGE_KEY = "plane-admin-content-v1";
 
@@ -10,12 +10,14 @@ export interface CmsContentState {
   projects: Project[];
   news: NewsItem[];
   testimonials: ProjectTestimonial[];
+  awards: AwardItem[];
 }
 
 export interface CmsDeletedContent {
   projects: string[];
   news: string[];
   testimonials: string[];
+  awards: string[];
 }
 
 export const DEFAULT_TESTIMONIALS: ProjectTestimonial[] = [
@@ -88,6 +90,7 @@ export function readLocalCmsState(): CmsContentState {
       projects: PROJECTS,
       news: NEWS_ITEMS,
       testimonials: DEFAULT_TESTIMONIALS,
+      awards: DEFAULT_AWARDS,
     };
   }
 
@@ -99,6 +102,7 @@ export function readLocalCmsState(): CmsContentState {
         projects: PROJECTS,
         news: NEWS_ITEMS,
         testimonials: DEFAULT_TESTIMONIALS,
+        awards: DEFAULT_AWARDS,
       };
     }
 
@@ -121,11 +125,27 @@ export function readLocalCmsState(): CmsContentState {
     const userCreatedNews = rawLocalNews.filter((n) => !defaultSlugs.has(n.slug));
     const finalLocalNews = [...mergedNews, ...userCreatedNews];
 
+    const rawLocalAwards = Array.isArray(parsed.awards) && parsed.awards.length ? parsed.awards : DEFAULT_AWARDS;
+    const localAwardsById = new Map(rawLocalAwards.map((a) => [a.id, a]));
+    const mergedAwards = DEFAULT_AWARDS.map((item) => {
+      const existing = localAwardsById.get(item.id);
+      if (!existing) return item;
+      return {
+        ...item,
+        ...existing,
+        isPublished: existing.isPublished ?? item.isPublished ?? true,
+      };
+    });
+    const defaultAwardIds = new Set(DEFAULT_AWARDS.map((a) => a.id));
+    const userCreatedAwards = rawLocalAwards.filter((a) => !defaultAwardIds.has(a.id));
+    const finalLocalAwards = [...mergedAwards, ...userCreatedAwards];
+
     return {
       settings: { ...fallbackSettings, ...(parsed.settings ?? {}) },
       projects: Array.isArray(parsed.projects) && parsed.projects.length ? parsed.projects : PROJECTS,
       news: finalLocalNews,
       testimonials: Array.isArray(parsed.testimonials) && parsed.testimonials.length ? parsed.testimonials : DEFAULT_TESTIMONIALS,
+      awards: finalLocalAwards,
     };
   } catch {
     return {
@@ -133,6 +153,7 @@ export function readLocalCmsState(): CmsContentState {
       projects: PROJECTS,
       news: NEWS_ITEMS,
       testimonials: DEFAULT_TESTIMONIALS,
+      awards: DEFAULT_AWARDS,
     };
   }
 }
@@ -379,11 +400,20 @@ export async function getAdminCmsContent(): Promise<CmsContentState> {
   const extraNews = supabaseNews.filter((n) => !localNewsSlugs.has(n.slug));
   const finalNews: NewsItem[] = (mergedNews.length > 0 || extraNews.length > 0) ? [...mergedNews, ...extraNews] : NEWS_ITEMS;
 
+  const settingsJson = settingsResult.data?.settings as Record<string, unknown> | undefined;
+  const remoteAwards = Array.isArray(settingsJson?.awards) ? (settingsJson?.awards as unknown as AwardItem[]) : [];
+  const localAwards = readLocalCmsState().awards;
+  const remoteAwardsById = new Map(remoteAwards.map((a) => [a.id, a]));
+  const mergedAwards = localAwards.map((a) => remoteAwardsById.get(a.id) ?? a);
+  const extraAwards = remoteAwards.filter((a) => !localAwards.some((l) => l.id === a.id));
+  const finalAwards: AwardItem[] = (mergedAwards.length > 0 || extraAwards.length > 0) ? [...mergedAwards, ...extraAwards] : DEFAULT_AWARDS;
+
   return {
     settings: mapSiteSettings(settingsResult.data?.settings),
     projects: [...mergedProjects, ...extraProjects],
     news: finalNews,
     testimonials: (testimonialsResult.data && testimonialsResult.data.length > 0) ? testimonialsResult.data.map(mapTestimonial) : readLocalCmsState().testimonials,
+    awards: finalAwards,
   };
 }
 
@@ -396,7 +426,10 @@ export async function saveAdminCmsContent(state: CmsContentState, deleted: CmsDe
   const [settingsResult, projectsResult, newsResult, testimonialsResult] = await Promise.all([
     cmsClient.from("site_settings").upsert({
       singleton: true,
-      settings: state.settings as unknown as Json,
+      settings: {
+        ...(state.settings as unknown as Record<string, unknown>),
+        awards: state.awards,
+      } as unknown as Json,
       updated_at: new Date().toISOString(),
     }, { onConflict: "singleton" }),
     cmsClient.from("projects").upsert(state.projects.map((project: Project) => ({
@@ -581,4 +614,27 @@ export async function getTestimonials(): Promise<ProjectTestimonial[]> {
   const { data, error } = response;
   if (error || !data || data.length === 0) return readLocalCmsState().testimonials;
   return data.map(mapTestimonial);
+}
+
+export async function getAwards(): Promise<AwardItem[]> {
+  const localAwards = readLocalCmsState().awards.filter((a) => a.isPublished !== false);
+  if (!isSupabaseConfigured || !supabase) return localAwards.length > 0 ? localAwards : DEFAULT_AWARDS;
+
+  try {
+    const client = supabase as NonNullable<typeof supabase>;
+    const response = await client
+      .from("site_settings")
+      .select("settings")
+      .eq("singleton", true)
+      .maybeSingle() as QueryResult<{ settings: Json }>;
+    const settingsJson = response.data?.settings as Record<string, unknown> | undefined;
+    if (Array.isArray(settingsJson?.awards) && settingsJson.awards.length > 0) {
+      const remote = (settingsJson.awards as unknown as AwardItem[]).filter((a) => a.isPublished !== false);
+      return remote.length > 0 ? remote : localAwards;
+    }
+  } catch {
+    // fallback
+  }
+
+  return localAwards.length > 0 ? localAwards : DEFAULT_AWARDS;
 }

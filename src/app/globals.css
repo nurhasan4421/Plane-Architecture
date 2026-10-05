@@ -216,3 +216,19 @@ html.dark ::selection {
 .animate-progress-fast {
   animation: progressSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Custom Cursor styling for fine pointer devices */
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"] {
+    cursor: none !important;
+  }
+
+  body.has-custom-cursor input,
+  body.has-custom-cursor textarea,
+  body.has-custom-cursor select {
+    cursor: auto !important;
+  }
+}

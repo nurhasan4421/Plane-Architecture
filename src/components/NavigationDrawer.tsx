@@ -30,8 +30,8 @@ export default function NavigationDrawer({
     >
       <div className="mx-auto grid w-full max-w-[1600px] gap-8 px-5 py-8 sm:px-8 sm:py-10 md:grid-cols-[1fr_0.8fr] lg:px-16 lg:py-12">
         <div className="flex flex-col">
-          <Link href="/" onClick={onClose} className="py-3 font-display text-xl uppercase text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white sm:text-2xl">
-            Projects
+          <Link href="/awards" onClick={onClose} className="py-3 font-display text-xl uppercase text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white sm:text-2xl">
+            Awards
           </Link>
           <Link href="/news" onClick={onClose} className="py-3 font-display text-xl uppercase text-neutral-700 dark:text-neutral-300 transition-colors hover:text-black dark:hover:text-white sm:text-2xl">
             News

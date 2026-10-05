@@ -54,7 +54,7 @@ export default function Footer({ onSelectCategory }: FooterProps) {
           <nav aria-label="Footer navigation">
             <h2 className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-white">Explore</h2>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="transition-colors hover:text-white">Projects</Link></li>
+              <li><Link href="/awards" className="transition-colors hover:text-white">Awards</Link></li>
               <li><Link href="/news" className="transition-colors hover:text-white">News</Link></li>
               <li><Link href="/about" className="transition-colors hover:text-white">About</Link></li>
               <li><Link href="/contact" className="transition-colors hover:text-white">Contact</Link></li>

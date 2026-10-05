@@ -201,10 +201,11 @@ export default function Header({
           <div className="border-b border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-900/30">
             <nav aria-label="Mobile site navigation" className="flex items-center justify-center gap-1 px-3 py-2.5 sm:gap-2 sm:px-6">
               {[
+                { label: "Awards", href: "/awards" },
                 { label: "News", href: "/news" },
-                { label: "FAQ", href: "/contact#faq" },
-                { label: "Contact", href: "/contact" },
                 { label: "About", href: "/about" },
+                { label: "Contact", href: "/contact" },
+                { label: "FAQ", href: "/contact#faq" },
               ].map((item) => (
                 <Link
                   key={item.label}

@@ -31,6 +31,7 @@ import {
   Save,
   Star,
   Trash2,
+  Trophy,
   Undo2,
   Upload,
   UsersRound,
@@ -42,7 +43,7 @@ import PlaneLogo from "@/components/PlaneLogo";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { getAdminCmsContent, saveAdminCmsContent } from "@/lib/site-content";
 import type { CmsDeletedContent, SiteCategory } from "@/lib/site-content";
-import { NewsItem, Project, ProjectTestimonial } from "@/types/project";
+import { AwardItem, NewsItem, Project, ProjectTestimonial } from "@/types/project";
 import { formatImageUrl, formatImageCaption } from "@/lib/image-utils";
 
 const DEFAULT_COLLAGE_CAPTIONS = [
@@ -124,7 +125,22 @@ const emptyTestimonial = (): ProjectTestimonial => ({
   createdAt: new Date().toISOString(),
 });
 
-type AdminSection = "overview" | "projects" | "carousel" | "news" | "testimonials" | "categories" | "cta" | "settings";
+const emptyAward = (): AwardItem => ({
+  id: crypto.randomUUID(),
+  title: "New Architectural Honor",
+  year: String(new Date().getFullYear()),
+  organization: "Architectural Jury / Institute",
+  project: "Studio Project",
+  projectSlug: "",
+  rank: "First Prize / Gold Winner",
+  category: "Cultural & Civic Architecture",
+  description: "Brief citation celebrating spatial ingenuity, materiality, and environmental excellence.",
+  image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+  isPublished: true,
+  sortOrder: 0,
+});
+
+type AdminSection = "overview" | "projects" | "carousel" | "news" | "awards" | "testimonials" | "categories" | "cta" | "settings";
 type ProjectTreeSelection = { categoryId: string; subcategoryId: string };
 
 const inputClass = "mt-1.5 w-full border border-black/15 bg-white px-3.5 py-2.5 text-sm text-[#171717] outline-none transition placeholder:text-neutral-400 focus:border-black";
@@ -135,6 +151,7 @@ const navItems: { key: AdminSection; label: string; icon: LucideIcon }[] = [
   { key: "projects", label: "Projects", icon: FolderKanban },
   { key: "carousel", label: "Carousel", icon: SlidersHorizontal },
   { key: "news", label: "News & Journal", icon: BookOpen },
+  { key: "awards", label: "Awards & Honors", icon: Trophy },
   { key: "testimonials", label: "Testimonials", icon: UsersRound },
   { key: "categories", label: "Categories", icon: ListTree },
   { key: "cta", label: "Start Project", icon: ArrowRightIcon },
@@ -1154,14 +1171,16 @@ function StartProjectAdmin() {
 }
 
 export default function AdminPage() {
-  const { settings, projects, newsItems, testimonials, refreshSettings } = useSiteContent();
+  const { settings, projects, newsItems, testimonials, awards, refreshSettings } = useSiteContent();
   const [settingsDraft, setSettingsDraft] = useState(settings);
   const [projectDrafts, setProjectDrafts] = useState(projects);
   const [newsDrafts, setNewsDrafts] = useState(newsItems);
   const [testimonialDrafts, setTestimonialDrafts] = useState(testimonials);
-  const [deletedContent, setDeletedContent] = useState<CmsDeletedContent>({ projects: [], news: [], testimonials: [] });
+  const [awardDrafts, setAwardDrafts] = useState<AwardItem[]>(awards);
+  const [deletedContent, setDeletedContent] = useState<CmsDeletedContent>({ projects: [], news: [], testimonials: [], awards: [] });
   const [selectedProjectId, setSelectedProjectId] = useState(projects[0]?.id ?? "");
   const [selectedNewsId, setSelectedNewsId] = useState(newsItems[0]?.id ?? "");
+  const [selectedAwardId, setSelectedAwardId] = useState<string>(awards[0]?.id ?? "");
   const [selectedTestimonialId, setSelectedTestimonialId] = useState(testimonials[0]?.id ?? "");
   const [activeSection, setActiveSection] = useState<AdminSection>("overview");
   const [collectionSearch, setCollectionSearch] = useState("");
@@ -1194,6 +1213,7 @@ export default function AdminPage() {
       settings: typeof settings;
       news: NewsItem[];
       testimonials: ProjectTestimonial[];
+      awards: AwardItem[];
     };
   }[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -1202,12 +1222,14 @@ export default function AdminPage() {
     settings: typeof settings;
     news: NewsItem[];
     testimonials: ProjectTestimonial[];
+    awards: AwardItem[];
   }[]>([]);
   const [redoStack, setRedoStack] = useState<{
     projects: Project[];
     settings: typeof settings;
     news: NewsItem[];
     testimonials: ProjectTestimonial[];
+    awards: AwardItem[];
   }[]>([]);
 
   // Load version history and persistent drafts on mount
@@ -1225,6 +1247,7 @@ export default function AdminPage() {
           if (parsed.settings) setSettingsDraft(parsed.settings);
           if (parsed.news) setNewsDrafts(parsed.news);
           if (parsed.testimonials) setTestimonialDrafts(parsed.testimonials);
+          if (parsed.awards) setAwardDrafts(parsed.awards);
           if (parsed.selectedProjectId) setSelectedProjectId(parsed.selectedProjectId);
         }
       }
@@ -1242,12 +1265,13 @@ export default function AdminPage() {
         settings: settingsDraft,
         news: newsDrafts,
         testimonials: testimonialDrafts,
+        awards: awardDrafts,
         selectedProjectId,
       }));
     } catch {
       // ignore
     }
-  }, [projectDrafts, settingsDraft, newsDrafts, testimonialDrafts, selectedProjectId, contentLoaded]);
+  }, [projectDrafts, settingsDraft, newsDrafts, testimonialDrafts, awardDrafts, selectedProjectId, contentLoaded]);
 
   useEffect(() => {
     let ignore = false;
@@ -1350,7 +1374,7 @@ export default function AdminPage() {
               if (parsed.news) setNewsDrafts(parsed.news);
               if (parsed.testimonials) setTestimonialDrafts(parsed.testimonials);
               if (parsed.selectedProjectId) setSelectedProjectId(parsed.selectedProjectId);
-              setDeletedContent({ projects: [], news: [], testimonials: [] });
+              setDeletedContent({ projects: [], news: [], testimonials: [], awards: [] });
               setContentLoaded(true);
               return;
             }
@@ -1360,10 +1384,12 @@ export default function AdminPage() {
         setProjectDrafts(content.projects);
         setNewsDrafts(content.news);
         setTestimonialDrafts(content.testimonials);
+        setAwardDrafts(content.awards);
         setSelectedProjectId(content.projects[0]?.id ?? "");
         setSelectedNewsId(content.news[0]?.id ?? "");
+        setSelectedAwardId(content.awards[0]?.id ?? "");
         setSelectedTestimonialId(content.testimonials[0]?.id ?? "");
-        setDeletedContent({ projects: [], news: [], testimonials: [] });
+        setDeletedContent({ projects: [], news: [], testimonials: [], awards: [] });
         setContentLoaded(true);
       })
       .catch((error: unknown) => {
@@ -1392,6 +1418,10 @@ export default function AdminPage() {
     () => newsDrafts.find((item) => item.id === selectedNewsId) ?? newsDrafts[0],
     [newsDrafts, selectedNewsId],
   );
+  const selectedAward = useMemo(
+    () => awardDrafts.find((item) => item.id === selectedAwardId) ?? awardDrafts[0],
+    [awardDrafts, selectedAwardId],
+  );
   const selectedTestimonial = useMemo(
     () => testimonialDrafts.find((item) => item.id === selectedTestimonialId) ?? testimonialDrafts[0],
     [testimonialDrafts, selectedTestimonialId],
@@ -1399,6 +1429,9 @@ export default function AdminPage() {
   const filteredNews = useMemo(() => newsDrafts.filter((item) =>
     `${item.title} ${item.slug} ${item.category}`.toLowerCase().includes(collectionSearch.toLowerCase()),
   ), [newsDrafts, collectionSearch]);
+  const filteredAwards = useMemo(() => awardDrafts.filter((item) =>
+    `${item.title} ${item.organization} ${item.project} ${item.year} ${item.rank ?? ""} ${item.category}`.toLowerCase().includes(collectionSearch.toLowerCase()),
+  ), [awardDrafts, collectionSearch]);
   const filteredTestimonials = useMemo(() => testimonialDrafts.filter((item) =>
     `${item.author} ${item.role} ${item.quote}`.toLowerCase().includes(collectionSearch.toLowerCase()),
   ), [testimonialDrafts, collectionSearch]);
@@ -1454,6 +1487,7 @@ export default function AdminPage() {
         settings: settingsDraft,
         news: newsDrafts,
         testimonials: testimonialDrafts,
+        awards: awardDrafts,
       },
     ]);
     setRedoStack([]);
@@ -1466,6 +1500,7 @@ export default function AdminPage() {
       settings: settingsDraft,
       news: newsDrafts,
       testimonials: testimonialDrafts,
+      awards: awardDrafts,
     };
     const previous = undoStack[undoStack.length - 1];
     setUndoStack((prev) => prev.slice(0, -1));
@@ -1475,6 +1510,7 @@ export default function AdminPage() {
     setSettingsDraft(previous.settings);
     setNewsDrafts(previous.news);
     setTestimonialDrafts(previous.testimonials);
+    setAwardDrafts(previous.awards);
   };
 
   const handleRedo = () => {
@@ -1484,6 +1520,7 @@ export default function AdminPage() {
       settings: settingsDraft,
       news: newsDrafts,
       testimonials: testimonialDrafts,
+      awards: awardDrafts,
     };
     const next = redoStack[redoStack.length - 1];
     setRedoStack((prev) => prev.slice(0, -1));
@@ -1493,6 +1530,7 @@ export default function AdminPage() {
     setSettingsDraft(next.settings);
     setNewsDrafts(next.news);
     setTestimonialDrafts(next.testimonials);
+    setAwardDrafts(next.awards);
   };
 
   const revertToVersion = (version: (typeof versionHistory)[0]) => {
@@ -1501,6 +1539,7 @@ export default function AdminPage() {
     setSettingsDraft(version.snapshot.settings);
     setNewsDrafts(version.snapshot.news);
     setTestimonialDrafts(version.snapshot.testimonials);
+    if (version.snapshot.awards) setAwardDrafts(version.snapshot.awards);
     setIsHistoryOpen(false);
     setSaveState(`Restored version: "${version.message}"`);
   };
@@ -1526,8 +1565,9 @@ export default function AdminPage() {
         projects: projectDrafts,
         news: newsDrafts,
         testimonials: testimonialDrafts,
+        awards: awardDrafts,
       }, deletedContent);
-      setDeletedContent({ projects: [], news: [], testimonials: [] });
+      setDeletedContent({ projects: [], news: [], testimonials: [], awards: [] });
       await refreshSettings();
       setSaveState("Saved to Supabase");
 
@@ -1547,6 +1587,7 @@ export default function AdminPage() {
           settings: settingsDraft,
           news: newsDrafts,
           testimonials: testimonialDrafts,
+          awards: awardDrafts,
         },
       };
 
@@ -1725,6 +1766,37 @@ export default function AdminPage() {
     setNewsDrafts((current) => current.filter((item) => item.id !== selectedNews.id));
     setSelectedNewsId(newsDrafts.find((item) => item.id !== selectedNews.id)?.id ?? "");
   };
+  const addAward = () => {
+    pushToUndoStack();
+    const item = emptyAward();
+    item.sortOrder = awardDrafts.length;
+    setAwardDrafts((current) => [item, ...current]);
+    setSelectedAwardId(item.id);
+  };
+  const duplicateAward = (award: AwardItem) => {
+    pushToUndoStack();
+    const copy: AwardItem = {
+      ...award,
+      id: crypto.randomUUID(),
+      title: `${award.title} (Copy)`,
+      sortOrder: awardDrafts.length,
+      isPublished: false,
+    };
+    setAwardDrafts((current) => [copy, ...current]);
+    setSelectedAwardId(copy.id);
+  };
+  const deleteAward = () => {
+    if (!selectedAward) return;
+    pushToUndoStack();
+    setDeletedContent((current) => ({ ...current, awards: [...current.awards, selectedAward.id] }));
+    setAwardDrafts((current) => current.filter((item) => item.id !== selectedAward.id));
+    setSelectedAwardId(awardDrafts.find((item) => item.id !== selectedAward.id)?.id ?? "");
+  };
+  const updateAward = (field: keyof AwardItem, value: string | boolean | number | null | undefined) => {
+    if (!selectedAward) return;
+    pushToUndoStack();
+    setAwardDrafts((current) => current.map((item) => item.id === selectedAward.id ? { ...item, [field]: value } : item));
+  };
   const deleteTestimonial = () => {
     if (!selectedTestimonial) return;
     pushToUndoStack();
@@ -1844,12 +1916,13 @@ export default function AdminPage() {
     projects: "Projects",
     carousel: "Carousel",
     news: "Journal",
+    awards: "Awards & Honors",
     testimonials: "Testimonials",
     categories: "Categories",
     cta: "Start Project",
     settings: "Site settings",
   };
-  const publishedCount = [...projectDrafts, ...newsDrafts, ...testimonialDrafts].filter((item) => item.isPublished).length;
+  const publishedCount = [...projectDrafts, ...newsDrafts, ...awardDrafts, ...testimonialDrafts].filter((item) => item.isPublished).length;
 
   return (
     <div className="admin-container min-h-screen bg-[#f6f5f1] text-[#171717]">
@@ -1864,6 +1937,7 @@ export default function AdminPage() {
                 {key === "projects" && <span className="ml-auto text-[10px] text-neutral-400">{projectDrafts.length}</span>}
                 {key === "carousel" && <span className="ml-auto text-[10px] text-neutral-400">{settingsDraft.carouselEnabled ? `${settingsDraft.featuredProjectSlugs.length}/5` : "Off"}</span>}
                 {key === "news" && <span className="ml-auto text-[10px] text-neutral-400">{newsDrafts.length}</span>}
+                {key === "awards" && <span className="ml-auto text-[10px] text-neutral-400">{awardDrafts.length}</span>}
                 {key === "testimonials" && <span className="ml-auto text-[10px] text-neutral-400">{testimonialDrafts.length}</span>}
                 {key === "categories" && <span className="ml-auto text-[10px] text-neutral-400">{settingsDraft.categories.length}/5</span>}
               </button>
@@ -1983,7 +2057,7 @@ export default function AdminPage() {
                 {[
                   { label: "Projects", count: projectDrafts.length, key: "projects" as AdminSection },
                   { label: "Journal stories", count: newsDrafts.length, key: "news" as AdminSection },
-                  { label: "Testimonials", count: testimonialDrafts.length, key: "testimonials" as AdminSection },
+                  { label: "Awards & Honors", count: awardDrafts.length, key: "awards" as AdminSection },
                   { label: "Published items", count: publishedCount, key: "overview" as AdminSection },
                 ].map((item, index) => (
                   <button key={item.label} type="button" aria-label={`Open ${item.label}, ${item.count} items`} onClick={() => openSection(item.key)} className={`group relative py-5 text-left transition hover:bg-white ${index % 2 ? "pl-4 md:pl-6" : ""} ${index < 2 ? "border-b border-black/10 md:border-b-0" : ""} ${index > 0 ? "md:border-l md:border-black/10 md:pl-6" : ""}`}>
@@ -2000,12 +2074,14 @@ export default function AdminPage() {
                     const count = key === "projects" ? projectDrafts.length
                       : key === "carousel" ? (settingsDraft.carouselEnabled ? `${settingsDraft.featuredProjectSlugs.length}/5` : "Disabled")
                       : key === "news" ? newsDrafts.length
+                      : key === "awards" ? awardDrafts.length
                       : key === "testimonials" ? testimonialDrafts.length
                       : key === "categories" ? settingsDraft.categories.length
                       : null;
                     const description = key === "projects" ? "Portfolio entries and project imagery"
                       : key === "carousel" ? "Homepage 5-slide showcase & on/off toggle"
                       : key === "news" ? "Studio news and journal stories"
+                      : key === "awards" ? "Architectural honors, citations & trophies"
                       : key === "testimonials" ? "Client voices and project references"
                       : key === "categories" ? "Navbar categories and project submenus"
                       : "Studio details and profile options";
@@ -2037,8 +2113,8 @@ export default function AdminPage() {
               <button type="button" onClick={() => { setProjectCategoryFilter(null); setSelectedProjectId(projectDrafts[0]?.id ?? ""); }} className="rounded-[4px] border border-black/15 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.1em] transition hover:border-black">All projects</button>
             </div>}
 
-            {(activeSection === "projects" || activeSection === "news" || activeSection === "testimonials") && <div>
-              <section className="mb-7 flex flex-col justify-between gap-5 border-b border-black/10 pb-6 sm:flex-row sm:items-end"><div><p className={labelClass}>{activeSection === "projects" ? "Portfolio" : activeSection === "news" ? "Studio journal" : "Client voices"}</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">{activeSection === "projects" ? "Project library" : activeSection === "news" ? "Journal entries" : "Testimonials"}</h2><p className="mt-2 text-sm text-neutral-500">{activeSection === "projects" ? `${projectDrafts.length} projects in your portfolio` : activeSection === "news" ? `${newsDrafts.length} stories in your journal` : `${testimonialDrafts.length} client testimonials`}</p></div><button type="button" onClick={activeSection === "projects" ? addProject : activeSection === "news" ? addNews : addTestimonial} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 bg-[#171717] px-4 text-[10px] font-medium uppercase tracking-[0.13em] text-white transition hover:bg-neutral-700"><Plus className="h-4 w-4" />Create {activeSection === "projects" ? "project" : activeSection === "news" ? "story" : "testimonial"}</button></section>
+            {(activeSection === "projects" || activeSection === "news" || activeSection === "awards" || activeSection === "testimonials") && <div>
+              <section className="mb-7 flex flex-col justify-between gap-5 border-b border-black/10 pb-6 sm:flex-row sm:items-end"><div><p className={labelClass}>{activeSection === "projects" ? "Portfolio" : activeSection === "news" ? "Studio journal" : activeSection === "awards" ? "Accolades & Honors" : "Client voices"}</p><h2 className="mt-2 font-display text-3xl sm:text-4xl">{activeSection === "projects" ? "Project library" : activeSection === "news" ? "Journal entries" : activeSection === "awards" ? "Awards & Honors" : "Testimonials"}</h2><p className="mt-2 text-sm text-neutral-500">{activeSection === "projects" ? `${projectDrafts.length} projects in your portfolio` : activeSection === "news" ? `${newsDrafts.length} stories in your journal` : activeSection === "awards" ? `${awardDrafts.length} architectural awards & honors` : `${testimonialDrafts.length} client testimonials`}</p></div><button type="button" onClick={activeSection === "projects" ? addProject : activeSection === "news" ? addNews : activeSection === "awards" ? addAward : addTestimonial} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 bg-[#171717] px-4 text-[10px] font-medium uppercase tracking-[0.13em] text-white transition hover:bg-neutral-700"><Plus className="h-4 w-4" />Create {activeSection === "projects" ? "project" : activeSection === "news" ? "story" : activeSection === "awards" ? "award" : "testimonial"}</button></section>
               <div className="grid min-w-0 gap-7 xl:grid-cols-[320px_minmax(0,1fr)]">
                 <aside className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-white">
                   <div className="border-b border-black/10 p-3">
@@ -2076,6 +2152,17 @@ export default function AdminPage() {
                         image={item.image}
                       />
                     ))}
+                    {activeSection === "awards" && filteredAwards.map((item) => (
+                      <CollectionRow
+                        key={item.id}
+                        title={item.title}
+                        subtitle={`${item.year} · ${item.organization}`}
+                        published={item.isPublished ?? true}
+                        selected={selectedAward?.id === item.id}
+                        onClick={() => setSelectedAwardId(item.id)}
+                        image={item.image}
+                      />
+                    ))}
                     {activeSection === "testimonials" && filteredTestimonials.map((item) => {
                       const linkedProject = projectDrafts.find((p) => p.slug === item.projectSlug);
                       return (
@@ -2090,7 +2177,7 @@ export default function AdminPage() {
                         />
                       );
                     })}
-                    {((activeSection === "projects" && filteredProjects.length === 0) || (activeSection === "news" && filteredNews.length === 0) || (activeSection === "testimonials" && filteredTestimonials.length === 0)) && (
+                    {((activeSection === "projects" && filteredProjects.length === 0) || (activeSection === "news" && filteredNews.length === 0) || (activeSection === "awards" && filteredAwards.length === 0) || (activeSection === "testimonials" && filteredTestimonials.length === 0)) && (
                       <p className="px-4 py-8 text-center text-sm text-neutral-500">No matching content found.</p>
                     )}
                   </div>
@@ -2497,6 +2584,194 @@ export default function AdminPage() {
                     </>
                   )}
 
+                  {activeSection === "awards" && selectedAward && (
+                    <>
+                      <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                        <div className="min-w-0">
+                          <p className={labelClass}>Award recognition & honor</p>
+                          <h3 className="mt-1 truncate font-display text-2xl">{selectedAward.title}</h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <PublishStatus published={selectedAward.isPublished ?? true} />
+                          <Link
+                            href="/awards"
+                            target="_blank"
+                            title="View awards on live site"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                          >
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Preview</span>
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => duplicateAward(selectedAward)}
+                            title="Duplicate award"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-black/15 bg-white px-2.5 text-[10px] font-medium uppercase tracking-[0.1em] text-neutral-700 transition hover:border-black hover:text-black cursor-pointer shadow-2xs"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Duplicate</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={deleteAward}
+                            title="Delete award"
+                            aria-label="Delete award"
+                            className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-red-200 text-red-600 transition hover:bg-red-50 cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-7 p-5 sm:p-7">
+                        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+                          <div className="grid content-start gap-4 sm:grid-cols-2">
+                            <AdminField
+                              label="Award title / Honor name"
+                              value={selectedAward.title}
+                              onChange={(value) => updateAward("title", value)}
+                              className="sm:col-span-2"
+                              placeholder="e.g. World Architecture Festival (WAF) Finalist"
+                            />
+                            <AdminField
+                              label="Awarding Organization / Jury"
+                              value={selectedAward.organization}
+                              onChange={(value) => updateAward("organization", value)}
+                              placeholder="e.g. EMAP / WAF International Jury"
+                            />
+                            <AdminField
+                              label="Year awarded"
+                              value={selectedAward.year}
+                              onChange={(value) => updateAward("year", value)}
+                              placeholder="e.g. 2025"
+                            />
+                            <AdminField
+                              label="Awarded Project Name"
+                              value={selectedAward.project}
+                              onChange={(value) => updateAward("project", value)}
+                              placeholder="e.g. Dhaka Contemporary Art Center"
+                            />
+                            <div>
+                              <label className={labelClass}>
+                                Linked Project Slug (Optional)
+                                <select
+                                  value={selectedAward.projectSlug ?? ""}
+                                  onChange={(e) => {
+                                    const slug = e.target.value;
+                                    updateAward("projectSlug", slug || undefined);
+                                    const matched = projectDrafts.find((p) => p.slug === slug);
+                                    if (matched && !selectedAward.project) {
+                                      updateAward("project", matched.title);
+                                    }
+                                  }}
+                                  className={inputClass}
+                                >
+                                  <option value="">-- No project link --</option>
+                                  {projectDrafts.map((p) => (
+                                    <option key={p.id} value={p.slug}>
+                                      {p.title} ({p.slug})
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
+                              <p className="mt-1 text-[10px] text-neutral-400">
+                                When linked, visitors can click through to the project page.
+                              </p>
+                            </div>
+                            <AdminField
+                              label="Distinction / Rank / Trophy"
+                              value={selectedAward.rank ?? ""}
+                              onChange={(value) => updateAward("rank", value)}
+                              placeholder="e.g. Gold Trophy / Winner, First Prize, Jury Commendation"
+                            />
+                            <div>
+                              <AdminField
+                                label="Typology / Category"
+                                value={selectedAward.category}
+                                onChange={(value) => updateAward("category", value)}
+                                placeholder="e.g. Cultural & Civic Architecture"
+                              />
+                              <div className="mt-1.5 flex flex-wrap gap-1 text-[10px] text-neutral-500">
+                                <span>Quick tags:</span>
+                                {["Cultural & Civic", "Educational", "Residential", "Sustainable & Eco", "Public Architecture", "Commercial", "Landscape"].map((cat) => (
+                                  <button
+                                    key={cat}
+                                    type="button"
+                                    onClick={() => updateAward("category", cat)}
+                                    className={`px-1.5 py-0.5 rounded text-[10px] border transition cursor-pointer ${
+                                      selectedAward.category === cat
+                                        ? "bg-black text-white border-black"
+                                        : "bg-white text-neutral-600 border-neutral-200 hover:border-black"
+                                    }`}
+                                  >
+                                    {cat}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <AdminField
+                              label="Display sort order"
+                              type="number"
+                              value={String(selectedAward.sortOrder ?? 0)}
+                              onChange={(value) => updateAward("sortOrder", Number(value))}
+                            />
+                          </div>
+
+                          <div className="space-y-4">
+                            <div>
+                              <p className={labelClass}>Cover / Project photo</p>
+                              <div className="mt-1.5 aspect-[16/10] overflow-hidden border border-black/10 bg-[#f5f4f1]">
+                                {selectedAward.image ? (
+                                  <img
+                                    src={selectedAward.image}
+                                    alt={`Preview for ${selectedAward.title}`}
+                                    className="h-full w-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="flex h-full items-center justify-center text-neutral-400">
+                                    <FileImage className="h-6 w-6" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="mt-3">
+                                <SupabaseMediaField
+                                  label="Cover image URL or Upload"
+                                  value={selectedAward.image ?? ""}
+                                  onChange={(value) => updateAward("image", value)}
+                                />
+                              </div>
+                            </div>
+
+                            <label className="flex cursor-pointer items-center gap-3 rounded-[4px] border border-black/10 bg-[#faf9f6] p-3.5 text-sm text-neutral-700">
+                              <input
+                                type="checkbox"
+                                checked={selectedAward.isPublished ?? true}
+                                onChange={(event) => updateAward("isPublished", event.target.checked)}
+                                className="h-4 w-4 accent-black cursor-pointer"
+                              />
+                              <span>
+                                <span className="block text-xs font-medium">Publish award</span>
+                                <span className="mt-0.5 block text-[10px] text-neutral-500">
+                                  Visible on public /awards page
+                                </span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div className="grid gap-6 border-t border-black/10 pt-6">
+                          <AdminField
+                            label="Jury Citation / Description"
+                            value={selectedAward.description}
+                            onChange={(value) => updateAward("description", value)}
+                            rows={5}
+                            placeholder="Jury citation or project statement explaining the recognition..."
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   {activeSection === "testimonials" && selectedTestimonial && (
                     <>
                       <div className="flex flex-col gap-3 border-b border-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
@@ -2710,7 +2985,7 @@ export default function AdminPage() {
                     </>
                   )}
 
-                  {((activeSection === "projects" && !selectedProject) || (activeSection === "news" && !selectedNews) || (activeSection === "testimonials" && !selectedTestimonial)) && <div className="flex min-h-[320px] flex-col items-center justify-center px-6 text-center"><FileImage className="h-8 w-8 text-neutral-300" /><p className="mt-4 font-display text-xl">Nothing selected</p><p className="mt-2 text-sm text-neutral-500">Create an item or choose one from the collection list.</p></div>}
+                  {((activeSection === "projects" && !selectedProject) || (activeSection === "news" && !selectedNews) || (activeSection === "awards" && !selectedAward) || (activeSection === "testimonials" && !selectedTestimonial)) && <div className="flex min-h-[320px] flex-col items-center justify-center px-6 text-center"><FileImage className="h-8 w-8 text-neutral-300" /><p className="mt-4 font-display text-xl">Nothing selected</p><p className="mt-2 text-sm text-neutral-500">Create an item or choose one from the collection list.</p></div>}
                 </section>
               </div>
             </div>}
