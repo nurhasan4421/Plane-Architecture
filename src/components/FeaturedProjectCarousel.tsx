@@ -63,7 +63,7 @@ export default function FeaturedProjectCarousel({ projects }: FeaturedProjectCar
     <section
       aria-label="Featured projects"
       aria-roledescription="carousel"
-      className="relative isolate h-svh min-h-[620px] w-full overflow-hidden bg-black font-body select-none"
+      className="relative isolate h-svh min-h-[620px] w-full overflow-hidden bg-black font-body"
       onMouseEnter={() => setIsInteracting(true)}
       onMouseLeave={() => setIsInteracting(false)}
       onFocusCapture={() => setIsInteracting(true)}

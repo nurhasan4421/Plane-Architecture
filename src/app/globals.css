@@ -220,15 +220,19 @@ html.dark ::selection {
 /* Custom Cursor styling for fine pointer devices */
 @media (pointer: fine) {
   body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button,
-  body.has-custom-cursor [role="button"] {
+  body.has-custom-cursor *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
     cursor: none !important;
+  }
+
+  body.has-custom-cursor {
+    user-select: text !important;
+    -webkit-user-select: text !important;
   }
 
   body.has-custom-cursor input,
   body.has-custom-cursor textarea,
-  body.has-custom-cursor select {
-    cursor: auto !important;
+  body.has-custom-cursor select,
+  body.has-custom-cursor [contenteditable="true"] {
+    cursor: text !important;
   }
 }
